@@ -1,0 +1,43 @@
+#!/usr/bin/perl -w
+#############################################################################
+## Name:        script/wxperl_xspp
+## Purpose:     XS++ preprocessor
+## Author:      Mattia Barbon
+## Modified by:
+## Created:     01/03/2003
+## RCS-ID:      $Id: wxperl_xspp 2334 2008-01-21 22:38:57Z mbarbon $
+## Copyright:   (c) 2003-2004, 2006, 2008 Mattia Barbon
+## Licence:     This program is free software; you can redistribute it and/or
+##              modify it under the same terms as Perl itself
+#############################################################################
+
+use strict;
+
+=head1 NAME
+
+wxperl_xspp - XS++ preprocessor
+
+=head1 SYNOPSIS
+
+    wxperl_xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+
+=head1 DOCUMENTATION
+
+See C<XSpp.pod> in the wxPerl distribution.
+
+=cut
+
+use Getopt::Long;
+
+use ExtUtils::XSpp::Driver;
+
+my @typemap_files;
+GetOptions( 'typemap=s' => \@typemap_files );
+
+my $driver = ExtUtils::XSpp::Driver->new
+  ( typemaps   => \@typemap_files,
+    file       => shift @ARGV,
+    );
+$driver->process;
+
+exit 0;

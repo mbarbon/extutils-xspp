@@ -1,0 +1,16 @@
+Build.PL
+Changes
+MANIFEST
+MANIFEST.SKIP
+META.yml
+XSP.yp
+inc/My/Build.pm
+lib/ExtUtils/XSpp.pod
+lib/ExtUtils/XSpp/Driver.pm
+lib/ExtUtils/XSpp/Grammar.pm
+lib/ExtUtils/XSpp/Node.pm
+lib/ExtUtils/XSpp/Parser.pm
+lib/ExtUtils/XSpp/Typemap.pm
+lib/ExtUtils/XSpp.pm
+scripts/xspp
+t/001_load.t
