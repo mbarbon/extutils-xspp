@@ -15,7 +15,7 @@ sub new {
     return $self;
 }
 
-sub process {
+sub generate {
     my( $self ) = @_;
 
     foreach my $typemap ( $self->typemaps ) {
@@ -26,7 +26,14 @@ sub process {
                                               string => $self->string,
                                               );
     $parser->parse;
-    $self->_write( $self->_emit( $parser ) );
+
+    return $self->_emit( $parser );
+}
+
+sub process {
+    my( $self ) = @_;
+
+    $self->_write( $self->generate );
 }
 
 sub _write {
@@ -66,7 +73,7 @@ sub _emit {
     return \%out;
 }
 
-sub typemaps { @{$_[0]->{typemaps}} }
+sub typemaps { @{$_[0]->{typemaps} || []} }
 sub file     { $_[0]->{file} }
 sub string   { $_[0]->{string} }
 sub output   { $_[0]->{output} }
