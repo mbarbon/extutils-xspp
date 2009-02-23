@@ -4,4 +4,5 @@ ExtUtils-XSpp-*.*.tar.gz
 META.yml
 _build
 blib
+cover_db
 lib/ExtUtils/XSpp/Grammar.pm
