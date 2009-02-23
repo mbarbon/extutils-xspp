@@ -34,6 +34,7 @@ sub new {
   my %args = @_;
 
   $this->{FILE} = $args{file};
+  $this->{STRING} = $args{string};
   $this->{PARSER} = ExtUtils::XSpp::Grammar->new;
 
   return $this;
@@ -48,7 +49,12 @@ on failure C<get_errors> will return the list of errors.
 
 sub parse {
   my $this = shift;
-  my $fh = _my_open( $this->{FILE} );
+  my $fh;
+  if( $this->{FILE} ) {
+      $fh = _my_open( $this->{FILE} );
+  } else {
+      open $fh, '<', \$this->{STRING};
+  }
   my $buf = '';
 
   my $parser = $this->{PARSER};

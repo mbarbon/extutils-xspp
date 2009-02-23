@@ -22,7 +22,9 @@ sub process {
         ExtUtils::XSpp::Parser->new( file => $typemap )->parse;
     }
 
-    my $parser = ExtUtils::XSpp::Parser->new( file => $self->file );
+    my $parser = ExtUtils::XSpp::Parser->new( file   => $self->file,
+                                              string => $self->string,
+                                              );
     $parser->parse;
     $self->_write( $self->_emit( $parser ) );
 }
@@ -66,6 +68,7 @@ sub _emit {
 
 sub typemaps { @{$_[0]->{typemaps}} }
 sub file     { $_[0]->{file} }
+sub string   { $_[0]->{string} }
 sub output   { $_[0]->{output} }
 
 1;
