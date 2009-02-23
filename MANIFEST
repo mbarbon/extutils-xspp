@@ -14,3 +14,4 @@ lib/ExtUtils/XSpp/Typemap.pm
 lib/ExtUtils/XSpp.pm
 scripts/xspp
 t/001_load.t
+t/zzz_pod.t
