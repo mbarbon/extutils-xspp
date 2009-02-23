@@ -12,7 +12,7 @@
 
 %token OPCURLY CLCURLY OPPAR CLPAR SEMICOLON TILDE DCOLON
 %token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
-%token INTEGER RAW_CODE ID
+%token INTEGER RAW_CODE ID COLON
 
 %%
 
@@ -218,6 +218,7 @@ use ExtUtils::XSpp::Node;
 use ExtUtils::XSpp::Typemap;
 
 my %tokens = ( '::' => 'DCOLON',
+               ':'  => 'COLON',
                '%{' => 'OPSPECIAL',
                '%}' => 'CLSPECIAL',
                '{%' => 'OPSPECIAL',
@@ -317,7 +318,7 @@ sub yylex {
                       | \%name | \%typemap | \%module | \%typemap | \%code
                       | \%file | \%cleanup
                       | [{}();%~*&,=\/\.\-]
-                      | ::
+                      | :: | :
                        )//x ) {
         return ( $tokens{$1}, $1 );
       } elsif( $$buf =~ s/^(INCLUDE:.*)(?:\r\n|\r|\n)// ) {
