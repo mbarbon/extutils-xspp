@@ -194,7 +194,7 @@ sub print {
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup, $precall ) =
     ( '', '', '', '', '', '', '' );
 
-  if( $args ) {
+  if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
     foreach my $i ( 0 .. $#$args ) {
       my $a = ${$args}[$i];
