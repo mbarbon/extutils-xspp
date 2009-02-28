@@ -16,5 +16,6 @@ scripts/xspp
 t/001_load.t
 t/010_base.t
 t/015_reference.t
+t/020_rename.t
 t/lib/XSP/Test.pm
 t/zzz_pod.t
