@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 8;
+use t::lib::XSP::Test tests => 9;
 
 run_diff xsp_stdout => 'expected';
 
@@ -24,6 +24,21 @@ MODULE=Foo PACKAGE=Foo
 
 int
 Foo::foo( a )
+    int a
+
+=== Basic function
+--- xsp_stdout
+%module{Foo};
+%package{Foo::Bar};
+
+%typemap{int}{simple};
+
+int foo( int a );
+--- expected
+MODULE=Foo PACKAGE=Foo::Bar
+
+int
+foo( a )
     int a
 
 === Renamed function

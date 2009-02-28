@@ -52,11 +52,11 @@ Returns an array reference holding the rows to be output in the final file.
 sub rows { $_[0]->{ROWS} }
 sub print { join( "\n", @{$_[0]->rows} ) . "\n" }
 
-package ExtUtils::XSpp::Node::Class;
+package ExtUtils::XSpp::Node::Package;
 
-=head1 ExtUtils::XSpp::Node::Class
+=head1 ExtUtils::XSpp::Node::Package
 
-A class.
+Used to put global functions inside a Perl package.
 
 =cut
 
@@ -69,26 +69,20 @@ sub init {
 
   $this->{CPP_NAME} = $args{cpp_name};
   $this->{PERL_NAME} = $args{perl_name} || $args{cpp_name};
-  $this->{METHODS} = $args{methods} || [];
 }
 
-=head2 ExtUtils::XSpp::Node::Class::cpp_name
+=head2 ExtUtils::XSpp::Node::Package::cpp_name
 
-Returns the C++ name for the class.
+Returns the C++ name for the package (will be used for namespaces).
 
-=cut
+=head2 ExtUtils::XSpp::Node::Package::perl_name
 
-=head2 ExtUtils::XSpp::Node::Class::perl_name
-
-Returns the Perl name for the class.
-
-=head2 ExtUtils::XSpp::Node::Class::methods
+Returns the Perl name for the package.
 
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
 sub perl_name { $_[0]->{PERL_NAME} }
-sub methods { $_[0]->{METHODS} }
 
 sub print {
   my $this = shift;
@@ -102,10 +96,41 @@ sub print {
   my $cur_module = $state->{current_module}->to_string;
 
   $out .= <<EOT;
-
 $cur_module PACKAGE=$pcname
-
 EOT
+
+  return $out;
+}
+
+package ExtUtils::XSpp::Node::Class;
+
+=head1 ExtUtils::XSpp::Node::Class
+
+A class (inherits from Package).
+
+=cut
+
+use strict;
+use base 'ExtUtils::XSpp::Node::Package';
+
+sub init {
+  my $this = shift;
+  my %args = @_;
+
+  $this->SUPER::init( @_ );
+  $this->{METHODS} = $args{methods} || [];
+}
+
+=head2 ExtUtils::XSpp::Node::Class::methods
+
+=cut
+
+sub methods { $_[0]->{METHODS} }
+
+sub print {
+  my $this = shift;
+  my $state = shift;
+  my $out = $this->SUPER::print( $state ) . "\n";
 
   foreach my $m ( @{$this->methods} ) {
     $out .= $m->print;

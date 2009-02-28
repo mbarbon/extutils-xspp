@@ -28,6 +28,8 @@ top:    raw             { [ $_[1] ] }
 
 directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
+              | perc_package SEMICOLON
+                    { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
               | typemap SEMICOLON { add_data_raw( $_[0], [ '' ] ) };
@@ -151,6 +153,7 @@ _metadata:      perc_code       { $_[1] }
               ;
 
 perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
+perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
 perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
 perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
 perc_code:      p_code special_block                  { [ code => $_[2] ] };
@@ -243,6 +246,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%module' => 'p_module',
                '%code' => 'p_code',
                '%cleanup' => 'p_cleanup',
+               '%package' => 'p_package',
              );
 
 my %keywords = ( const => 1,
@@ -316,7 +320,7 @@ sub yylex {
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
                       | \%name | \%typemap | \%module | \%typemap | \%code
-                      | \%file | \%cleanup
+                      | \%file | \%cleanup | \%package
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {
