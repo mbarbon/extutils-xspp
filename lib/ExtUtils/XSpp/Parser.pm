@@ -28,8 +28,7 @@ Create a new XS++ parser.
 =cut
 
 sub new {
-  my $ref = shift;
-  my $class = ref $ref || $ref;
+  my $class = shift;
   my $this = bless {}, $class;
   my %args = @_;
 
