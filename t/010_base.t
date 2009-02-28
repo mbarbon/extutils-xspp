@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 7;
+use t::lib::XSP::Test tests => 8;
 
 run_diff xsp_stdout => 'expected';
 
@@ -129,3 +129,39 @@ MODULE=Foo PACKAGE=Foo
 
 void
 Foo::foo()
+
+=== Comments and raw blocks
+--- xsp_stdout
+%module{Foo};
+
+{%
+  Passed through verbatim
+  as written in sources
+%}
+
+# simple typemaps
+%typemap{int}{simple};
+%typemap{Foo*}{simple};
+
+# before class
+class Foo
+{
+    # before method
+    int foo( int a, int b, int c );
+    # after method
+};
+--- expected
+  Passed through verbatim
+  as written in sources
+# simple typemaps
+# before class
+MODULE=Foo PACKAGE=Foo
+
+# before method
+int
+Foo::foo( a, b, c )
+    int a
+    int b
+    int c
+
+# after method
