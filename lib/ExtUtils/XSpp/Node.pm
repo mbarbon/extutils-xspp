@@ -97,6 +97,7 @@ sub print {
 
   $out .= <<EOT;
 $cur_module PACKAGE=$pcname
+
 EOT
 
   return $out;
@@ -130,7 +131,7 @@ sub methods { $_[0]->{METHODS} }
 sub print {
   my $this = shift;
   my $state = shift;
-  my $out = $this->SUPER::print( $state ) . "\n";
+  my $out = $this->SUPER::print( $state );
 
   foreach my $m ( @{$this->methods} ) {
     $out .= $m->print;
@@ -497,7 +498,7 @@ sub init {
 
 sub module { $_[0]->{MODULE} }
 sub to_string { 'MODULE=' . $_[0]->module }
-sub print { "\n" }
+sub print { "" }
 
 package ExtUtils::XSpp::Node::File;
 

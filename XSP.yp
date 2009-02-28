@@ -18,11 +18,11 @@
 
 top:    raw             { [ $_[1] ] }
       | class           { [ $_[1] ] }
-      | directive       { [ $_[1] ] }
+      | directive       { $_[1] ? [ $_[1] ] : [] }
       | function        { [ $_[1] ] }
       | top raw         { push @{$_[1]}, $_[2]; $_[1] }
       | top class       { push @{$_[1]}, $_[2]; $_[1] }
-      | top directive   { push @{$_[1]}, $_[2]; $_[1] }
+      | top directive   { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
       | top function    { push @{$_[1]}, $_[2]; $_[1] }
         ;
 
@@ -32,7 +32,7 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
-              | typemap SEMICOLON { add_data_raw( $_[0], [ '' ] ) };
+              | typemap SEMICOLON { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                     { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
@@ -52,7 +52,7 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       undef };
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
-      | special_block   { add_data_raw( $_[0], [ @{$_[1]}, '' ] ) };
+      | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
 class: class_head class_body
            { $_[2] ? set_data_class( $_[0],
