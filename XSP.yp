@@ -30,7 +30,7 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
-              | typemap SEMICOLON { add_data_raw( $_[0], [ "\n" ] ) };
+              | typemap SEMICOLON { add_data_raw( $_[0], [ '' ] ) };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                     { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
