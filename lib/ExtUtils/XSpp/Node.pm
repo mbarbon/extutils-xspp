@@ -222,6 +222,7 @@ sub print {
 
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
+    my( @arg_list, @call_arg_list );
     foreach my $i ( 0 .. $#$args ) {
       my $a = ${$args}[$i];
       my $t = $this->{TYPEMAPS}{ARGUMENTS}[$i];
@@ -230,20 +231,16 @@ sub print {
 
       $need_call_function ||=    defined $t->call_parameter_code( '' )
                               || defined $pc;
-      $arg_list .= ', ' . $a->name;
-      $arg_list .= ' = ' . $a->default if $a->has_default;
+      push @arg_list, $a->name . ( $a->has_default ? ' = ' . $a->default : '' );
       $init .= '    ' . $t->cpp_type . ' ' . $a->name . "\n";
 
       my $call_code = $t->call_parameter_code( $a->name );
-      $call_arg_list .= ', ' . ( defined( $call_code ) ?
-                                            $call_code :
-                                            $a->name );
+      push @call_arg_list, defined( $call_code ) ? $call_code : $a->name;
       $precall .= $pc . ";\n" if $pc
     }
 
-    $arg_list = substr( $arg_list, 1 ) . ' ' if length $arg_list;
-    $call_arg_list = substr( $call_arg_list, 1 ) . ' '
-      if length $call_arg_list;
+    $arg_list = ' ' . join( ', ', @arg_list ) . ' ' if @arg_list;
+    $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ' if @call_arg_list;
   }
   # same for return value
   $need_call_function ||= $ret_typemap &&

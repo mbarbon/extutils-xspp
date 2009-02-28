@@ -17,14 +17,16 @@ __DATA__
 
 class Foo
 {
-    int foo( int a );
+    int foo( int a, int b, int c );
 };
 --- expected
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
+Foo::foo( a, b, c )
     int a
+    int b
+    int c
 
 === Basic function
 --- xsp_stdout
