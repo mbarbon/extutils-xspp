@@ -8,15 +8,25 @@ run_diff xsp_stdout => 'expected';
 
 __DATA__
 
-=== Renamed function
+=== Renamed function (also in different package)
 --- xsp_stdout
 %module{Foo};
 %package{Foo::Bar};
 %typemap{int}{simple};
 
 %name{boo} int foo(int a);
+%name{moo::boo} int foo(int a);
 --- expected
 MODULE=Foo PACKAGE=Foo::Bar
+
+int
+boo( a )
+    int a
+  CODE:
+    RETVAL = foo( a );
+  OUTPUT: RETVAL
+
+MODULE=Foo PACKAGE=moo
 
 int
 boo( a )
