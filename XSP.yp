@@ -84,9 +84,9 @@ method:         function { my $f = $_[1];
                                code      => $f->code,
                                cleanup   => $f->cleanup,
                                class     => $class,
+                               perl_name => $f->perl_name,
                                );
                            $m->{STATIC} = $_[1]->{STATIC};
-                           $m->{PERL_NAME} = $_[1]->{PERL_NAME};
                            $m
                          }
               | ctor
@@ -416,6 +416,7 @@ sub add_data_method {
                               arguments => $args{arguments},
                               code      => $args{code},
                               cleanup   => $args{cleanup},
+                              perl_name => $args{perl_name},
                               );
 }
 
