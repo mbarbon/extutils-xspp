@@ -18,5 +18,6 @@ t/010_base.t
 t/015_reference.t
 t/020_rename.t
 t/030_code_blocks.t
+t/080_complex_typemap.t
 t/lib/XSP/Test.pm
 t/zzz_pod.t
