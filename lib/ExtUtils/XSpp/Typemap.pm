@@ -71,11 +71,6 @@ sub get_typemap_for_type {
   }
 
   die "No typemap for type ", $type->print;
-  if( $type->is_reference ) {
-    return ExtUtils::XSpp::Typemap::reference->new( type => $type );
-  } else {
-    return ExtUtils::XSpp::Typemap::simple->new( type => $type );
-  }
 }
 
 package ExtUtils::XSpp::Typemap::parsed;
@@ -104,12 +99,6 @@ sub call_function_code {
   my( $this, $func, $var ) = @_;
   return unless defined $this->{CALL_FUNCTION_CODE};
   return _replace( $this->{CALL_FUNCTION_CODE}, '$1' => $func, '$$' => $var );
-  my $code = $this->{CALL_FUNCTION_CODE};
-
-  $code =~ s/\$1/$func/g;
-  $code =~ s/\$\$/$var/g;
-
-  $code;
 }
 
 sub precall_code {
