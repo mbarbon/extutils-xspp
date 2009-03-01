@@ -239,8 +239,8 @@ sub print {
       $precall .= $pc . ";\n" if $pc
     }
 
-    $arg_list = ' ' . join( ', ', @arg_list ) . ' ' if @arg_list;
-    $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ' if @call_arg_list;
+    $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
+    $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
   }
   # same for return value
   $need_call_function ||= $ret_typemap &&
