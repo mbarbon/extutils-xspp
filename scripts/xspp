@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #############################################################################
-## Name:        script/wxperl_xspp
+## Name:        script/xspp
 ## Purpose:     XS++ preprocessor
 ## Author:      Mattia Barbon
 ## Modified by:
@@ -15,15 +15,15 @@ use strict;
 
 =head1 NAME
 
-wxperl_xspp - XS++ preprocessor
+xspp - XS++ preprocessor
 
 =head1 SYNOPSIS
 
-    wxperl_xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+    xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
 
 =head1 DOCUMENTATION
 
-See C<XSpp.pod> in the wxPerl distribution.
+See C<ExtUtils::XSpp>.
 
 =cut
 
