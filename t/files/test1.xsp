@@ -1,0 +1,17 @@
+%module{Foo};
+
+#include <foo.h>
+
+%package{Foo};
+
+%typemap{int}{simple};
+
+%file{t/files/foo.h};
+{%
+/* header file */
+
+int foo( int, int, int );
+%}
+%file{-};
+
+int foo( int a, int b, int c );

@@ -14,10 +14,14 @@ lib/ExtUtils/XSpp/Parser.pm
 lib/ExtUtils/XSpp/Typemap.pm
 scripts/xspp
 t/001_load.t
+t/005_io.t
 t/010_base.t
+t/011_multiple_files.t
 t/015_reference.t
 t/020_rename.t
 t/030_code_blocks.t
 t/080_complex_typemap.t
+t/files/test1.xsp
+t/files/typemap.xsp
 t/lib/XSP/Test.pm
 t/zzz_pod.t

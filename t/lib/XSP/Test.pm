@@ -11,6 +11,7 @@ use Test::Differences;
 our @EXPORT = qw(run_diff);
 
 filters { xsp_stdout => 'xsp_stdout',
+          xsp_file   => 'xsp_file',
           };
 
 sub run_diff(@) {
@@ -35,6 +36,14 @@ sub xsp_stdout {
     my $out = $d->generate;
 
     return $out->{'-'};
+}
+
+sub xsp_file {
+    my $name = Test::Base::filter_arguments();
+    my $d = ExtUtils::XSpp::Driver->new( string => shift );
+    my $out = $d->generate;
+
+    return $out->{$name};
 }
 
 1;

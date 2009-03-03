@@ -11,5 +11,6 @@ my $build = My::Build->new
     license     => 'perl',
     requires    => { 'perl'          => '5.6.1',
                      },
+    add_to_cleanup => [ qw(t/files/foo.h) ],
     );
 $build->create_build_script;
