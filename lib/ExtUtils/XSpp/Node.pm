@@ -462,15 +462,6 @@ sub equals {
 sub is_void { return $_[0]->base_type eq 'void' &&
                 !$_[0]->is_pointer && !$_[0]->is_reference }
 
-sub print_noconst {
-  my $this = shift;
-
-  return join( '',
-               $this->base_type,
-               ( $this->is_pointer ? ( '*' x $this->is_pointer ) :
-                 $this->is_reference ? '&' : '' ) );
-}
-
 sub print {
   my $this = shift;
 
