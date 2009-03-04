@@ -9,7 +9,7 @@ sub ACTION_code {
 
     if( !$self->up_to_date( [ 'XSP.yp' ],
                             [ 'lib/ExtUtils/XSpp/Grammar.pm' ] ) ) {
-        $self->do_system( 'yapp', '-m', 'ExtUtils::XSpp::Grammar',
+        $self->do_system( 'yapp', '-v', '-m', 'ExtUtils::XSpp::Grammar',
                           '-o', 'lib/ExtUtils/XSpp/Grammar.pm', 'XSP.yp' );
     }
 
