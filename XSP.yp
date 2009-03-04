@@ -316,6 +316,16 @@ sub yylex {
 
       if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
         return ( 'FLOAT', $1 );
+      } elsif( $$buf =~ s/^(\/\/.*)(?:\r\n|\r|\n)// ) {
+        return ( 'RAW_CODE', $1 );
+      } elsif( $$buf =~ s/^\/\*// ) {
+        my $raw = '/*';
+        for(; length( $$buf ) || read_more( $fh, $buf ); $$buf = '') {
+          if( $$buf =~ s/(.*?\*\/)// ) {
+              return ( 'RAW_CODE', $raw . $1 );
+          }
+          $raw .= $$buf;
+        }
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
                       | \%name | \%typemap | \%module | \%typemap | \%code

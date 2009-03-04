@@ -146,10 +146,14 @@ Foo::foo()
 # before class
 class Foo
 {
-    # before method
+    // before method
     int foo( int a, int b, int c );
     # after method
 };
+/* long comment
+ * right after
+ * class
+ */
 --- expected
   Passed through verbatim
   as written in sources
@@ -157,7 +161,7 @@ class Foo
 # before class
 MODULE=Foo PACKAGE=Foo
 
-# before method
+// before method
 int
 Foo::foo( a, b, c )
     int a
@@ -165,3 +169,7 @@ Foo::foo( a, b, c )
     int c
 
 # after method
+/* long comment
+ * right after
+ * class
+ */
