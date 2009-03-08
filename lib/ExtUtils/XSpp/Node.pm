@@ -121,6 +121,7 @@ sub init {
 
   $this->SUPER::init( @_ );
   $this->{METHODS} = $args{methods} || [];
+  $this->{BASE_CLASSES} = $args{base_classes} || [];
 }
 
 =head2 ExtUtils::XSpp::Node::Class::methods
@@ -128,15 +129,22 @@ sub init {
 =cut
 
 sub methods { $_[0]->{METHODS} }
+sub base_classes { $_[0]->{BASE_CLASSES} }
 
 sub add_methods {
   my $this = shift;
-
-  foreach my $meth ( grep $_->can( 'class' ), @_ ) {
-      $meth->{CLASS} = $this;
-      $meth->resolve_typemaps;
+  my $access = 'public'; # good enough for now
+  foreach my $meth ( @_ ) {
+      if( $meth->isa( 'ExtUtils::XSpp::Node::Method' ) ) {
+          $meth->{CLASS} = $this;
+          $meth->{ACCESS} = $access;
+          $meth->resolve_typemaps;
+      } elsif( $meth->isa( 'ExtUtils::XSpp::Node::Access' ) ) {
+          $access = $meth->access;
+          next;
+      }
+      push @{$this->{METHODS}}, $meth;
   }
-  push @{$this->{METHODS}}, @_;
 }
 
 sub print {
@@ -150,6 +158,26 @@ sub print {
 
   return $out;
 }
+
+package ExtUtils::XSpp::Node::Access;
+
+=head1 ExtUtils::XSpp::Node::Access
+
+Access specifier.
+
+=cut
+
+use strict;
+use base 'ExtUtils::XSpp::Node';
+
+sub init {
+  my $this = shift;
+  my %args = @_;
+
+  $this->{ACCESS} = $args{access};
+}
+
+sub access { $_[0]->{ACCESS} }
 
 package ExtUtils::XSpp::Node::Function;
 
@@ -210,9 +238,11 @@ sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
+sub virtual { $_[0]->{VIRTUAL} }
 
 sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
 sub set_static { $_[0]->{STATIC} = $_[1] }
+sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 
 #
 # return_type

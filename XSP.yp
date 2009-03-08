@@ -54,13 +54,25 @@ method:   method_decl | decorate_method;
 decorate_class:     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
 decorate_function:  perc_name function { $_[2]->set_perl_name( $_[1] ); $_[2] };
 decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
-                  | static method { $_[2]->set_static( $_[1] ); $_[2] };
+                  | static method { $_[2]->set_static( $_[1] ); $_[2] }
+                  | virtual method { $_[2]->set_virtual( 1 ); $_[2] };
 
-class_decl: 'class' ID OPCURLY class_body_list CLCURLY SEMICOLON
-                { create_class( $_[0], $_[4] ) }
-            'class' ID OPCURLY CLCURLY SEMICOLON
-                { create_class( $_[0], [] ) };
+class_decl: 'class' ID base_classes OPCURLY class_body_list CLCURLY SEMICOLON
+                { create_class( $_[0], $_[2], $_[3], $_[5] ) }
+          | 'class' ID base_classes OPCURLY CLCURLY SEMICOLON
+                { create_class( $_[0], $_[2], $_[3], [] ) };
 
+base_classes:
+      COLON base_class
+    | base_classes ',' base_class
+    | ;
+
+base_class:
+      'public' ID    { $_[2] }
+    | 'protected' ID { $_[2] }
+    | 'private' ID   { $_[2] }
+    ;
+    
 class_body_list:
       class_body_element
           { $_[1] ? [ $_[1] ] : [] }
@@ -68,7 +80,13 @@ class_body_list:
           { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-class_body_element: method | raw | typemap;
+class_body_element: method | raw | typemap | access_specifier;
+
+access_specifier:
+      'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    | 'protected' COLON { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    ;
 
 method_decl:    function_decl
                          { my $f = $_[1];
@@ -87,6 +105,8 @@ method_decl:    function_decl
 
 const: 'const'
      | ;
+
+virtual: 'virtual';
 
 static: 'package_static'
       | 'class_static'
@@ -224,6 +244,10 @@ my %keywords = ( const => 1,
                  char => 1,
                  package_static => 1,
                  class_static => 1,
+                 public => 1,
+                 private => 1,
+                 protected => 1,
+                 virtual => 1,
                  );
 
 sub get_lex_mode { return $_[0]->YYData->{LEX}{MODES}[0] || '' }
@@ -356,8 +380,9 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $methods ) = @_;
-  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name  => $name );
+  my( $parser, $name, $bases, $methods ) = @_;
+  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name     => $name,
+                                                base_classes => $bases );
   $class->add_methods( @$methods );
   return $class;
 }

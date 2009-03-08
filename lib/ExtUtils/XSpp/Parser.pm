@@ -62,7 +62,7 @@ sub parse {
 
   $this->{DATA} = $parser->YYParse( yylex   => \&ExtUtils::XSpp::Grammar::yylex,
                                     yyerror => \&ExtUtils::XSpp::Grammar::yyerror,
-                                    yydebug => 0,
+                                    yydebug => 0x00,
                                    );
 }
 
