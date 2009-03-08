@@ -83,6 +83,7 @@ Returns the Perl name for the package.
 
 sub cpp_name { $_[0]->{CPP_NAME} }
 sub perl_name { $_[0]->{PERL_NAME} }
+sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
 
 sub print {
   my $this = shift;
@@ -128,6 +129,16 @@ sub init {
 
 sub methods { $_[0]->{METHODS} }
 
+sub add_methods {
+  my $this = shift;
+
+  foreach my $meth ( grep $_->can( 'class' ), @_ ) {
+      $meth->{CLASS} = $this;
+      $meth->resolve_typemaps;
+  }
+  push @{$this->{METHODS}}, @_;
+}
+
 sub print {
   my $this = shift;
   my $state = shift;
@@ -162,6 +173,11 @@ sub init {
   $this->{CODE} = $args{code};
   $this->{CLEANUP} = $args{cleanup};
   $this->{CLASS} = $args{class};
+}
+
+sub resolve_typemaps {
+  my $this = shift;
+
   if( $this->ret_type ) {
     $this->{TYPEMAPS}{RET_TYPE} =
       ExtUtils::XSpp::Typemap::get_typemap_for_type( $this->ret_type );
@@ -194,6 +210,9 @@ sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
+
+sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
+sub set_static { $_[0]->{STATIC} = $_[1] }
 
 #
 # return_type
@@ -400,6 +419,7 @@ sub init {
 }
 
 sub perl_function_name { $_[0]->class->cpp_name . '::' . 'DESTROY' }
+sub ret_type { undef }
 
 package ExtUtils::XSpp::Node::Argument;
 

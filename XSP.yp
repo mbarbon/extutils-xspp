@@ -13,18 +13,17 @@
 %token OPCURLY CLCURLY OPPAR CLPAR SEMICOLON TILDE DCOLON
 %token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
 %token INTEGER RAW_CODE ID COLON
+%expect 1
 
 %%
 
-top:    raw             { [ $_[1] ] }
-      | class           { [ $_[1] ] }
-      | directive       { $_[1] ? [ $_[1] ] : [] }
-      | function        { [ $_[1] ] }
-      | top raw         { push @{$_[1]}, $_[2]; $_[1] }
-      | top class       { push @{$_[1]}, $_[2]; $_[1] }
-      | top directive   { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
-      | top function    { push @{$_[1]}, $_[2]; $_[1] }
-        ;
+top_list:
+      top               { $_[1] ? [ $_[1] ] : [] }
+    | top_list top      { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
+
+top: raw | class | directive
+   | function { $_[1]->resolve_typemaps; $_[1] };
 
 directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
@@ -32,21 +31,15 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
-              | typemap SEMICOLON { };
+              | typemap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
-                    { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
-                      my $type = $_[3];
-                      my $tm = $package->new( type => $type );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
-                      undef }
-              | p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
-                  special_blocks
+                  special_blocks SEMICOLON
                     { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
                       my $type = $_[3]; my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
                                  map { join( '', @$_ ) }
-                                     @{$_[8]};
+                                     @{$_[8] || []};
                       my $tm = $package->new( type => $type, %args );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
                       undef };
@@ -54,28 +47,31 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
-class: class_head class_body
-           { $_[2] ? set_data_class( $_[0],
-                                     class   => $_[1],
-                                     methods => $_[2] ) : $_[1] };
+class:    class_decl | decorate_class;
+function: function_decl | decorate_function;
+method:   method_decl | decorate_method;
 
-class_head:  perc_name 'class' ID
-                 { $class = create_class( $_[0], $_[3], $_[1] ) }
-           | 'class' ID
-                 { $class = create_class( $_[0], $_[2] ) };
+decorate_class:     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
+decorate_function:  perc_name function { $_[2]->set_perl_name( $_[1] ); $_[2] };
+decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
+                  | static method { $_[2]->set_static( $_[1] ); $_[2] };
 
-class_body:  OPCURLY methods CLCURLY SEMICOLON { $_[2] }
-           | OPCURLY CLCURLY SEMICOLON { undef };
+class_decl: 'class' ID OPCURLY class_body_list CLCURLY SEMICOLON
+                { create_class( $_[0], $_[4] ) }
+            'class' ID OPCURLY CLCURLY SEMICOLON
+                { create_class( $_[0], [] ) };
 
-methods:        method          { [ $_[1] ] }
-              | methods method  { push @{$_[1]}, $_[2]; $_[1] }
-              | raw             { [ $_[1] ] }
-              | methods raw     { push @{$_[1]}, $_[2]; $_[1] }
-              | typemap SEMICOLON
-              | methods typemap SEMICOLON
-              ;
+class_body_list:
+      class_body_element
+          { $_[1] ? [ $_[1] ] : [] }
+    | class_body_list class_body_element
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
 
-method:         function { my $f = $_[1];
+class_body_element: method | raw | typemap;
+
+method_decl:    function_decl
+                         { my $f = $_[1];
                            my $m = add_data_method
                              ( $_[0],
                                name      => $f->cpp_name,
@@ -83,15 +79,10 @@ method:         function { my $f = $_[1];
                                arguments => $f->arguments,
                                code      => $f->code,
                                cleanup   => $f->cleanup,
-                               class     => $class,
-                               perl_name => $f->perl_name,
                                );
-                           $m->{STATIC} = $_[1]->{STATIC};
                            $m
                          }
               | ctor
-              | perc_name ctor
-                    { $_[2]->{PERL_NAME} = $_[1]; $_[2] }
               | dtor ;
 
 const: 'const'
@@ -101,45 +92,20 @@ static: 'package_static'
       | 'class_static'
       ;
 
-function:       _func
-              | static _func
-                    { $_[2]->{STATIC} = $_[1]; $_[2] }
-              | perc_name _func
-                    { $_[2]->{PERL_NAME} = $_[1];
-                      $_[2] }
-              | perc_name static _func
-                    { $_[3]->{PERL_NAME} = $_[1];
-                      $_[3]->{STATIC} = $_[2];
-                      $_[3] }
-              ;
-
-_func:          type ID OPPAR arg_list CLPAR const metadata SEMICOLON
+function_decl:  type ID OPPAR arg_list CLPAR const metadata SEMICOLON
                     { add_data_function( $_[0],
                                          name      => $_[2],
                                          ret_type  => $_[1],
                                          arguments => $_[4],
-                                         class     => $class,
-                                         @{ $_[7] } ) }
-              | type ID OPPAR CLPAR const metadata SEMICOLON
-                    { add_data_function( $_[0],
-                                         name     => $_[2],
-                                         ret_type => $_[1],
-                                         class     => $class,
-                                         @{ $_[6] } ) };
+                                         @{ $_[7] } ) };
 
 ctor:           ID OPPAR arg_list CLPAR metadata SEMICOLON
                     { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
-                                            class     => $class,
-                                            @{ $_[5] } ) }
-              | ID OPPAR CLPAR metadata SEMICOLON
-                    { add_data_ctor( $_[0], name  => $_[1],
-                                            class => $class,
-                                            @{ $_[4] } ) };
+                                            @{ $_[5] } ) };
 
 dtor:           TILDE ID OPPAR CLPAR metadata SEMICOLON
                     { add_data_dtor( $_[0], name  => $_[2],
-                                            class => $class,
                                             @{ $_[5] },
                                       ) };
 
@@ -147,8 +113,8 @@ metadata:       metadata _metadata { [ @{$_[1]}, @{$_[2]} ] }
               |                    { [] }
               ;
 
-_metadata:      perc_code       { $_[1] }
-              | perc_cleanup    { $_[1] }
+_metadata:      perc_code
+              | perc_cleanup
               ;
 
 perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
@@ -176,7 +142,8 @@ file_name:      DASH                            { '-' }
               | ID SLASH file_name              { $_[1] . '/' . $_[3] };
 
 arg_list:       argument                { [ $_[1] ] }
-              | arg_list COMMA argument { push @{$_[1]}, $_[3]; $_[1] };
+              | arg_list COMMA argument { push @{$_[1]}, $_[3]; $_[1] }
+              | ;
 
 argument:       type ID                 { make_argument( @_ ) }
               | type ID EQUAL value
@@ -196,7 +163,7 @@ special_blocks:  special_block
                      { [ $_[1] ] }
                | special_blocks special_block
                      { [ @{$_[1]}, $_[2] ] }
-               ;
+               | ;
 
 special_block:          special_block_start lines special_block_end
                             { $_[2] }
@@ -328,7 +295,7 @@ sub yylex {
         }
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
-                      | \%name | \%typemap | \%module | \%typemap | \%code
+                      | \%name | \%typemap | \%module | \%code
                       | \%file | \%cleanup | \%package
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
@@ -389,18 +356,10 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $perl ) = @_;
-  my $class = ExtUtils::XSpp::Node::Class->new( perl_name => $perl,
-                                         cpp_name  => $name,
-                                         );
+  my( $parser, $name, $methods ) = @_;
+  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name  => $name );
+  $class->add_methods( @$methods );
   return $class;
-}
-
-sub set_data_class {
-  my( $parser, %args ) = @_;
-  $args{class}->{METHODS} = $args{methods};
-
-  return $args{class};
 }
 
 sub add_data_function {
@@ -418,9 +377,7 @@ sub add_data_function {
 sub add_data_method {
   my( $parser, %args ) = @_;
 
-  die "PANIC: method $args{name} without class" unless $args{class};
   ExtUtils::XSpp::Node::Method->new( cpp_name  => $args{name},
-                              class     => $args{class},
                               ret_type  => $args{ret_type},
                               arguments => $args{arguments},
                               code      => $args{code},
@@ -432,9 +389,7 @@ sub add_data_method {
 sub add_data_ctor {
   my( $parser, %args ) = @_;
 
-  die "PANIC: constructor $args{name} without class" unless $args{class};
   ExtUtils::XSpp::Node::Constructor->new( cpp_name  => $args{name},
-                                   class     => $args{class},
                                    arguments => $args{arguments},
                                    code      => $args{code},
                                    );
@@ -443,9 +398,7 @@ sub add_data_ctor {
 sub add_data_dtor {
   my( $parser, %args ) = @_;
 
-  die "PANIC: destructor $args{name} without class" unless $args{class};
   ExtUtils::XSpp::Node::Destructor->new( cpp_name  => $args{name},
-                                  class     => $args{class},
                                   code      => $args{code},
                                   );
 }
