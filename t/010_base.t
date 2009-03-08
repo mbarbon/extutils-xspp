@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 8;
+use t::lib::XSP::Test tests => 9;
 
 run_diff xsp_stdout => 'expected';
 
@@ -27,6 +27,19 @@ Foo::foo( a, b, c )
     int a
     int b
     int c
+
+=== Empty class
+--- xsp_stdout
+%module{Foo};
+
+%typemap{int}{simple};
+%typemap{Foo*}{simple};
+
+class Foo
+{
+};
+--- expected
+MODULE=Foo PACKAGE=Foo
 
 === Basic function
 --- xsp_stdout
