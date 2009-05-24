@@ -17,5 +17,6 @@ my $build = My::Build->new
         'Test::Differences'   => '0',
         },
     add_to_cleanup => [ qw(t/files/foo.h) ],
+    script_files => 'scripts',
     );
 $build->create_build_script;
