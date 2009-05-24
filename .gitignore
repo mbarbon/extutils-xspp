@@ -7,3 +7,5 @@ blib
 cover_db
 lib/ExtUtils/XSpp/Grammar.pm
 t/files/foo.h
+*.swp
+*.swo
