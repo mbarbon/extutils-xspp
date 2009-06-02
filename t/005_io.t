@@ -30,6 +30,7 @@ sub slurp($) {
 
 eq_or_diff( $out, <<EOT, 'Output on stdout' );
 #include <foo.h>
+
 MODULE=Foo PACKAGE=Foo
 
 

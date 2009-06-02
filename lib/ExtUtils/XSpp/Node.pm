@@ -97,6 +97,7 @@ sub print {
   my $cur_module = $state->{current_module}->to_string;
 
   $out .= <<EOT;
+
 $cur_module PACKAGE=$pcname
 
 EOT

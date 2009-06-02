@@ -159,7 +159,7 @@ Foo::foo()
 # before class
 class Foo
 {
-    // before method
+    ## before method
     int foo( int a, int b, int c );
     # after method
 };
@@ -172,9 +172,10 @@ class Foo
   as written in sources
 # simple typemaps
 # before class
+
 MODULE=Foo PACKAGE=Foo
 
-// before method
+## before method
 int
 Foo::foo( a, b, c )
     int a
