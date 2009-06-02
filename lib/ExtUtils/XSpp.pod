@@ -4,6 +4,8 @@ ExtUtils::XSpp - XS for C++
 
 =head1 SYNOPSIS
 
+  xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+
 In Foo.xs (all in one line):
 
   INCLUDE: perl -S xspp --typemap=typemap.xsp
@@ -14,7 +16,8 @@ In Foo.xs (all in one line):
 XS++ is just a thin layer over plain XS, hence to use it you
 are supposed to know, at the very least, C++ and XS.
 
-This means that you will need typemaps for B<both> xsubpp and xsubppp.
+This means that you will need typemaps for B<both> the normal XS
+pre-processor I<xsubpp> and the XS++ pre-processor I<xspp>.
 
 =head1 TYPEMAPS
 
@@ -106,6 +109,12 @@ See B<TYPEMAPS> above.
           %code{% RETVAL = a + b; %}
           %cleanup{% /* do something */ %};
   };
+
+=head2 Comments
+
+C-style C</* ... */> comments will be passed through unchanged.  C++-style
+comments C<// ...> will be passed throug with the leading C<//> replaced
+with C<##>.
 
 =head1 AUTHOR
 
