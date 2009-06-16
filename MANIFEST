@@ -21,6 +21,7 @@ t/015_reference.t
 t/020_rename.t
 t/022_static.t
 t/030_code_blocks.t
+t/031_verbatim_blocks.t
 t/075_types.t
 t/080_complex_typemap.t
 t/files/test1.xsp
