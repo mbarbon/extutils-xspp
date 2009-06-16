@@ -41,6 +41,7 @@ sub init {
   my %args = @_;
 
   $this->{ROWS} = $args{rows};
+  push @{$this->{ROWS}}, "\n";
 }
 
 =head2 ExtUtils::XSpp::Node::Raw::rows

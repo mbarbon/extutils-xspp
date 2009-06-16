@@ -31,6 +31,8 @@ sub slurp($) {
 eq_or_diff( $out, <<EOT, 'Output on stdout' );
 #include <foo.h>
 
+
+
 MODULE=Foo PACKAGE=Foo
 
 
@@ -48,4 +50,6 @@ eq_or_diff( slurp 't/files/foo.h', <<EOT, 'Output on external file' );
 /* header file */
 
 int foo( int, int, int );
+
+
 EOT

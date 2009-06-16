@@ -170,12 +170,20 @@ class Foo
 --- expected
   Passed through verbatim
   as written in sources
+
+
 # simple typemaps
+
+
 # before class
+
+
 
 MODULE=Foo PACKAGE=Foo
 
 ## before method
+
+
 int
 Foo::foo( a, b, c )
     int a
@@ -183,6 +191,8 @@ Foo::foo( a, b, c )
     int c
 
 # after method
+
+
 /* long comment
  * right after
  * class
