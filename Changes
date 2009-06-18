@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Add parsing deep class hierarchies. (Steffen Mueller)
+
 0.03
 	- Include a renamed Parse::Yapp::Driver to eschew
 	  a dependency. (Steffen Mueller)
