@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 9;
+use t::lib::XSP::Test tests => 10;
 
 run_diff xsp_stdout => 'expected';
 
@@ -197,3 +197,20 @@ Foo::foo( a, b, c )
  * right after
  * class
  */
+=== length() and ANSI style
+--- xsp_stdout
+%module{Foo};
+
+%package{Bar};
+
+%typemap{float}{simple};
+%typemap{int}{simple};
+%typemap{char*}{simple};
+
+float
+bar( char* line, int length(line) );
+--- expected
+MODULE=Foo PACKAGE=Bar
+
+float
+bar( char* line, int length(line) )
