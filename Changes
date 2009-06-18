@@ -1,5 +1,9 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.03
+	- Include a renamed Parse::Yapp::Driver to eschew
+	  a dependency. (Steffen Mueller)
+
 0.02
 	- Added an example distribution (Steffen Mueller).
 
