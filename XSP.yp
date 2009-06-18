@@ -168,7 +168,7 @@ arg_list:       argument                { [ $_[1] ] }
               | arg_list COMMA argument { push @{$_[1]}, $_[3]; $_[1] }
               | ;
 
-argument:       type 'length' OPPAR ID CLPAR
+argument:       type p_length OPCURLY ID CLCURLY
                     { make_argument( @_[0, 1], "length($_[4])" ) }
               | type ID EQUAL value
                     { make_argument( @_[0, 1, 2, 4] ) }
@@ -231,20 +231,20 @@ my %tokens = ( '::' => 'DCOLON',
                 '.' => 'DOT',
                 '-' => 'DASH',
                # these are here due to my lack of skill with yacc
-               '%name' => 'p_name',
+               '%name'    => 'p_name',
                '%typemap' => 'p_typemap',
-               '%file' => 'p_file',
-               '%module' => 'p_module',
-               '%code' => 'p_code',
+               '%file'    => 'p_file',
+               '%module'  => 'p_module',
+               '%code'    => 'p_code',
                '%cleanup' => 'p_cleanup',
                '%package' => 'p_package',
+               '%length'  => 'p_length',
              );
 
 my %keywords = ( const => 1,
                  class => 1,
                  unsigned => 1,
                  short => 1,
-                 length => 1, # This is an XS specific keyword
                  long => 1,
                  int => 1,
                  char => 1,
@@ -325,8 +325,8 @@ sub yylex {
         }
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
-                      | \%name | \%typemap | \%module | \%code
-                      | \%file | \%cleanup | \%package
+                      | \%name | \%typemap | \%module  | \%code
+                      | \%file | \%cleanup | \%package | \%length
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {

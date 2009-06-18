@@ -197,7 +197,7 @@ Foo::foo( a, b, c )
  * right after
  * class
  */
-=== length() and ANSI style
+=== %length and ANSI style
 --- xsp_stdout
 %module{Foo};
 
@@ -208,7 +208,7 @@ Foo::foo( a, b, c )
 %typemap{char*}{simple};
 
 unsigned int
-bar( char* line, unsigned long length(line) );
+bar( char* line, unsigned long %length{line} );
 --- expected
 MODULE=Foo PACKAGE=Bar
 
