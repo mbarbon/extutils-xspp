@@ -353,10 +353,10 @@ sub yyerror {
   my $data = $_[0]->YYData->{LEX};
   my $buf = $data->{BUFFER};
   my $fh = $data->{FH};
-   
-  print STDERR "Error: line " . $fh->input_line_number . " (",
-    $_[0]->YYCurtok, ') (',
-    $_[0]->YYCurval, ') "', ( $buf ? $$buf : '--empty buffer--' ),
+
+  print STDERR "Error: line " . $fh->input_line_number . " (Current token type: '",
+    $_[0]->YYCurtok, "') (Current value: '",
+    $_[0]->YYCurval, '\') Buffer: "', ( $buf ? $$buf : '--empty buffer--' ),
       q{"} . "\n";
   print STDERR "Expecting: (", ( join ", ", map { "'$_'" } $_[0]->YYExpect ),
         ")\n";
