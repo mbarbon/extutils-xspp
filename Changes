@@ -4,6 +4,7 @@ Revision history for Perl extension ExtUtils::XSpp.
 	- If the length() feature is used, generate ANSI style
 	  XSUBs instead of the default K.-R. style. (Steffen Mueller)
 	- Add parsing deep class hierarchies. (Steffen Mueller)
+	- Fix two-part types (eg. unsigned int). (Steffen Mueller)
 
 0.03
 	- Include a renamed Parse::Yapp::Driver to eschew

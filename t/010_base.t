@@ -203,14 +203,14 @@ Foo::foo( a, b, c )
 
 %package{Bar};
 
-%typemap{float}{simple};
-%typemap{int}{simple};
+%typemap{unsigned int}{simple};
+%typemap{unsigned long}{simple};
 %typemap{char*}{simple};
 
-float
-bar( char* line, int length(line) );
+unsigned int
+bar( char* line, unsigned long length(line) );
 --- expected
 MODULE=Foo PACKAGE=Bar
 
-float
-bar( char* line, int length(line) )
+unsigned int
+bar( char* line, unsigned long length(line) )
