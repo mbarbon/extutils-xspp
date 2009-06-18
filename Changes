@@ -1,7 +1,9 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.02
+	- Added an example distribution (Steffen Mueller).
+
 0.01
 	- Extracted from wxPerl source tree.
-	- Added an example distribution (Steffen Mueller).
 	- Pass through C and C++ comments.
 	- Added test suite.
