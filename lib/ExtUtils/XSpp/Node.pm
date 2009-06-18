@@ -230,6 +230,12 @@ sub resolve_typemaps {
 
 =head2 ExtUtils::XSpp::Node::Function::cleanup
 
+=head2 ExtUtils::XSpp::Node::Function::argument_style
+
+Returns either C<ansi> or C<kr>. C<kr> is the default.
+C<ansi> is returned if any one of the arguments uses the XS
+C<length> feature.
+
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
@@ -246,6 +252,15 @@ sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
 sub set_static { $_[0]->{STATIC} = $_[1] }
 sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 
+sub argument_style {
+  my $this = shift;
+  foreach my $arg (@{$this->{ARGUMENTS}}) {
+    return 'ansi' if $arg->name =~ /length.*\(/;
+  }
+  return 'kr';
+}
+
+# Depending on argument style, this produces either: (style=kr)
 #
 # return_type
 # class_name::function_name( args = def, ... )
@@ -259,6 +274,14 @@ sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 #     RETVAL
 #   CLEANUP:
 #     /* anything */
+#
+# Or: (style=ansi)
+#
+# return_type
+# class_name::function_name( type arg1 = def, type arg2 = def, ... )
+#   PREINIT:
+# (rest as above)
+
 sub print {
   my $this = shift;
   my $state = shift;
@@ -270,23 +293,27 @@ sub print {
   my $need_call_function = 0;
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup, $precall ) =
     ( '', '', '', '', '', '', '' );
+  my $use_ansi_style = $this->argument_style() eq 'ansi';
 
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
     my( @arg_list, @call_arg_list );
     foreach my $i ( 0 .. $#$args ) {
-      my $a = ${$args}[$i];
+      my $arg = ${$args}[$i];
       my $t = $this->{TYPEMAPS}{ARGUMENTS}[$i];
       my $pc = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
-                                 $a->name );
+                                 $arg->name );
 
       $need_call_function ||=    defined $t->call_parameter_code( '' )
                               || defined $pc;
-      push @arg_list, $a->name . ( $a->has_default ? ' = ' . $a->default : '' );
-      $init .= '    ' . $t->cpp_type . ' ' . $a->name . "\n";
+      my $type = $use_ansi_style ? $t->cpp_type . ' ' : '';
+      push @arg_list, $type . $arg->name . ( $arg->has_default ? ' = ' . $arg->default : '' );
+      if (!$use_ansi_style) {
+        $init .= '    ' . $t->cpp_type . ' ' . $arg->name . "\n";
+      }
 
-      my $call_code = $t->call_parameter_code( $a->name );
-      push @call_arg_list, defined( $call_code ) ? $call_code : $a->name;
+      my $call_code = $t->call_parameter_code( $arg->name );
+      push @call_arg_list, defined( $call_code ) ? $call_code : $arg->name;
       $precall .= $pc . ";\n" if $pc
     }
 
