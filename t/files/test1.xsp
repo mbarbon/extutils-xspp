@@ -1,8 +1,8 @@
-%module{Foo};
+%module{Foo::Bar::Baz};
 
 #include <foo.h>
 
-%package{Foo};
+%package{Foo::Bar::Baz::Buz};
 
 %typemap{int}{simple};
 
