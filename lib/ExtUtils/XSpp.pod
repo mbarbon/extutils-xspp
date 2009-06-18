@@ -87,6 +87,21 @@ accessible.
 
 See B<TYPEMAPS> above.
 
+=head2 %length
+
+When you need to pass a string from Perl to an XSUB that
+takes the C string and its length as arguments,
+you may have XS++ pass the length of the string automatically.
+For example, if you declare a method as follows,
+
+  void PrintLine( char* line, unsigned int %length{line} );
+
+you can call the method from Perl like this:
+
+  $object->PrintLine( $string );
+
+This feature is also present in plain XS. See also: L<perlxs>
+
 =head2 Classes
 
   %name{My::Class} class MyClass
