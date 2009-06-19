@@ -38,6 +38,8 @@ my $driver = ExtUtils::XSpp::Driver->new
   ( typemaps   => \@typemap_files,
     file       => shift @ARGV,
     );
-$driver->process;
+my $success = $driver->process;
+
+exit(1) if !$success;
 
 exit 0;

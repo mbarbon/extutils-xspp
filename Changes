@@ -5,6 +5,8 @@ Revision history for Perl extension ExtUtils::XSpp.
 	  XSUBs instead of the default K.-R. style. (Steffen Mueller)
 	- Add parsing deep class hierarchies. (Steffen Mueller)
 	- Fix two-part types (eg. unsigned int). (Steffen Mueller)
+	- Non-zero exit value on failure for more graceful build errors.
+          (Steffen Mueller)
 
 0.03
 	- Include a renamed Parse::Yapp::Driver to eschew
