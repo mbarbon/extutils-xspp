@@ -14,11 +14,11 @@ ExtUtils::XSpp::Parser - an XS++ parser
 
 sub _my_open {
   my $file = shift;
-  local *IN;
 
-  open IN, "< $file" or die "open '$file': $!";
+  open my $in, "<", $file
+    or die "Failed to open '$file' for reading: $!";
 
-  return *IN;
+  return $in;
 }
 
 =head2 ExtUtils::XSpp::Parser::new( file => path )
@@ -52,7 +52,8 @@ sub parse {
   if( $this->{FILE} ) {
       $fh = _my_open( $this->{FILE} );
   } else {
-      open $fh, '<', \$this->{STRING};
+      open $fh, '<', \$this->{STRING}
+        or die "Failed to create file handle from in-memory string";
   }
   my $buf = '';
 

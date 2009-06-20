@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 9;
+use t::lib::XSP::Test tests => 11;
 
 run_diff xsp_stdout => 'expected';
 
@@ -197,3 +197,47 @@ Foo::foo( a, b, c )
  * right after
  * class
  */
+=== %length and ANSI style
+--- xsp_stdout
+%module{Foo};
+
+%package{Bar};
+
+%typemap{unsigned int}{simple};
+%typemap{unsigned long}{simple};
+%typemap{char*}{simple};
+
+unsigned int
+bar( char* line, unsigned long %length{line} );
+--- expected
+MODULE=Foo PACKAGE=Bar
+
+unsigned int
+bar( char* line, unsigned long length(line) )
+=== various integer types
+--- xsp_stdout
+%module{Foo};
+
+%package{Bar};
+
+%typemap{short int}{simple};
+%typemap{short}{simple};
+%typemap{unsigned short int}{simple};
+%typemap{unsigned}{simple};
+%typemap{unsigned int}{simple};
+%typemap{int}{simple};
+%typemap{unsigned short}{simple};
+
+short int
+bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f );
+--- expected
+MODULE=Foo PACKAGE=Bar
+
+short int
+bar( a, b, c, d, e, f )
+    short a
+    unsigned short int b
+    unsigned c
+    unsigned int d
+    int e
+    unsigned short f

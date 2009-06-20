@@ -25,7 +25,8 @@ sub generate {
     my $parser = ExtUtils::XSpp::Parser->new( file   => $self->file,
                                               string => $self->string,
                                               );
-    $parser->parse;
+    my $success = $parser->parse;
+    return() if not $success;
 
     return $self->_emit( $parser );
 }
@@ -33,7 +34,9 @@ sub generate {
 sub process {
     my( $self ) = @_;
 
-    $self->_write( $self->generate );
+    my $generated = $self->generate;
+    return() if not $generated;
+    $self->_write( $generated );
 }
 
 sub _write {
@@ -51,6 +54,7 @@ sub _write {
             close $fh or die "close '$f': $!";
         }
     }
+    return 1;
 }
 
 sub _emit {

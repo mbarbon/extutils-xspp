@@ -24,7 +24,8 @@ open my $fh, '>', \my $out;
 }
 
 sub slurp($) {
-    open my $fh, '<', $_[0];
+    open my $fh, '<', $_[0]
+      or die "Could not open file '$_[0]' for reading: $!";
     return join '', <$fh>;
 }
 
@@ -33,7 +34,7 @@ eq_or_diff( $out, <<EOT, 'Output on stdout' );
 
 
 
-MODULE=Foo PACKAGE=Foo
+MODULE=Foo::Bar::Baz PACKAGE=Foo::Bar::Baz::Buz
 
 
 int

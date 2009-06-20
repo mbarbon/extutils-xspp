@@ -1,7 +1,21 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Let XS' length() feature pass through. (Steffen Mueller)
+	- If the length() feature is used, generate ANSI style
+	  XSUBs instead of the default K.-R. style. (Steffen Mueller)
+	- Add parsing deep class hierarchies. (Steffen Mueller)
+	- Fix two-part types (eg. unsigned int). (Steffen Mueller)
+	- Non-zero exit value on failure for more graceful build errors.
+          (Steffen Mueller)
+
+0.03
+	- Include a renamed Parse::Yapp::Driver to eschew
+	  a dependency. (Steffen Mueller)
+
+0.02
+	- Added an example distribution (Steffen Mueller).
+
 0.01  Wed Jun 17 21:01:00 CEST 2009
 	- Extracted from wxPerl source tree.
-	- Added an example distribution (Steffen Mueller).
 	- Pass through C and C++ comments.
 	- Added test suite.

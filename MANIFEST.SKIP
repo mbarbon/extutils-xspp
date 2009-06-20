@@ -5,6 +5,7 @@
 \B\.svn\b
 \B\.cvsignore$
 ^\.git
+.gitignore
 
 # Avoid Makemaker generated and utility files.
 \bMakefile$
@@ -45,4 +46,9 @@
 #   Mac OSX SMB mount metadata files
 \B\._
 # Avoid archives of this distribution
-\bXS-XSpp-[\d\.\_]+
+\bExtUtils-XSpp-[\d\.\_]+
+
+# Avoid build and test products
+^t/files/foo.h
+^XSP.output
+

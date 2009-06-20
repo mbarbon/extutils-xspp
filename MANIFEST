@@ -1,9 +1,17 @@
 Build.PL
 Changes
-MANIFEST
-MANIFEST.SKIP
-META.yml
-XSP.yp
+examples/Object-WithIntAndString/IntAndString.cc
+examples/Object-WithIntAndString/IntAndString.h
+examples/Object-WithIntAndString/lib/Object/WithIntAndString.pm
+examples/Object-WithIntAndString/Makefile.PL
+examples/Object-WithIntAndString/Object-WithIntAndString.xsp
+examples/Object-WithIntAndString/perlobject.map
+examples/Object-WithIntAndString/ppport.h
+examples/Object-WithIntAndString/t/01load.t
+examples/Object-WithIntAndString/t/02test.t
+examples/Object-WithIntAndString/typemap
+examples/Object-WithIntAndString/typemap.xsp
+examples/Object-WithIntAndString/WithIntAndString.xs
 inc/My/Build.pm
 lib/ExtUtils/XSpp.pm
 lib/ExtUtils/XSpp.pod
@@ -12,6 +20,9 @@ lib/ExtUtils/XSpp/Grammar.pm
 lib/ExtUtils/XSpp/Node.pm
 lib/ExtUtils/XSpp/Parser.pm
 lib/ExtUtils/XSpp/Typemap.pm
+MANIFEST
+META.yml
+README
 scripts/xspp
 t/001_load.t
 t/005_io.t
@@ -28,3 +39,4 @@ t/files/test1.xsp
 t/files/typemap.xsp
 t/lib/XSP/Test.pm
 t/zzz_pod.t
+XSP.yp

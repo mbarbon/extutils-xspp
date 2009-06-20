@@ -3,14 +3,31 @@ package My::Build;
 use strict;
 use warnings;
 use base qw(Module::Build);
+use File::Spec ();
 
 sub ACTION_code {
     my( $self ) = @_;
 
+    # Generate the parser using yapp
+    my $grammar_module = File::Spec->catfile(qw(lib ExtUtils XSpp Grammar.pm));
     if( !$self->up_to_date( [ 'XSP.yp' ],
-                            [ 'lib/ExtUtils/XSpp/Grammar.pm' ] ) ) {
-        $self->do_system( 'yapp', '-v', '-m', 'ExtUtils::XSpp::Grammar',
-                          '-o', 'lib/ExtUtils/XSpp/Grammar.pm', 'XSP.yp' );
+                            [ $grammar_module ] ) ) {
+        $self->do_system( 'yapp', '-v', '-m', 'ExtUtils::XSpp::Grammar', '-s',
+                          '-o', $grammar_module, 'XSP.yp' );
+
+        # Replace the copy Parse::Yapp::Driver with a package in
+        # our own namespace hierarchy
+        open my $fh, '+<', $grammar_module
+          or die "Could not open file '$grammar_module' for rw: $!";
+        my @code = map {
+          s{(?<!Module )Parse::Yapp::Driver}
+           {ExtUtils::XSpp::Grammar::YappDriver}gx;
+          $_
+        } <$fh>;
+        seek $fh, 0, 0;
+        truncate $fh, 0;
+        print $fh @code;
+        close $fh or die "Updating grammar module failed: $!";
     }
 
     $self->SUPER::ACTION_code;
