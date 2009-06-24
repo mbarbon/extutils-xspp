@@ -1,5 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.04
 	- Let XS' length() feature pass through. (Steffen Mueller)
 	- If the length() feature is used, generate ANSI style
 	  XSUBs instead of the default K.-R. style. (Steffen Mueller)
