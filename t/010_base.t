@@ -193,10 +193,10 @@ Foo::foo( a, b, c )
 # after method
 
 
-/* long comment
- * right after
- * class
- */
+##/* long comment
+## * right after
+## * class
+## */
 === %length and ANSI style
 --- xsp_stdout
 %module{Foo};
