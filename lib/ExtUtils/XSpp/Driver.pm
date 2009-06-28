@@ -64,6 +64,10 @@ sub _emit {
     my $out_file = '-';
     my %state = ( current_module => undef );
 
+    foreach my $plugin ( @{$parser->post_process_plugins} ) {
+        $plugin->post_process( $data );
+    }
+
     foreach my $e ( @$data ) {
         if( $e->isa( 'ExtUtils::XSpp::Node::Module' ) ) {
             $state{current_module} = $e;

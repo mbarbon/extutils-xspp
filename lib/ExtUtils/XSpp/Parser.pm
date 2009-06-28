@@ -60,6 +60,7 @@ sub parse {
   my $parser = $this->{PARSER};
   $parser->YYData->{LEX}{FH} = $fh;
   $parser->YYData->{LEX}{BUFFER} = \$buf;
+  local $parser->YYData->{PARSER} = $this;
 
   $this->{DATA} = $parser->YYParse( yylex   => \&ExtUtils::XSpp::Grammar::yylex,
                                     yyerror => \&ExtUtils::XSpp::Grammar::yyerror,
@@ -93,5 +94,38 @@ sub get_errors {
 
   return @{$this->{ERRORS}};
 }
+
+=head2 ExtUtils::XSpp::Parser::load_plugin
+
+Loads the specified plugin and calls its C<register_plugin> method.
+
+=cut
+
+sub load_plugin {
+  my $this = shift;
+  my( $package ) = @_;
+
+  ( my $module = $package ) =~ s{::}{/}g;
+
+  require "$module.pm";
+
+  $package->register_plugin( $this );
+}
+
+=head2 ExtUtils::XSpp::Parser::add_post_process_plugin
+
+Adds the specified plugin to be called after parsing is complete to
+modify the parse tree before it is emitted.
+
+=cut
+
+sub add_post_process_plugin {
+  my $this = shift;
+  my( $plugin ) = @_;
+
+  push @{$this->{PLUGINS}{POST_PROCESS}}, $plugin;
+}
+
+sub post_process_plugins { $_[0]->{PLUGINS}{POST_PROCESS} || [] }
 
 1;

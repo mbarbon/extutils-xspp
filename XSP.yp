@@ -31,6 +31,8 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
+              | perc_require SEMICOLON
+                    { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | typemap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
@@ -141,6 +143,7 @@ perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
 perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
 perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
 perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
+perc_require:   p_require OPCURLY class_name CLCURLY  { $_[3] };
 perc_code:      p_code special_block                  { [ code => $_[2] ] };
 perc_cleanup:   p_cleanup special_block               { [ cleanup => $_[2] ] };
 
@@ -240,6 +243,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%cleanup' => 'p_cleanup',
                '%package' => 'p_package',
                '%length'  => 'p_length',
+               '%require' => 'p_require',
              );
 
 my %keywords = ( const => 1,
@@ -328,6 +332,7 @@ sub yylex {
                       | \%{ | {\%
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
+                      | \%require
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {
