@@ -33,6 +33,8 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
               | perc_require SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
+              | perc_include SEMICOLON
+                    { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
               | typemap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
@@ -144,6 +146,7 @@ perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
 perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
 perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
 perc_require:   p_require OPCURLY class_name CLCURLY  { $_[3] };
+perc_include:   p_include OPCURLY file_name CLCURLY   { $_[3] };
 perc_code:      p_code special_block                  { [ code => $_[2] ] };
 perc_cleanup:   p_cleanup special_block               { [ cleanup => $_[2] ] };
 
@@ -244,6 +247,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%package' => 'p_package',
                '%length'  => 'p_length',
                '%require' => 'p_require',
+               '%include' => 'p_include',
              );
 
 my %keywords = ( const => 1,
@@ -279,23 +283,32 @@ sub pop_lex_mode {
 }
 
 sub read_more {
-  my( $fh, $buf ) = @_;
-  my $v = <$fh>;
+  my $v = readline $_[0]->YYData->{LEX}{FH};
+  my $buf = $_[0]->YYData->{LEX}{BUFFER};
 
-  return unless defined $v;
+  unless( defined $v ) {
+    if( $_[0]->YYData->{LEX}{NEXT} ) {
+      $_[0]->YYData->{LEX} = $_[0]->YYData->{LEX}{NEXT};
+      $buf = $_[0]->YYData->{LEX}{BUFFER};
+
+      return $buf if length $$buf;
+      return read_more( $_[0] );
+    } else {
+      return;
+    }
+  }
 
   $$buf .= $v;
 
-  return 1;
+  return $buf;
 }
 
 sub yylex {
   my $data = $_[0]->YYData->{LEX};
-  my $fh = $data->{FH};
   my $buf = $data->{BUFFER};
 
   for(;;) {
-    if( !length( $$buf ) && !read_more( $fh, $buf ) ) {
+    if( !length( $$buf ) && !( $buf = read_more( $_[0] ) ) ) {
       return ( '', undef );
     }
 
@@ -322,7 +335,7 @@ sub yylex {
         return ( 'RAW_CODE', '##' . $1 );
       } elsif( $$buf =~ s/^\/\*// ) {
         my $raw = '/*';
-        for(; length( $$buf ) || read_more( $fh, $buf ); $$buf = '') {
+        for(; length( $$buf ) || ( $buf = read_more( $_[0] ) ); $$buf = '') {
           if( $$buf =~ s/(.*?\*\/)// ) {
               return ( 'RAW_CODE', $raw . $1 );
           }
@@ -332,7 +345,7 @@ sub yylex {
                       | \%{ | {\%
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
-                      | \%require
+                      | \%require | \%include
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {

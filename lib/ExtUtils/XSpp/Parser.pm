@@ -68,6 +68,18 @@ sub parse {
                                    );
 }
 
+sub include_file {
+  my $this = shift;
+  my( $file ) = @_;
+  my $buf = '';
+  my $new_lex = { FH     => _my_open( $file ),
+                  BUFFER => \$buf,
+                  NEXT   => $this->{PARSER}->YYData->{LEX},
+                  };
+
+  $this->{PARSER}->YYData->{LEX} = $new_lex;
+}
+
 =head2 ExtUtils::XSpp::Parser::get_data
 
 Returns a list containing the parsed data. Each item of the list is
