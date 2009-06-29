@@ -34,11 +34,13 @@ t/022_static.t
 t/030_code_blocks.t
 t/031_verbatim_blocks.t
 t/035_include.t
+t/040_plugin.t
 t/075_types.t
 t/080_complex_typemap.t
 t/files/include.xsp
 t/files/test1.xsp
 t/files/typemap.xsp
+t/lib/XSP/Plugin.pm
 t/lib/XSP/Test.pm
 t/zzz_pod.t
 XSP.yp
