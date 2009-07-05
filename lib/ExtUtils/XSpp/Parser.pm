@@ -117,11 +117,18 @@ sub load_plugin {
   my $this = shift;
   my( $package ) = @_;
 
-  ( my $module = $package ) =~ s{::}{/}g;
-
-  require "$module.pm";
-
-  $package->register_plugin( $this );
+  if (eval "require ExtUtils::XSpp::Plugin::$package;") {
+    $package = "ExtUtils::XSpp::Plugin::$package";
+    $package->register_plugin( $this );
+  }
+  elsif (eval "require $package;") {
+    $package->register_plugin( $this );
+  }
+  else {
+    die "Could not load XS++ plugin '$package' (neither via the namespace "
+       ."'ExtUtils::XS++::Plugin::$package' nor via '$package'). Reason: $@";
+  }
+  return 1;
 }
 
 =head2 ExtUtils::XSpp::Parser::add_post_process_plugin
