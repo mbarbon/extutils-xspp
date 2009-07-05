@@ -12,7 +12,7 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%require{t::lib::XSP::Plugin};
+%loadplugin{t::lib::XSP::Plugin};
 
 %typemap{int}{simple};
 %typemap{void}{simple};

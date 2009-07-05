@@ -31,7 +31,7 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
-              | perc_require SEMICOLON
+              | perc_loadplugin SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
@@ -141,14 +141,14 @@ _metadata:      perc_code
               | perc_cleanup
               ;
 
-perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
-perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
-perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
-perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
-perc_require:   p_require OPCURLY class_name CLCURLY  { $_[3] };
-perc_include:   p_include OPCURLY file_name CLCURLY   { $_[3] };
-perc_code:      p_code special_block                  { [ code => $_[2] ] };
-perc_cleanup:   p_cleanup special_block               { [ cleanup => $_[2] ] };
+perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
+perc_package:    p_package OPCURLY class_name CLCURLY    { $_[3] };
+perc_module:     p_module OPCURLY class_name CLCURLY     { $_[3] };
+perc_file:       p_file OPCURLY file_name CLCURLY        { $_[3] };
+perc_loadplugin: p_loadplugin OPCURLY class_name CLCURLY { $_[3] };
+perc_include:    p_include OPCURLY file_name CLCURLY     { $_[3] };
+perc_code:       p_code special_block                    { [ code => $_[2] ] };
+perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
 
 type:           'const' type_name      { make_const( make_type( $_[2] ) ) }
               | type STAR              { make_ptr( $_[1] ) }
@@ -238,16 +238,16 @@ my %tokens = ( '::' => 'DCOLON',
                 '.' => 'DOT',
                 '-' => 'DASH',
                # these are here due to my lack of skill with yacc
-               '%name'    => 'p_name',
-               '%typemap' => 'p_typemap',
-               '%file'    => 'p_file',
-               '%module'  => 'p_module',
-               '%code'    => 'p_code',
-               '%cleanup' => 'p_cleanup',
-               '%package' => 'p_package',
-               '%length'  => 'p_length',
-               '%require' => 'p_require',
-               '%include' => 'p_include',
+               '%name'       => 'p_name',
+               '%typemap'    => 'p_typemap',
+               '%file'       => 'p_file',
+               '%module'     => 'p_module',
+               '%code'       => 'p_code',
+               '%cleanup'    => 'p_cleanup',
+               '%package'    => 'p_package',
+               '%length'     => 'p_length',
+               '%loadplugin' => 'p_loadplugin',
+               '%include'    => 'p_include',
              );
 
 my %keywords = ( const => 1,
@@ -345,7 +345,7 @@ sub yylex {
                       | \%{ | {\%
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
-                      | \%require | \%include
+                      | \%loadplugin | \%include
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {
