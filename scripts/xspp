@@ -27,19 +27,6 @@ See C<ExtUtils::XSpp>.
 
 =cut
 
-use Getopt::Long;
+use ExtUtils::XSpp::Cmd;
 
-use ExtUtils::XSpp::Driver;
-
-my @typemap_files;
-GetOptions( 'typemap=s' => \@typemap_files );
-
-my $driver = ExtUtils::XSpp::Driver->new
-  ( typemaps   => \@typemap_files,
-    file       => shift @ARGV,
-    );
-my $success = $driver->process;
-
-exit(1) if !$success;
-
-exit 0;
+exit xspp;
