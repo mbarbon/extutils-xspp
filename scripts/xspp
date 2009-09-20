@@ -21,9 +21,13 @@ xspp - XS++ preprocessor
 
     xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
 
+or
+
+    perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+
 =head1 DOCUMENTATION
 
-See C<ExtUtils::XSpp>.
+See L<ExtUtils::XSpp>.
 
 =cut
 

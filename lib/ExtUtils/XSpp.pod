@@ -6,10 +6,19 @@ ExtUtils::XSpp - XS for C++
 
   xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
 
-In Foo.xs (all in one line):
+or
 
-  INCLUDE: perl -S xspp --typemap=typemap.xsp
-           Foo.xsp |
+  perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+
+In Foo.xs
+
+  INCLUDE: xspp --typemap=typemap.xsp Foo.xsp |
+
+  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+
+Using C<ExtUtils::XSpp::Cmd> is equivalent to using the C<xspp>
+command line script, except that there is no guarantee for C<xspp> to
+be installed in the system PATH.
 
 =head1 OVERVIEW
 
