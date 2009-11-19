@@ -33,6 +33,8 @@ class Y
     void bar();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -63,6 +65,8 @@ class Y
     void bar();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int

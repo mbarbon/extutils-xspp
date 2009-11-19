@@ -17,6 +17,8 @@ __DATA__
 Straight to XS, no checks...
 %}
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 
@@ -35,6 +37,8 @@ Straight to XS, no checks...
     int foo(int a);
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=X
 
 

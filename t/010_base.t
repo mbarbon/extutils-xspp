@@ -20,6 +20,8 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -39,6 +41,8 @@ class Foo
 {
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 === Basic function
@@ -50,6 +54,8 @@ MODULE=Foo PACKAGE=Foo
 
 int foo( int a );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
@@ -68,6 +74,8 @@ class Foo
     int foo( int a = 1 );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -86,6 +94,8 @@ class Foo
     Foo( int a = 1 );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 Foo*
@@ -104,6 +114,8 @@ class Foo
     ~Foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -121,6 +133,8 @@ class Foo
     void foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -138,6 +152,8 @@ class Foo
     void foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -168,6 +184,8 @@ class Foo
  * class
  */
 --- expected
+MODULE=Foo
+
   Passed through verbatim
   as written in sources
 
@@ -210,6 +228,8 @@ Foo::foo( a, b, c )
 unsigned int
 bar( char* line, unsigned long %length{line} );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar
 
 unsigned int
@@ -231,6 +251,8 @@ bar( char* line, unsigned long length(line) )
 short int
 bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar
 
 short int

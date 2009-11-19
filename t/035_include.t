@@ -17,6 +17,8 @@ __DATA__
 %include{t/files/include.xsp};
 int bar(int y);
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 # trivial typemap

@@ -20,6 +20,8 @@ class Foo
     package_static int foo(int a);
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int

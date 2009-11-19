@@ -20,6 +20,8 @@ class Foo
     void foo( Foo& a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -39,6 +41,8 @@ class Foo
     Foo& foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 Foo*

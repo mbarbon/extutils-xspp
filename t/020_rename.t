@@ -17,6 +17,8 @@ __DATA__
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
@@ -47,6 +49,8 @@ class Foo
     %name{bar} int foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -68,6 +72,8 @@ class Foo
     %name{newFoo} Foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 static Foo*
@@ -90,6 +96,8 @@ Foo::newFoo( a )
     %name{foo_int} int foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar::Baz
 
 void

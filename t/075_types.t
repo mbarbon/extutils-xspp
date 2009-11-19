@@ -19,6 +19,8 @@ __DATA__
 int* foo();
 int* boo(const int* a);
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int*
@@ -40,6 +42,8 @@ boo( a )
 void foo(const std::string a);
 void boo(const std::string& a);
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void

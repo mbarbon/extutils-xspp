@@ -20,6 +20,8 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 foobar
@@ -39,6 +41,8 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -61,6 +65,8 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -84,6 +90,8 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -109,6 +117,8 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int

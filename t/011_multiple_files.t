@@ -24,6 +24,8 @@ text
 
 int foo( int a, int b, int c );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 

@@ -565,7 +565,7 @@ sub init {
 
 sub module { $_[0]->{MODULE} }
 sub to_string { 'MODULE=' . $_[0]->module }
-sub print { "" }
+sub print { return $_[0]->to_string . "\n" }
 
 package ExtUtils::XSpp::Node::File;
 

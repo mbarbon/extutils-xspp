@@ -17,6 +17,8 @@ __DATA__
 %name{boo} int foo(int a)
     %code{% RETVAL = a + 12; %};
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -35,6 +37,8 @@ boo( a )
 %name{boo} int foo(int a)
     %cleanup{% free( it ); %};
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -56,6 +60,8 @@ boo( a )
 %name{boo} void foo(int a)
     %code{% blub( a ); %};
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -75,6 +81,8 @@ boo( a )
     %code{% blub( a ); %}
     %cleanup{% free( it ); %};
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
