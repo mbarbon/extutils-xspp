@@ -53,6 +53,32 @@ Returns an array reference holding the rows to be output in the final file.
 sub rows { $_[0]->{ROWS} }
 sub print { join( "\n", @{$_[0]->rows} ) . "\n" }
 
+package ExtUtils::XSpp::Node::Comment;
+
+=head1 ExtUtils::XSpp::Node::Comment
+
+Contains data that should be output prefixed with a comment marker
+
+=cut
+
+use strict;
+use base 'ExtUtils::XSpp::Node::Raw';
+
+sub init {
+  my $this = shift;
+  my %args = @_;
+
+  $this->{ROWS} = $args{rows};
+}
+
+sub print {
+  my $this = shift;
+  my $state = shift;
+  my $comm = defined $state->{current_module} ? '##' : '//';
+
+  return join( "\n", map $comm . $_, @{$this->rows} ) . "\n";
+}
+
 package ExtUtils::XSpp::Node::Package;
 
 =head1 ExtUtils::XSpp::Node::Package

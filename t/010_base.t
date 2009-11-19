@@ -161,7 +161,13 @@ Foo::foo()
 
 === Comments and raw blocks
 --- xsp_stdout
+// comment before %module
+## comment before %module
+
 %module{Foo};
+
+## comment after %module
+// comment after %module
 
 {%
   Passed through verbatim
@@ -184,7 +190,15 @@ class Foo
  * class
  */
 --- expected
+// comment before %module
+## comment before %module
+
+
 MODULE=Foo
+## comment after %module
+
+
+## comment after %module
 
   Passed through verbatim
   as written in sources

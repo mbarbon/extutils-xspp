@@ -12,7 +12,7 @@
 
 %token OPCURLY CLCURLY OPPAR CLPAR SEMICOLON TILDE DCOLON
 %token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
-%token INTEGER RAW_CODE ID COLON
+%token INTEGER RAW_CODE COMMENT ID COLON
 %expect 1
 
 %%
@@ -49,6 +49,7 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       undef };
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
+      | COMMENT         { add_data_comment( $_[0], $_[1] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
 class:    class_decl | decorate_class;
@@ -332,14 +333,16 @@ sub yylex {
       if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
         return ( 'FLOAT', $1 );
       } elsif( $$buf =~ s/^\/\/(.*)(?:\r\n|\r|\n)// ) {
-        return ( 'RAW_CODE', '##' . $1 );
+        return ( 'COMMENT', [ $1 ] );
       } elsif( $$buf =~ /^\/\*/ ) {
-        my $raw = '';
+        my @rows;
         for(; length( $$buf ) || ( $buf = read_more( $_[0] ) ); $$buf = '') {
           if( $$buf =~ s/(.*?\*\/)// ) {
-              return ( 'RAW_CODE', $raw . '##' . $1 );
+              push @rows, $1;
+              return ( 'COMMENT', \@rows );
           }
-          $raw .= '##' . $$buf;
+          $$buf =~ s/(?:\r\n|\r|\n)$//;
+          push @rows, $$buf;
         }
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
@@ -394,6 +397,13 @@ sub add_data_raw {
   my $rows = shift;
 
   ExtUtils::XSpp::Node::Raw->new( rows => $rows );
+}
+
+sub add_data_comment {
+  my $p = shift;
+  my $rows = shift;
+
+  ExtUtils::XSpp::Node::Comment->new( rows => $rows );
 }
 
 sub make_argument {
