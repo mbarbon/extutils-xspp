@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Add command line options to run xsubpp directly from xspp.
+
 0.05  Sun Sep 20 14:29:16 CEST 2009
 	- Move the implementation of xspp to ExtUtils::XSpp::Cmd.
 
@@ -10,7 +12,7 @@ Revision history for Perl extension ExtUtils::XSpp.
 	- Add parsing deep class hierarchies. (Steffen Mueller)
 	- Fix two-part types (eg. unsigned int). (Steffen Mueller)
 	- Non-zero exit value on failure for more graceful build errors.
-          (Steffen Mueller)
+	  (Steffen Mueller)
 
 0.03
 	- Include a renamed Parse::Yapp::Driver to eschew

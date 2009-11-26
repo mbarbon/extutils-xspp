@@ -35,8 +35,8 @@ sub process {
     my( $self ) = @_;
 
     my $generated = $self->generate;
-    return() if not $generated;
-    $self->_write( $generated );
+    return () if not $generated;
+    return $self->_write( $generated );
 }
 
 sub _write {
@@ -44,16 +44,32 @@ sub _write {
 
     foreach my $f ( keys %$out ) {
         if( $f eq '-' ) {
-            print $$out{$f};
+            if( $self->xsubpp ) {
+                require IPC::Open2;
+
+                my $cmd = $self->xsubpp . ' ' . ( $self->xsubpp_args || '' )
+                          . ' -';
+                my $pid = IPC::Open2::open2( '>&STDOUT', my $fh, $cmd );
+
+                print $fh $$out{$f} or die "Error writing to xsubpp: $!";
+                close $fh or die "Error writing to xsubpp: $!";
+                waitpid( $pid, 0 );
+                my $exit_code = $? >> 8;
+
+                return $exit_code;
+            } else {
+                print $$out{$f} or die "Error writing output";
+            }
         } else {
             File::Path::mkpath( File::Basename::dirname( $f ) );
 
             open my $fh, '>', $f or die "open '$f': $!";
             binmode $fh;
-            print $fh $$out{$f};
+            print $fh $$out{$f} or die "Error writing to '$f': $!";
             close $fh or die "close '$f': $!";
         }
     }
+
     return 1;
 }
 
@@ -85,5 +101,7 @@ sub typemaps { @{$_[0]->{typemaps} || []} }
 sub file     { $_[0]->{file} }
 sub string   { $_[0]->{string} }
 sub output   { $_[0]->{output} }
+sub xsubpp   { $_[0]->{xsubpp} }
+sub xsubpp_args { $_[0]->{xsubpp_args} }
 
 1;

@@ -4,7 +4,9 @@ ExtUtils::XSpp - XS for C++
 
 =head1 SYNOPSIS
 
-  xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+  xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]]
+       [--xsubpp[=/path/to/xsubpp] [--xsubpp-args="xsubpp args"]
+       Foo.xsp
 
 or
 
@@ -14,7 +16,7 @@ In Foo.xs
 
   INCLUDE: xspp --typemap=typemap.xsp Foo.xsp |
 
-  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments> |
 
 Using C<ExtUtils::XSpp::Cmd> is equivalent to using the C<xspp>
 command line script, except that there is no guarantee for C<xspp> to
@@ -27,6 +29,24 @@ are supposed to know, at the very least, C++ and XS.
 
 This means that you will need typemaps for B<both> the normal XS
 pre-processor I<xsubpp> and the XS++ pre-processor I<xspp>.
+
+=head1 COMMAND LINE
+
+=head2 C<--typemap=/path/to/typemap.xsp>
+
+Can be specified multiple times to process additional typemap files
+before the main XS++ input files.  Typemap files are processed the
+same way as regular XS++ files, except that output code is discarded.
+
+=head2 C<--xsubpp[=/path/to/xsubpp]>
+
+If specified, XS++ will run F<xsubpp> after processing the XS++ input
+file.  If the path to F<xsubpp> is not specified, F<xspp> expects to
+find it in the system PATH.
+
+=head2 C<--xsubpp-args="extra xsubpp args">
+
+Can be used to pass additional command line arguments to F<xsubpp>.
 
 =head1 TYPEMAPS
 

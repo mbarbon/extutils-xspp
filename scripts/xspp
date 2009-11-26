@@ -19,7 +19,9 @@ xspp - XS++ preprocessor
 
 =head1 SYNOPSIS
 
-    xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+    xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]]
+         [--xsubpp[=/path/to/xsubpp] [--xsubpp-args="xsubpp args"]
+         Foo.xsp
 
 or
 

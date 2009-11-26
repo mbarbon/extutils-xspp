@@ -12,7 +12,7 @@ ExtUtils::XSpp::Cmd - implementation of xspp
 
 In Foo.xs
 
-  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments> |
 
 Using C<ExtUtils::XSpp::Cmd> is equivalent to using the C<xspp>
 command line script, except that there is no guarantee for C<xspp> to
@@ -32,16 +32,23 @@ use ExtUtils::XSpp::Driver;
 our @EXPORT = qw(xspp);
 
 sub xspp {
-    my @typemap_files;
-    GetOptions( 'typemap=s' => \@typemap_files );
+    my( @typemap_files, $xsubpp, $xsubpp_args );
+    GetOptions( 'typemap=s'       => \@typemap_files,
+                'xsubpp:s'        => \$xsubpp,
+                'xsubpp-args=s'   => \$xsubpp_args,
+                );
+    $xsubpp = 'xsubpp' if defined $xsubpp && !length $xsubpp;
 
     my $driver = ExtUtils::XSpp::Driver->new
-      ( typemaps   => \@typemap_files,
-        file       => shift @ARGV,
+      ( typemaps    => \@typemap_files,
+        file        => shift @ARGV,
+        xsubpp      => $xsubpp,
+        xsubpp_args => $xsubpp_args,
         );
-    my $success = $driver->process;
+    my $success = $driver->process ? 0 : 1;
 
-    return $success ? 0 : 1;
+    exit $success unless defined wantarray;
+    return $success;
 }
 
 1;
