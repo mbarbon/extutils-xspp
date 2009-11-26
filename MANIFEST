@@ -18,6 +18,7 @@ lib/ExtUtils/XSpp.pod
 lib/ExtUtils/XSpp/Cmd.pm
 lib/ExtUtils/XSpp/Driver.pm
 lib/ExtUtils/XSpp/Grammar.pm
+lib/ExtUtils/XSpp/Lexer.pm
 lib/ExtUtils/XSpp/Node.pm
 lib/ExtUtils/XSpp/Parser.pm
 lib/ExtUtils/XSpp/Typemap.pm
