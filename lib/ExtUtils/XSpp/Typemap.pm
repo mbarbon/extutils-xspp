@@ -70,7 +70,7 @@ sub get_typemap_for_type {
     return ${$t}[1] if $t->[0]->equals( $type );
   }
 
-  die "No typemap for type ", $type->print;
+  Carp::confess( "No typemap for type ", $type->print );
 }
 
 package ExtUtils::XSpp::Typemap::parsed;
