@@ -56,7 +56,7 @@ sub _write {
                 waitpid( $pid, 0 );
                 my $exit_code = $? >> 8;
 
-                return $exit_code;
+                return 0 if $exit_code;
             } else {
                 print $$out{$f} or die "Error writing output";
             }
