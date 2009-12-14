@@ -63,6 +63,17 @@ sub add_typemap_for_type {
   unshift @typemaps, [ $type, $typemap ];
 }
 
+# a weak typemap does not override an already existing typemap for the
+# same type
+sub add_weak_typemap_for_type {
+  my( $type, $typemap ) = @_;
+
+  foreach my $t ( @typemaps ) {
+    return if $t->[0]->equals( $type );
+  }
+  unshift @typemaps, [ $type, $typemap ];
+}
+
 sub get_typemap_for_type {
   my $type = shift;
 

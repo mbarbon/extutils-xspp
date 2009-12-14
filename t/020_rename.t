@@ -42,7 +42,6 @@ boo( a )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -65,7 +64,6 @@ Foo::bar( a )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {

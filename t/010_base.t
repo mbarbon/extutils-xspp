@@ -13,7 +13,6 @@ __DATA__
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -35,7 +34,6 @@ Foo::foo( a, b, c )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -67,7 +65,6 @@ foo( a )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -87,7 +84,6 @@ Foo::foo( a = 1 )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -107,7 +103,6 @@ Foo::new( a = 1 )
 %module{Foo};
 
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 class Foo
 {
@@ -176,7 +171,6 @@ Foo::foo()
 
 # simple typemaps
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 # before class
 class Foo

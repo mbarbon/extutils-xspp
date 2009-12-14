@@ -13,7 +13,6 @@ __DATA__
 %module{Foo};
 
 %typemap{void}{simple};
-%typemap{Foo&}{reference};
 
 class Foo
 {
@@ -33,8 +32,6 @@ Foo::foo( a )
 === Reference in return value
 --- xsp_stdout
 %module{Foo};
-
-%typemap{Foo&}{reference};
 
 class Foo
 {

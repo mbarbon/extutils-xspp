@@ -207,7 +207,25 @@ sub create_class {
   my( $parser, $name, $bases, $methods ) = @_;
   my $class = ExtUtils::XSpp::Node::Class->new( cpp_name     => $name,
                                                 base_classes => $bases );
+
+  # when adding a class C, automatically add weak typemaps for C* and C&
+  my $ptr = ExtUtils::XSpp::Node::Type->new
+                ( base    => $name,
+                  pointer => 1,
+                  );
+  my $ref = ExtUtils::XSpp::Node::Type->new
+                ( base      => $name,
+                  reference => 1,
+                  );
+
+  ExtUtils::XSpp::Typemap::add_weak_typemap_for_type
+      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr ) );
+  ExtUtils::XSpp::Typemap::add_weak_typemap_for_type
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref ) );
+
+  # finish creating the class
   $class->add_methods( @$methods );
+
   return $class;
 }
 

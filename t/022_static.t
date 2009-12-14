@@ -12,7 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{Foo*}{simple};
 %typemap{int}{simple};
 
 class Foo
