@@ -227,14 +227,6 @@ bar( char* line, unsigned long length(line) )
 
 %package{Bar};
 
-%typemap{short int}{simple};
-%typemap{short}{simple};
-%typemap{unsigned short int}{simple};
-%typemap{unsigned}{simple};
-%typemap{unsigned int}{simple};
-%typemap{int}{simple};
-%typemap{unsigned short}{simple};
-
 short int
 bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f );
 --- expected
@@ -242,11 +234,11 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Bar
 
-short int
+short
 bar( a, b, c, d, e, f )
     short a
-    unsigned short int b
-    unsigned c
+    unsigned short b
+    unsigned int c
     unsigned int d
     int e
     unsigned short f

@@ -540,11 +540,20 @@ package ExtUtils::XSpp::Node::Type;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
+# normalized names for some integral C types
+my %normalize =
+  ( 'unsigned'           => 'unsigned int',
+    'long int'           => 'long',
+    'unsigned long int'  => 'unsigned long',
+    'short int'          => 'short',
+    'unsigned short int' => 'unsigned short',
+    );
+
 sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{BASE} = $args{base};
+  $this->{BASE} = $normalize{$args{base}} || $args{base};
   $this->{POINTER} = $args{pointer} ? 1 : 0;
   $this->{REFERENCE} = $args{reference} ? 1 : 0;
   $this->{CONST} = $args{const} ? 1 : 0;
