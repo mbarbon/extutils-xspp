@@ -12,8 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     package_static int foo(int a);

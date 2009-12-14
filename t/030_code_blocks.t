@@ -12,7 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%typemap{int}{simple};
 
 %name{boo} int foo(int a)
     %code{% RETVAL = a + 12; %};
@@ -32,7 +31,6 @@ boo( a )
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%typemap{int}{simple};
 
 %name{boo} int foo(int a)
     %cleanup{% free( it ); %};
@@ -54,8 +52,6 @@ boo( a )
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%typemap{int}{simple};
-%typemap{void}{simple};
 
 %name{boo} void foo(int a)
     %code{% blub( a ); %};
@@ -74,8 +70,6 @@ boo( a )
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%typemap{int}{simple};
-%typemap{void}{simple};
 
 %name{boo} void foo(int a)
     %code{% blub( a ); %}

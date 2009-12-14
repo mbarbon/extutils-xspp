@@ -27,7 +27,6 @@ Straight to XS, no checks...
 === Space after verbatim blocks
 --- xsp_stdout
 %module{Foo};
-%typemap{int}{simple};
 
 class X
 {

@@ -57,6 +57,9 @@ sub call_function_code { undef }
 
 my @typemaps;
 
+# add typemaps for basic C types
+add_default_typemaps();
+
 sub add_typemap_for_type {
   my( $type, $typemap ) = @_;
 
@@ -82,6 +85,28 @@ sub get_typemap_for_type {
   }
 
   Carp::confess( "No typemap for type ", $type->print );
+}
+
+sub add_default_typemaps {
+  # void, integral and floating point types
+  foreach my $t ( 'char', 'short', 'int', 'long',
+                  'unsigned char', 'unsigned short', 'unsigned int',
+                  'unsigned long', 'void',
+                  'float', 'double', 'long double' ) {
+    my $type = ExtUtils::XSpp::Node::Type->new( base => $t );
+
+    ExtUtils::XSpp::Typemap::add_typemap_for_type
+        ( $type, ExtUtils::XSpp::Typemap::simple->new( type => $type ) );
+  }
+
+  # misc basic types
+  my $char_p = ExtUtils::XSpp::Node::Type->new
+                   ( base    => 'char',
+                     pointer => 1,
+                     );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type
+      ( $char_p, ExtUtils::XSpp::Typemap::simple->new( type => $char_p ) );
 }
 
 package ExtUtils::XSpp::Typemap::parsed;

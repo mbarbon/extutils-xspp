@@ -37,7 +37,6 @@ boo( a )
 
 %typemap{const std::string}{simple};
 %typemap{const std::string&}{reference};
-%typemap{void}{simple};
 
 void foo(const std::string a);
 void boo(const std::string& a);

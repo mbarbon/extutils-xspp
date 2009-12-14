@@ -12,8 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     int foo( int a, int b, int c );
@@ -33,8 +31,6 @@ Foo::foo( a, b, c )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
 };
@@ -47,8 +43,6 @@ MODULE=Foo PACKAGE=Foo
 --- xsp_stdout
 %module{Foo};
 %package{Foo::Bar};
-
-%typemap{int}{simple};
 
 int foo( int a );
 --- expected
@@ -63,8 +57,6 @@ foo( a )
 === Default arguments
 --- xsp_stdout
 %module{Foo};
-
-%typemap{int}{simple};
 
 class Foo
 {
@@ -83,8 +75,6 @@ Foo::foo( a = 1 )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     Foo( int a = 1 );
@@ -102,8 +92,6 @@ Foo::new( a = 1 )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     ~Foo();
@@ -119,9 +107,6 @@ Foo::DESTROY()
 === Void function
 --- xsp_stdout
 %module{Foo};
-
-%typemap{int}{simple};
-%typemap{void}{simple};
 
 class Foo
 {
@@ -139,8 +124,6 @@ Foo::foo( a )
 === No parameters
 --- xsp_stdout
 %module{Foo};
-
-%typemap{void}{simple};
 
 class Foo
 {
@@ -228,10 +211,6 @@ Foo::foo( a, b, c )
 %module{Foo};
 
 %package{Bar};
-
-%typemap{unsigned int}{simple};
-%typemap{unsigned long}{simple};
-%typemap{char*}{simple};
 
 unsigned int
 bar( char* line, unsigned long %length{line} );

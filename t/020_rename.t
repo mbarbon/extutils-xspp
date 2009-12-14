@@ -12,7 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 %package{Foo::Bar};
-%typemap{int}{simple};
 
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
@@ -41,8 +40,6 @@ boo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     %name{bar} int foo( int a );
@@ -63,8 +60,6 @@ Foo::bar( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-
 class Foo
 {
     %name{newFoo} Foo( int a );
@@ -84,9 +79,6 @@ Foo::newFoo( a )
 === Renamed class
 --- xsp_stdout
 %module{Foo};
-
-%typemap{int}{simple};
-%typemap{void}{simple};
 
 %name{Bar::Baz} class Foo
 {

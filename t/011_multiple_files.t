@@ -13,8 +13,6 @@ __DATA__
 %module{Foo};
 %package{Foo};
 
-%typemap{int}{simple};
-
 %file{foo.h};
 {%
 Some verbatim
@@ -40,8 +38,6 @@ foo( a, b, c )
 %module{Foo};
 %package{Foo};
 
-%typemap{int}{simple};
-
 %file{foo.h};
 %{
 Some verbatim
@@ -58,8 +54,6 @@ text
 --- process xsp_file=foo.h
 %module{Foo};
 %package{Foo};
-
-%typemap{int}{simple};
 
 %file{foo.h};
 int bar( int x );

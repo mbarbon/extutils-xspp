@@ -12,8 +12,6 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{void}{simple};
-
 class Foo
 {
     void foo( Foo& a );

@@ -23,9 +23,6 @@ __DATA__
 %package{Foo};
 %loadplugin{t::lib::XSP::Plugin};
 
-%typemap{int}{simple};
-%typemap{void}{simple};
-
 int foo(int y);
 
 class Y
@@ -54,9 +51,6 @@ Y::bar()
 %module{Foo};
 %package{Foo};
 %loadplugin{TestPlugin};
-
-%typemap{int}{simple};
-%typemap{void}{simple};
 
 int foo(int y);
 
