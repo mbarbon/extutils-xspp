@@ -68,8 +68,8 @@ class_decl: 'class' ID base_classes OPCURLY class_body_list CLCURLY SEMICOLON
                 { create_class( $_[0], $_[2], $_[3], [] ) };
 
 base_classes:
-      COLON base_class
-    | base_classes ',' base_class
+      COLON base_class              { [ $_[2] ] }
+    | base_classes COMMA base_class { push @{$_[1]}, $_[3] if $_[3]; $_[1] }
     | ;
 
 base_class:
