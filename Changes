@@ -4,6 +4,7 @@ Revision history for Perl extension ExtUtils::XSpp.
 	- When parsing a class declaration, automatically add a typemap
 	  for the class.
 	- Add typemaps for basic C types (integral, floating point and char*).
+	- Automatically setup the Perl inheritance for derived C++ classes.
 
 0.05  Sun Sep 20 14:29:16 CEST 2009
 	- Move the implementation of xspp to ExtUtils::XSpp::Cmd.

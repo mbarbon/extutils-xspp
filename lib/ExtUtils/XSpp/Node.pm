@@ -184,6 +184,31 @@ sub print {
     $out .= $m->print( $state );
   }
 
+  # add a BOOT block for base classes
+  if( @{$this->base_classes} ) {
+      my $class = $this->perl_name;
+
+      $out .= <<EOT;
+BOOT:
+    {
+        AV* isa = get_av( "${class}::ISA", 1 );
+EOT
+
+    foreach my $b ( @{$this->base_classes} ) {
+      my $base = $b->perl_name;
+
+      $out .= <<EOT;
+        av_store( isa, 0, newSVpv( "$base", 0 ) );
+EOT
+    }
+
+      # close block in BOOT
+      $out .= <<EOT;
+    } // blank line here is important
+
+EOT
+  }
+
   return $out;
 }
 
