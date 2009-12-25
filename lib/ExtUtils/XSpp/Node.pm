@@ -181,7 +181,7 @@ sub print {
   my $out = $this->SUPER::print( $state );
 
   foreach my $m ( @{$this->methods} ) {
-    $out .= $m->print;
+    $out .= $m->print( $state );
   }
 
   return $out;
@@ -522,9 +522,10 @@ sub init {
 
 sub print {
   my $this = shift;
+  my $state = shift;
 
   return join( ' ',
-               $this->type->print,
+               $this->type->print( $state ),
                $this->name,
                ( $this->default ?
                  ( '=', $this->default ) : () ) );
