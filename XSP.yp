@@ -73,11 +73,19 @@ base_classes:
     | ;
 
 base_class:
-      'public' ID    { $_[2] }
-    | 'protected' ID { $_[2] }
-    | 'private' ID   { $_[2] }
+      'public' class_id    { $_[2] }
+    | 'protected' class_id { $_[2] }
+    | 'private' class_id   { $_[2] }
     ;
-    
+
+class_id:
+      class_name           { create_class( $_[0], $_[1], [], [] ) }
+    | perc_name class_name { my $klass = create_class( $_[0], $_[2], [], [] );
+                             $klass->set_perl_name( $_[1] );
+                             $klass
+                             }
+    ;
+
 class_body_list:
       class_body_element
           { $_[1] ? [ $_[1] ] : [] }
