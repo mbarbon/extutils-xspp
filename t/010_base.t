@@ -228,17 +228,19 @@ bar( char* line, unsigned long length(line) )
 %package{Bar};
 
 short int
-bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f );
+bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f, long int g, unsigned long int h );
 --- expected
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Bar
 
 short
-bar( a, b, c, d, e, f )
+bar( a, b, c, d, e, f, g, h )
     short a
     unsigned short b
     unsigned int c
     unsigned int d
     int e
     unsigned short f
+    long g
+    unsigned long h

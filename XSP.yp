@@ -167,15 +167,18 @@ type:
 nconsttype:
     nconsttype STAR             { make_ptr( $_[1] ) }
   | nconsttype AMP              { make_ref( $_[1] ) }
-  | type_name                   { make_type( join(' ', @_[1..$#_]) ) }
+  | type_name                   { make_type( $_[1] ) }
   | template
   ;
 
-type_name:    class_name | 'unsigned' | basic_type | 'unsigned' basic_type
-                    { join ' ', @_[1..$#_]; };
+type_name:
+    class_name
+  | basic_type
+  | 'unsigned'                  { 'unsigned int' }
+  | 'unsigned' basic_type       { 'unsigned' . ' ' . $_[2] }
+  ;
 
-basic_type:   'char' | 'int' | 'long' | 'short' | 'long' 'int' | 'short' 'int' 
-                    { join ' ', @_[1..$#_]; };
+basic_type:   'char' | 'int' | 'long' | 'short' | 'long' 'int' | 'short' 'int';
 
 template:
     class_name OPANG type_list CLANG   { make_template( $_[1], $_[3] ) }
