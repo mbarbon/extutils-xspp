@@ -27,6 +27,8 @@ my %tokens = ( '::' => 'DCOLON',
                 '/' => 'SLASH',
                 '.' => 'DOT',
                 '-' => 'DASH',
+                '<' => 'OPANG',
+                '>' => 'CLANG',
                # these are here due to my lack of skill with yacc
                '%name'       => 'p_name',
                '%typemap'    => 'p_typemap',
@@ -138,7 +140,7 @@ sub yylex {
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
                       | \%loadplugin | \%include
-                      | [{}();%~*&,=\/\.\-]
+                      | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
         return ( $tokens{$1}, $1 );
@@ -180,6 +182,12 @@ sub make_const { $_[0]->{CONST} = 1; $_[0] }
 sub make_ref   { $_[0]->{REFERENCE} = 1; $_[0] }
 sub make_ptr   { $_[0]->{POINTER}++; $_[0] }
 sub make_type  { ExtUtils::XSpp::Node::Type->new( base => $_[0] ) }
+
+sub make_template {
+    ExtUtils::XSpp::Node::Type->new( base          => $_[0],
+                                     template_args => $_[1],
+                                     )
+}
 
 sub add_data_raw {
   my $p = shift;

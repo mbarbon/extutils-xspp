@@ -583,12 +583,14 @@ sub init {
   $this->{POINTER} = $args{pointer} ? 1 : 0;
   $this->{REFERENCE} = $args{reference} ? 1 : 0;
   $this->{CONST} = $args{const} ? 1 : 0;
+  $this->{TEMPLATE_ARGS} = $args{template_args} || [];
 }
 
 sub is_const { $_[0]->{CONST} }
 sub is_reference { $_[0]->{REFERENCE} }
 sub is_pointer { $_[0]->{POINTER} }
 sub base_type { $_[0]->{BASE} }
+sub template_args { $_[0]->{TEMPLATE_ARGS} }
 
 sub equals {
   my( $f, $s ) = @_;
@@ -604,12 +606,22 @@ sub is_void { return $_[0]->base_type eq 'void' &&
 
 sub print {
   my $this = shift;
+  my $state = shift;
+
+  my $tmpl_args = '';
+  if( @{$this->template_args} ) {
+      $tmpl_args =   '< '
+                   . join( ', ',
+                           map $_->print( $state ), @{$this->template_args} )
+                   . ' >';
+  }
 
   return join( '',
                ( $this->is_const ? 'const ' : '' ),
                $this->base_type,
                ( $this->is_pointer ? ( '*' x $this->is_pointer ) :
-                 $this->is_reference ? '&' : '' ) );
+                 $this->is_reference ? '&' : '' ),
+               $tmpl_args );
 }
 
 package ExtUtils::XSpp::Node::Module;
