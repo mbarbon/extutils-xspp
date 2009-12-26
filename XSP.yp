@@ -73,12 +73,12 @@ base_classes:
     | ;
 
 base_class:
-      'public' class_id    { $_[2] }
-    | 'protected' class_id { $_[2] }
-    | 'private' class_id   { $_[2] }
+      'public' class_name_rename    { $_[2] }
+    | 'protected' class_name_rename { $_[2] }
+    | 'private' class_name_rename   { $_[2] }
     ;
 
-class_id:
+class_name_rename:
       class_name           { create_class( $_[0], $_[1], [], [] ) }
     | perc_name class_name { my $klass = create_class( $_[0], $_[2], [], [] );
                              $klass->set_perl_name( $_[1] );
