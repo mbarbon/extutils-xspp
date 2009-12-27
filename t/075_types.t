@@ -71,7 +71,7 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
-## check type equality
+
 void
 foo( a )
     const std::vector< int >& a

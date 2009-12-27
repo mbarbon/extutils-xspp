@@ -74,9 +74,8 @@ sub init {
 sub print {
   my $this = shift;
   my $state = shift;
-  my $comm = defined $state->{current_module} ? '##' : '//';
 
-  return join( "\n", map $comm . $_, @{$this->rows} ) . "\n";
+  return "\n";
 }
 
 package ExtUtils::XSpp::Node::Package;

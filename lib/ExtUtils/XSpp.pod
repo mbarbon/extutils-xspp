@@ -133,7 +133,7 @@ This feature is also present in plain XS. See also: L<perlxs>
 
 =head2 Classes
 
-  %name{My::Class} class MyClass
+  %name{My::Class} class MyClass : public %name{My::Base} MyBase
   {
       // can be called in Perl as My::Class->new( ... );
       MyClass( int arg );
@@ -156,9 +156,8 @@ This feature is also present in plain XS. See also: L<perlxs>
 
 =head2 Comments
 
-C-style C</* ... */> comments will be passed through unchanged.  C++-style
-comments C<// ...> will be passed throug with the leading C<//> replaced
-with C<##>.
+XS++ recognizes both C-style comments C</* ... */> and C++-style
+comments C<// ...>.  Comments are removed from the XS output.
 
 =head1 AUTHOR
 

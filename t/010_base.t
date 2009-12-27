@@ -167,7 +167,6 @@ class Foo
  * class
  */
 --- expected
-// comment before %module
 ## comment before %module
 
 
@@ -175,7 +174,7 @@ MODULE=Foo
 ## comment after %module
 
 
-## comment after %module
+
 
   Passed through verbatim
   as written in sources
@@ -201,11 +200,6 @@ Foo::foo( a, b, c )
 
 # after method
 
-
-##/* long comment
-## * right after
-## * class
-## */
 === %length and ANSI style
 --- xsp_stdout
 %module{Foo};
