@@ -1,9 +1,3 @@
 
 // Map the type of our custom class
 %typemap{IntAndString*}{simple};
-
-// Map simple types
-%typemap{const char*}{simple};
-%typemap{int}{simple};
-%typemap{void}{simple};
-
