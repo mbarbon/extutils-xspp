@@ -60,10 +60,10 @@ boo( a )
 %module{Foo};
 %package{Foo};
 
-%typemap{const std::vector<int>}{simple};
+%typemap{const std::vector<int>&}{simple};
 %typemap{const std::map<int, std::string>}{simple};
 
-void foo(const std::vector<int> a);
+void foo(const std::vector<int>& a);
 void boo(const std::map<int, std::string> a);
 --- expected
 MODULE=Foo
@@ -72,7 +72,7 @@ MODULE=Foo PACKAGE=Foo
 
 void
 foo( a )
-    const std::vector< int > a
+    const std::vector< int >& a
 
 void
 boo( a )

@@ -619,9 +619,9 @@ sub print {
   return join( '',
                ( $this->is_const ? 'const ' : '' ),
                $this->base_type,
+               $tmpl_args,
                ( $this->is_pointer ? ( '*' x $this->is_pointer ) :
-                 $this->is_reference ? '&' : '' ),
-               $tmpl_args );
+                 $this->is_reference ? '&' : '' ) );
 }
 
 package ExtUtils::XSpp::Node::Module;
