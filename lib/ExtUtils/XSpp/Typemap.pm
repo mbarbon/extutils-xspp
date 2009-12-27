@@ -99,7 +99,7 @@ sub add_default_typemaps {
         ( $type, ExtUtils::XSpp::Typemap::simple->new( type => $type ) );
   }
 
-  # misc basic types
+  # char*, const char*
   my $char_p = ExtUtils::XSpp::Node::Type->new
                    ( base    => 'char',
                      pointer => 1,
@@ -107,6 +107,15 @@ sub add_default_typemaps {
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type
       ( $char_p, ExtUtils::XSpp::Typemap::simple->new( type => $char_p ) );
+
+  my $const_char_p = ExtUtils::XSpp::Node::Type->new
+                         ( base    => 'char',
+                           pointer => 1,
+                           const   => 1,
+                           );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type
+      ( $const_char_p, ExtUtils::XSpp::Typemap::simple->new( type => $const_char_p ) );
 }
 
 package ExtUtils::XSpp::Typemap::parsed;
