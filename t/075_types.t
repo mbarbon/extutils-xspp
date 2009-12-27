@@ -62,6 +62,7 @@ boo( a )
 
 %typemap{const std::vector<int>&}{simple};
 %typemap{const std::map<int, std::string>}{simple};
+%typemap{const std::vector&}{reference}; // check type equality
 
 void foo(const std::vector<int>& a);
 void boo(const std::map<int, std::string> a);
@@ -70,6 +71,7 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
+## check type equality
 void
 foo( a )
     const std::vector< int >& a

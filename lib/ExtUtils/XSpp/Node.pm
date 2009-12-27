@@ -595,6 +595,13 @@ sub template_args { $_[0]->{TEMPLATE_ARGS} }
 sub equals {
   my( $f, $s ) = @_;
 
+  return 0 if @{$f->template_args} != @{$s->template_args};
+
+  for( my $i = 0; $i < @{$f->template_args}; ++$i ) {
+      return 0
+          unless $f->template_args->[$i]->equals( $s->template_args->[$i] );
+  }
+
   return $f->is_const == $s->is_const
       && $f->is_reference == $s->is_reference
       && $f->is_pointer == $s->is_pointer
