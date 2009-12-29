@@ -213,11 +213,15 @@ value:          INTEGER
               | DASH INTEGER    { '-' . $_[2] }
               | FLOAT
               | QUOTED_STRING
-              | ID
-              | ID DCOLON ID    { $_[1] . '::' . $_[3] }
-              | ID OPPAR value CLPAR { "$_[1]($_[3])" }
+              | class_name
+              | class_name OPPAR value_list CLPAR { "$_[1]($_[3])" }
               ;
 
+value_list:
+    value
+  | value_list COMMA value      { "$_[1], $_[2]" }
+  |                             { "" }
+  ;
 
 special_blocks:  special_block
                      { [ $_[1] ] }
