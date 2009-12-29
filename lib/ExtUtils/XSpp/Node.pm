@@ -252,6 +252,7 @@ sub init {
   $this->{RET_TYPE} = $args{ret_type};
   $this->{CODE} = $args{code};
   $this->{CLEANUP} = $args{cleanup};
+  $this->{POSTCALL} = $args{postcall};
   $this->{CLASS} = $args{class};
 }
 
@@ -280,6 +281,8 @@ sub resolve_typemaps {
 
 =head2 ExtUtils::XSpp::Node::Function::cleanup
 
+=head2 ExtUtils::XSpp::Node::Function::postcall
+
 =head2 ExtUtils::XSpp::Node::Function::argument_style
 
 Returns either C<ansi> or C<kr>. C<kr> is the default.
@@ -294,6 +297,7 @@ sub arguments { $_[0]->{ARGUMENTS} }
 sub ret_type { $_[0]->{RET_TYPE} }
 sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
+sub postcall { $_[0]->{POSTCALL} }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
 sub virtual { $_[0]->{VIRTUAL} }
@@ -320,6 +324,8 @@ sub argument_style {
 #     aux vars
 #   [PP]CODE:
 #     RETVAL = new Foo( THIS->method( arg1, *arg2 ) );
+#   POSTCALL:
+#     /* anything */
 #   OUTPUT:
 #     RETVAL
 #   CLEANUP:
@@ -341,8 +347,9 @@ sub print {
   my $ret_type = $this->ret_type;
   my $ret_typemap = $this->{TYPEMAPS}{RET_TYPE};
   my $need_call_function = 0;
-  my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup, $precall ) =
-    ( '', '', '', '', '', '', '' );
+  my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
+      $postcall, $precall ) =
+    ( '', '', '', '', '', '', '', '' );
   my $use_ansi_style = $this->argument_style() eq 'ansi';
 
   if( $args && @$args ) {
@@ -389,8 +396,8 @@ sub print {
     $retstr = "static $retstr";
   }
 
+  my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
   if( $need_call_function ) {
-    my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
     my $ccode = $this->_call_code( $call_arg_list );
     if( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
       $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
@@ -417,6 +424,10 @@ sub print {
     $code = "  CODE:\n    " . join( "\n", @{$this->code} ) . "\n";
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/RETVAL/;
   }
+  if( $this->postcall ) {
+    $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";
+    $output ||= "  OUTPUT: RETVAL\n" if $has_ret;
+  }
   if( $this->cleanup ) {
     $cleanup ||= "  CLEANUP:\n";
     my $clcode = join( "\n", @{$this->cleanup} );
@@ -437,6 +448,7 @@ EOT
   $out .= "$fname($arg_list)\n";
   $out .= $init;
   $out .= $code;
+  $out .= $postcall;
   $out .= $output;
   $out .= $cleanup;
   $out .= "\n";

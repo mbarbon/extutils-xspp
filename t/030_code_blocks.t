@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 4;
+use t::lib::XSP::Test tests => 6;
 
 run_diff xsp_stdout => 'expected';
 
@@ -48,6 +48,25 @@ boo( a )
   CLEANUP:
      free( it ); 
 
+=== Function with custom postcall block
+--- xsp_stdout
+%module{Foo};
+%package{Foo};
+
+int foo(int a)
+    %postcall{% blub( a ); %};
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+foo( a )
+    int a
+  POSTCALL:
+     blub( a ); 
+  OUTPUT: RETVAL
+
 === Void function with custom code block
 --- xsp_stdout
 %module{Foo};
@@ -86,3 +105,21 @@ boo( a )
      blub( a ); 
   CLEANUP:
      free( it ); 
+
+=== Void function with custom postcall block
+--- xsp_stdout
+%module{Foo};
+%package{Foo};
+
+void foo(int a)
+    %postcall{% blub( a ); %};
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+void
+foo( a )
+    int a
+  POSTCALL:
+     blub( a ); 

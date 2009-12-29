@@ -36,6 +36,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%module'     => 'p_module',
                '%code'       => 'p_code',
                '%cleanup'    => 'p_cleanup',
+               '%postcall'   => 'p_postcall',
                '%package'    => 'p_package',
                '%length'     => 'p_length',
                '%loadplugin' => 'p_loadplugin',
@@ -139,7 +140,7 @@ sub yylex {
                       | \%{ | {\%
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
-                      | \%loadplugin | \%include
+                      | \%loadplugin | \%include | \%postcall
                       | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
@@ -240,42 +241,52 @@ sub create_class {
 sub add_data_function {
   my( $parser, %args ) = @_;
 
-  ExtUtils::XSpp::Node::Function->new( cpp_name  => $args{name},
-                                class     => $args{class},
-                                ret_type  => $args{ret_type},
-                                arguments => $args{arguments},
-                                code      => $args{code},
-                                cleanup   => $args{cleanup},
-                                );
+  ExtUtils::XSpp::Node::Function->new
+      ( cpp_name  => $args{name},
+        class     => $args{class},
+        ret_type  => $args{ret_type},
+        arguments => $args{arguments},
+        code      => $args{code},
+        cleanup   => $args{cleanup},
+        postcall  => $args{postcall},
+        );
 }
 
 sub add_data_method {
   my( $parser, %args ) = @_;
 
-  ExtUtils::XSpp::Node::Method->new( cpp_name  => $args{name},
-                              ret_type  => $args{ret_type},
-                              arguments => $args{arguments},
-                              code      => $args{code},
-                              cleanup   => $args{cleanup},
-                              perl_name => $args{perl_name},
-                              );
+  ExtUtils::XSpp::Node::Method->new
+      ( cpp_name  => $args{name},
+        ret_type  => $args{ret_type},
+        arguments => $args{arguments},
+        code      => $args{code},
+        cleanup   => $args{cleanup},
+        postcall  => $args{postcall},
+        perl_name => $args{perl_name},
+        );
 }
 
 sub add_data_ctor {
   my( $parser, %args ) = @_;
 
-  ExtUtils::XSpp::Node::Constructor->new( cpp_name  => $args{name},
-                                   arguments => $args{arguments},
-                                   code      => $args{code},
-                                   );
+  ExtUtils::XSpp::Node::Constructor->new
+      ( cpp_name  => $args{name},
+        arguments => $args{arguments},
+        code      => $args{code},
+        cleanup   => $args{cleanup},
+        postcall  => $args{postcall},
+        );
 }
 
 sub add_data_dtor {
   my( $parser, %args ) = @_;
 
-  ExtUtils::XSpp::Node::Destructor->new( cpp_name  => $args{name},
-                                  code      => $args{code},
-                                  );
+  ExtUtils::XSpp::Node::Destructor->new
+      ( cpp_name  => $args{name},
+        code      => $args{code},
+        cleanup   => $args{cleanup},
+        postcall  => $args{postcall},
+        );
 }
 
 sub is_directive {
