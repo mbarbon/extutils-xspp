@@ -1,5 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.06  Wed Jan 13 20:28:27 CET 2010
 	- When parsing a class declaration, automatically add a typemap
 	  for the class.
 	- Add default typemaps for basic C types (integral, floating point
