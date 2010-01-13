@@ -18,6 +18,6 @@ MODULE = Object::WithIntAndString		PACKAGE = Object::WithIntAndString
 ## xsp interface code for our class.
 ## It will include the output of the xsubplusplus run.
 
-INCLUDE: xspp --typemap=typemap.xsp Object-WithIntAndString.xsp |
+INCLUDE_COMMAND: $^X -MExtUtils::XSpp::Cmd -e xspp -- --typemap=typemap.xsp Object-WithIntAndString.xsp
 
 

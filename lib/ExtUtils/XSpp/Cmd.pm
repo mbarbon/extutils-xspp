@@ -8,11 +8,11 @@ ExtUtils::XSpp::Cmd - implementation of xspp
 
 =head1 SYNOPSIS
 
-  perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+  perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options/arguments>
 
 In Foo.xs
 
-  INCLUDE: perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments> |
+  INCLUDE_COMMAND: $^X -MExtUtils::XSpp::Cmd -e xspp -- <xspp options/arguments>
 
 Using C<ExtUtils::XSpp::Cmd> is equivalent to using the C<xspp>
 command line script, except that there is no guarantee for C<xspp> to
