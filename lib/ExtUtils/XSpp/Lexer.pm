@@ -145,7 +145,7 @@ sub yylex {
                       | :: | :
                        )//x ) {
         return ( $tokens{$1}, $1 );
-      } elsif( $$buf =~ s/^(INCLUDE:.*)(?:\r\n|\r|\n)// ) {
+      } elsif( $$buf =~ s/^(INCLUDE(?:_COMMAND)?:.*)(?:\r\n|\r|\n)// ) {
         return ( 'RAW_CODE', "$1\n" );
       } elsif( $$buf =~ m/^([a-zA-Z_]\w*)\W/ ) {
         $$buf =~ s/^(\w+)//;
