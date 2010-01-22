@@ -622,10 +622,9 @@ sub equals {
 sub is_void { return $_[0]->base_type eq 'void' &&
                 !$_[0]->is_pointer && !$_[0]->is_reference }
 
-sub print {
+sub print_tmpl_args {
   my $this = shift;
   my $state = shift;
-
   my $tmpl_args = '';
   if( @{$this->template_args} ) {
       $tmpl_args =   '< '
@@ -633,14 +632,21 @@ sub print {
                            map $_->print( $state ), @{$this->template_args} )
                    . ' >';
   }
+  return $tmpl_args;
+}
+
+sub print {
+  my $this = shift;
+  my $state = shift;
 
   return join( '',
                ( $this->is_const ? 'const ' : '' ),
                $this->base_type,
-               $tmpl_args,
+               $this->print_tmpl_args,
                ( $this->is_pointer ? ( '*' x $this->is_pointer ) :
                  $this->is_reference ? '&' : '' ) );
 }
+
 
 package ExtUtils::XSpp::Node::Module;
 

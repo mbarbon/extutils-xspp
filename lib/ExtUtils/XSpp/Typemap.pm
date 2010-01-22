@@ -188,11 +188,15 @@ sub init {
   $this->{TYPE} = $args{type};
 }
 
-sub cpp_type { $_[0]->{TYPE}->base_type . '*' }
+sub cpp_type {
+  my $type = $_[0]->type;
+  $type->base_type . $type->print_tmpl_args . ('*' x ($type->is_pointer+1))
+}
 sub output_code { undef }
 sub call_parameter_code { "*( $_[1] )" }
 sub call_function_code {
-  $_[2] . ' = new ' . $_[0]->type->base_type . '( ' . $_[1] . " )";
+  my $type = $_[0]->type;
+  $_[2] . ' = new ' . $type->base_type . $type->print_tmpl_args . '( ' . $_[1] . " )";
 }
 
 1;
