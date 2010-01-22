@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Fix issue with references as method arguments that have
+          template types. (Steffen Mueller)
+
 0.06  Wed Jan 13 20:28:27 CET 2010
 	- When parsing a class declaration, automatically add a typemap
 	  for the class.
