@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 3;
+use t::lib::XSP::Test tests => 4;
 
 run_diff xsp_stdout => 'expected';
 
@@ -79,3 +79,22 @@ foo( a )
 void
 boo( a )
     const std::map< int, std::string > a
+=== Template argument transformed to pointer
+--- xsp_stdout
+%module{Foo};
+%package{Foo};
+
+%typemap{const std::vector<double>&}{reference}; // check type equality
+
+void foo(const std::vector<double>& a);
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+
+void
+foo( a )
+    std::vector< double >* a
+  CODE:
+    foo( *( a ) );
