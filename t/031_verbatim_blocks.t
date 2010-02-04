@@ -47,3 +47,13 @@ Straight to XS, no checks...
 int
 X::foo( a )
     int a
+  CODE:
+    try {
+      RETVAL = THIS->foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+

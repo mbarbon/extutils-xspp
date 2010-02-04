@@ -24,7 +24,13 @@ int
 boo( a )
     int a
   CODE:
-    RETVAL = foo( a );
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 MODULE=Foo PACKAGE=moo
@@ -33,7 +39,13 @@ int
 boo( a )
     int a
   CODE:
-    RETVAL = foo( a );
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 === Renamed method
@@ -53,7 +65,13 @@ int
 Foo::bar( a )
     int a
   CODE:
-    RETVAL = THIS->foo( a );
+    try {
+      RETVAL = THIS->foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 === Renamed constructor
@@ -73,7 +91,13 @@ static Foo*
 Foo::newFoo( a )
     int a
   CODE:
-    RETVAL = new Foo( a );
+    try {
+      RETVAL = new Foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 === Renamed class
@@ -92,10 +116,24 @@ MODULE=Foo PACKAGE=Bar::Baz
 
 void
 Foo::foo()
+  CODE:
+    try {
+      THIS->foo();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 int
 Foo::foo_int( a )
     int a
   CODE:
-    RETVAL = THIS->foo( a );
+    try {
+      RETVAL = THIS->foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL

@@ -27,7 +27,25 @@ MODULE=Foo PACKAGE=Foo
 int
 foo( x )
     int x
+  CODE:
+    try {
+      RETVAL = foo( x );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 int
 bar( y )
     int y
+  CODE:
+    try {
+      RETVAL = bar( y );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL

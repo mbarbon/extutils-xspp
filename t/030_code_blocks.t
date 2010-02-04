@@ -43,7 +43,13 @@ int
 boo( a )
     int a
   CODE:
-    RETVAL = foo( a );
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
   CLEANUP:
      free( it ); 
@@ -63,6 +69,14 @@ MODULE=Foo PACKAGE=Foo
 int
 foo( a )
     int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   POSTCALL:
      blub( a ); 
   OUTPUT: RETVAL
@@ -121,5 +135,13 @@ MODULE=Foo PACKAGE=Foo
 void
 foo( a )
     int a
+  CODE:
+    try {
+      foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   POSTCALL:
      blub( a ); 

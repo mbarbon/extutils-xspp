@@ -25,10 +25,28 @@ MODULE=Foo PACKAGE=Foo
 
 int*
 foo()
+  CODE:
+    try {
+      RETVAL = foo();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 int*
 boo( a )
     const int* a
+  CODE:
+    try {
+      RETVAL = boo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Const value/const reference type
 --- xsp_stdout
@@ -48,12 +66,26 @@ MODULE=Foo PACKAGE=Foo
 void
 foo( a )
     const std::string a
+  CODE:
+    try {
+      foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 void
 boo( a )
     std::string* a
   CODE:
-    boo( *( a ) );
+    try {
+      boo( *( a ) );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 === Template type
 --- xsp_stdout
@@ -75,10 +107,26 @@ MODULE=Foo PACKAGE=Foo
 void
 foo( a )
     const std::vector< int >& a
+  CODE:
+    try {
+      foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 void
 boo( a )
     const std::map< int, std::string > a
+  CODE:
+    try {
+      boo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 === Template argument transformed to pointer
 --- xsp_stdout
 %module{Foo};
@@ -97,4 +145,10 @@ void
 foo( a )
     std::vector< double >* a
   CODE:
-    foo( *( a ) );
+    try {
+      foo( *( a ) );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }

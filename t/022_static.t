@@ -25,5 +25,11 @@ int
 Foo::foo( a )
     int a
   CODE:
-    RETVAL = Foo::foo( a );
+    try {
+      RETVAL = Foo::foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL

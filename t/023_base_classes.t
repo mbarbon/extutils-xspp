@@ -23,6 +23,14 @@ MODULE=Foo PACKAGE=Foo
 
 void
 Foo::foo()
+  CODE:
+    try {
+      THIS->foo();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 BOOT:
     {
@@ -45,6 +53,14 @@ MODULE=Foo PACKAGE=Foo
 
 void
 Foo::foo()
+  CODE:
+    try {
+      THIS->foo();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 BOOT:
     {

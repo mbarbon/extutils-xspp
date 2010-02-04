@@ -38,7 +38,13 @@ int
 foo_perl( y )
     int y
   CODE:
-    RETVAL = foo( y );
+    try {
+      RETVAL = foo( y );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 
@@ -46,6 +52,15 @@ MODULE=Foo PACKAGE=Y
 
 void
 Y::bar()
+  CODE:
+    try {
+      THIS->bar();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+
 === Plugin loading from the plugin namespace
 --- xsp_stdout
 %module{Foo};
@@ -67,7 +82,13 @@ int
 foo_perl2( y )
     int y
   CODE:
-    RETVAL = foo( y );
+    try {
+      RETVAL = foo( y );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 
@@ -75,3 +96,11 @@ MODULE=Foo PACKAGE=Y
 
 void
 Y::bar()
+  CODE:
+    try {
+      THIS->bar();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }

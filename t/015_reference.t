@@ -25,7 +25,13 @@ void
 Foo::foo( a )
     Foo* a
   CODE:
-    THIS->foo( *( a ) );
+    try {
+      THIS->foo( *( a ) );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 === Reference in return value
 --- xsp_stdout
@@ -43,6 +49,12 @@ MODULE=Foo PACKAGE=Foo
 Foo*
 Foo::foo()
   CODE:
-    RETVAL = new Foo( THIS->foo() );
+    try {
+      RETVAL = new Foo( THIS->foo() );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 

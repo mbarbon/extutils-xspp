@@ -32,6 +32,15 @@ foo( a, b, c )
     int a
     int b
     int c
+  CODE:
+    try {
+      RETVAL = foo( a, b, c );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Basic file - external file
 --- process xsp_file=foo.h
@@ -64,3 +73,12 @@ int foo( int a, int b, int c );
 int
 bar( x )
     int x
+  CODE:
+    try {
+      RETVAL = bar( x );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL

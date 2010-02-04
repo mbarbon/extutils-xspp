@@ -43,6 +43,15 @@ foo( a, b, c )
     int a
     int b
     int c
+  CODE:
+    try {
+      RETVAL = foo( a, b, c );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 EOT
 

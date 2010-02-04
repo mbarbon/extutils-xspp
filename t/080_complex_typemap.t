@@ -27,6 +27,15 @@ foobar
 Foo::foo( a, b )
     foobar a
     foobar b
+  CODE:
+    try {
+      RETVAL = THIS->foo( a, b );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Complex typemap, custom return value conversion
 --- xsp_stdout
@@ -48,7 +57,13 @@ Foo::foo( a, b )
     int a
     int b
   CODE:
-     RETVAL = fancy_conversion( THIS->foo( a, b ) ) ;
+    try {
+       RETVAL = fancy_conversion( THIS->foo( a, b ) ) ;
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 === Complex typemap, output code
@@ -71,8 +86,14 @@ Foo::foo( a, b )
     int a
     int b
   CODE:
-    RETVAL = THIS->foo( a, b );
-     custom_code( RETVAL ) ;
+    try {
+      RETVAL = THIS->foo( a, b );
+       custom_code( RETVAL ) ;
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
 
 === Complex typemap, cleanup code
@@ -95,7 +116,13 @@ Foo::foo( a, b )
     int a
     int b
   CODE:
-    RETVAL = THIS->foo( a, b );
+    try {
+      RETVAL = THIS->foo( a, b );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
   CLEANUP:
      custom_code( ST(0), RETVAL ) ;
@@ -121,7 +148,13 @@ Foo::foo( a, b )
     int a
     int b
   CODE:
-     custom_code( ST(1), RETVAL ) ;
+    try {
+       custom_code( ST(1), RETVAL ) ;
  custom_code( ST(2), RETVAL ) ;
-    RETVAL = THIS->foo( a, b );
+      RETVAL = THIS->foo( a, b );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
   OUTPUT: RETVAL
