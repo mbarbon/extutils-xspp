@@ -416,18 +416,18 @@ sub print {
     }
 
     $code .= "  CODE:\n";
-    $code .= '    ' . $precall if $precall;
     $code .= "    try {\n";
+    $code .= '      ' . $precall if $precall;
     $code .= '      ' . $ccode . ";\n";
+    if( $has_ret && defined $ret_typemap->output_code ) {
+      $code .= '      ' . $ret_typemap->output_code . ";\n";
+    }
     $code .= "    } catch (std::exception& e) {\n";
     $code .= '      croak("Caught unhandled C++ exception: %s", e.what());' . "\n";
     $code .= "    } catch (...) {\n";
     $code .= '      croak("Caught unhandled C++ exception of unknown type");' . "\n";
     $code .= "    }\n";
 
-    if( $has_ret && defined $ret_typemap->output_code ) {
-      $code .= '    ' . $ret_typemap->output_code . ";\n";
-    }
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
     if( $has_ret && defined $ret_typemap->cleanup_code ) {
