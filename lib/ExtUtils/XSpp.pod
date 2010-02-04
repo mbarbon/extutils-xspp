@@ -83,7 +83,9 @@ a raw block delimiter like this:
 
 =head2 %code
 
-See under B<Classes>.
+See under B<Classes>. Note that custom C<%code> blocks are the only
+exception to the exception handling. By specifying a custom C<%code>
+block, you forgo the automatic exception handlers.
 
 =head2 %file
 
@@ -156,6 +158,17 @@ This feature is also present in plain XS. See also: L<perlxs>
 
 XS++ recognizes both C-style comments C</* ... */> and C++-style
 comments C<// ...>.  Comments are removed from the XS output.
+
+=head2 Exceptions
+
+C++ Exceptions are always caught and transformed to Perl C<croak()>
+calls. If the exception that was caught inherited from C<std::exception>,
+then the C<what()> message is included in the Perl-level error message.
+All other exceptions will result in the C<croak()> message
+C<"Caught unhandled C++ exception of unknown type">.
+
+Note that if you supply a custom C<%code> block for a function or method,
+the automatic exception handling is turned off.
 
 =head1 AUTHOR
 
