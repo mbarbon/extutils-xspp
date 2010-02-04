@@ -406,7 +406,10 @@ sub print {
 
   if( $need_call_function ) {
     my $ccode = $this->_call_code( $call_arg_list );
-    if( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
+    if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
+      $ccode = 'delete THIS';
+      $has_ret = 0;
+    } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
       $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
     } elsif( $has_ret ) {
       $ccode = "RETVAL = $ccode";
