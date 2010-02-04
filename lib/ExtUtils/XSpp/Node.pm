@@ -397,6 +397,13 @@ sub print {
   }
 
   my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
+
+  # Hardcoded to one because we force the exception handling for now
+  # All the hard work above about determining whether $need_call_function
+  # needs to be enabled is left in as exception handling may be subject
+  # to configuration later. --Steffen
+  $need_call_function = 1;
+
   if( $need_call_function ) {
     my $ccode = $this->_call_code( $call_arg_list );
     if( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
