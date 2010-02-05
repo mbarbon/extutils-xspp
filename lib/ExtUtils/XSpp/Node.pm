@@ -438,7 +438,9 @@ sub print {
 
   if( $this->code ) {
     $code = "  CODE:\n    " . join( "\n", @{$this->code} ) . "\n";
-    $output = "  OUTPUT: RETVAL\n" if $code =~ m/RETVAL/;
+    # cleanup potential multiple newlines because they break XSUBs
+    $code =~ s/^\s*\z//m;
+    $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
     $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";
