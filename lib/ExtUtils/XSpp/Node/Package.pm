@@ -18,6 +18,15 @@ An L<ExtUtils::XSpp::Node> subclass representing a Perl package and
 thus acting as a container for methods (cf. sub-class
 L<ExtUtils::XSpp::Node::Class>) or functions.
 
+A literal C<ExtUtils::XSpp::Node::Package> would, for example,
+be created from:
+
+  %package{Some::Perl::Namespace}
+
+This would be compiled to a new XS line a la
+
+MODULE=$WhateverCurrentModule PACKAGE=Some::Perl::Namespace
+
 =head1 METHODS
 
 =head2 new
