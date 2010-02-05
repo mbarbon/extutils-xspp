@@ -6,6 +6,20 @@ use strict;
 use warnings;
 
 use ExtUtils::XSpp::Node;
+use ExtUtils::XSpp::Node::Access;
+use ExtUtils::XSpp::Node::Argument;
+use ExtUtils::XSpp::Node::Class;
+use ExtUtils::XSpp::Node::Comment;
+use ExtUtils::XSpp::Node::Constructor;
+use ExtUtils::XSpp::Node::Destructor;
+use ExtUtils::XSpp::Node::File;
+use ExtUtils::XSpp::Node::Function;
+use ExtUtils::XSpp::Node::Method;
+use ExtUtils::XSpp::Node::Module;
+use ExtUtils::XSpp::Node::Package;
+use ExtUtils::XSpp::Node::Raw;
+use ExtUtils::XSpp::Node::Type;
+
 use ExtUtils::XSpp::Typemap;
 
 my %tokens = ( '::' => 'DCOLON',
