@@ -3,6 +3,25 @@ package ExtUtils::XSpp::Node::Argument;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
+=head1 NAME
+
+ExtUtils::XSpp::Node::Argument - Node representing a method/function argument
+
+=head1 DESCRIPTION
+
+An L<ExtUtils::XSpp::Node> subclass representing a single function
+or method argument such as
+
+  int foo = 0.
+
+which would translate to an C<ExtUtils::XSpp::Node::Argument> which has
+its C<type> set to C<int>, its C<name> set to C<foo> and its C<default>
+set to C<0.>.
+
+=head1 METHODS
+
+=cut
+
 sub init {
   my $this = shift;
   my %args = @_;
@@ -22,6 +41,26 @@ sub print {
                ( $this->default ?
                  ( '=', $this->default ) : () ) );
 }
+
+=head1 ACCESSORS
+
+=head2 type
+
+Returns the type of the argument.
+
+=head2 name
+
+Returns the variable name of the argument variable.
+
+=head2 default
+
+Returns the default for the function parameter if any.
+
+=head2 has_default
+
+Returns whether there is a default for the function parameter.
+
+=cut
 
 sub type { $_[0]->{TYPE} }
 sub name { $_[0]->{NAME} }
