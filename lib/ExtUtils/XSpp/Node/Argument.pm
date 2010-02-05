@@ -20,6 +20,14 @@ set to C<0.>.
 
 =head1 METHODS
 
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Node::Argument>.
+
+Named parameters: C<type> indicating the C++ argument type,
+C<name> indicating the variable name, and optionally
+C<default> indicating the default value of the argument.
+
 =cut
 
 sub init {
