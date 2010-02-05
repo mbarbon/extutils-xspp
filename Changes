@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.08  Fri Feb  5 19:00:00 CET 2010
+	- Catch all C++ exceptions in the generated wrapper XS.
+          The exceptions are turned into plain Perl croak() calls
+          for now but may be upgraded to configurable exception
+          objects later. (Steffen Mueller)
+
 0.07  Fri Jan 22 18:07:10 CET 2010
 	- Fix issue with references as method arguments that have
           template types. (Steffen Mueller)
