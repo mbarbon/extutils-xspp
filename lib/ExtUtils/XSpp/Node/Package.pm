@@ -1,4 +1,6 @@
 package ExtUtils::XSpp::Node::Package;
+use strict;
+use base 'ExtUtils::XSpp::Node';
 
 =head1 ExtUtils::XSpp::Node::Package
 
@@ -6,8 +8,28 @@ Used to put global functions inside a Perl package.
 
 =cut
 
-use strict;
-use base 'ExtUtils::XSpp::Node';
+=head1 NAME
+
+ExtUtils::XSpp::Node::Package - Node representing a Perl package
+
+=head1 DESCRIPTION
+
+An L<ExtUtils::XSpp::Node> subclass representing a Perl package and
+thus acting as a container for methods (cf. sub-class
+L<ExtUtils::XSpp::Node::Class>) or functions.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Node::Package>.
+
+Named parameters: C<cpp_name> indicating the C++ class name
+(if any), and C<perl_name> indicating the name of the Perl
+package. If C<perl_name> is not specified but C<cpp_name> is,
+C<perl_name> defaults to C<cpp_name>.
+
+=cut
 
 sub init {
   my $this = shift;
@@ -17,13 +39,19 @@ sub init {
   $this->{PERL_NAME} = $args{perl_name} || $args{cpp_name};
 }
 
-=head2 ExtUtils::XSpp::Node::Package::cpp_name
+=head1 ACCESSORS
+
+=head2 cpp_name
 
 Returns the C++ name for the package (will be used for namespaces).
 
-=head2 ExtUtils::XSpp::Node::Package::perl_name
+=head2 perl_name
 
 Returns the Perl name for the package.
+
+=head2 set_perl_name
+
+Setter for the Perl package name.
 
 =cut
 
