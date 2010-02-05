@@ -52,3 +52,4 @@
 ^t/files/foo.h
 ^XSP.output
 
+^MYMETA.yml$
