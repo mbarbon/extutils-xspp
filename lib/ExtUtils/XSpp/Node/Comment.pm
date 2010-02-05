@@ -1,13 +1,32 @@
 package ExtUtils::XSpp::Node::Comment;
-
-=head1 ExtUtils::XSpp::Node::Comment
-
-Contains data that should be output prefixed with a comment marker
-
-=cut
-
 use strict;
 use base 'ExtUtils::XSpp::Node::Raw';
+
+=head1 NAME
+
+ExtUtils::XSpp::Node::Comment - Node representing a comment in the source file
+
+=head1 DESCRIPTION
+
+An L<ExtUtils::XSpp::Node::Raw> subclass representing a piece of raw data
+that should be included in the output verbatim, but with comment markers prefixed.
+
+  // This is a comment!
+
+would become something like
+
+  ## This is a comment!
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Node::Comment.
+
+Named parameters: C<rows> should be a reference to
+an array of source code comment lines.
+
+=cut
 
 sub init {
   my $this = shift;
