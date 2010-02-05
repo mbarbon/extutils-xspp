@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 11;
+use t::lib::XSP::Test tests => 12;
 
 run_diff xsp_stdout => 'expected';
 
@@ -324,4 +324,27 @@ bar( a, b, c, d, e, f, g, h )
     } catch (...) {
       croak("Caught unhandled C++ exception of unknown type");
     }
+  OUTPUT: RETVAL
+=== verbatim code blocks for xsubs
+--- xsp_stdout
+%module{Wx};
+
+%typemap{wxRichTextCtrl}{simple};
+%name{Wx::RichTextCtrl} class wxRichTextCtrl
+{
+    %name{newDefault} wxRichTextCtrl()
+        %code{% RETVAL = new wxRichTextCtrl();
+                wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
+             %};
+};
+--- expected
+MODULE=Wx
+
+MODULE=Wx PACKAGE=Wx::RichTextCtrl
+
+static wxRichTextCtrl*
+wxRichTextCtrl::newDefault()
+  CODE:
+     RETVAL = new wxRichTextCtrl();
+                wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
   OUTPUT: RETVAL
