@@ -2,12 +2,21 @@ NAME
     ExtUtils::XSpp - XS for C++
 
 SYNOPSIS
-      xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]] Foo.xsp
+      xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]]
+           [--xsubpp[=/path/to/xsubpp] [--xsubpp-args="xsubpp args"]
+           Foo.xsp
 
-    In Foo.xs (all in one line):
+    or
 
-      INCLUDE: perl -S xspp --typemap=typemap.xsp
-               Foo.xsp |
+      perl -MExtUtils::XSpp::Cmd -e xspp -- <xspp options and arguments>
+
+    In Foo.xs
+
+      INCLUDE_COMMAND: $^X -MExtUtils::XSpp::Cmd -e xspp -- <xspp options/arguments>
+
+    Using "ExtUtils::XSpp::Cmd" is equivalent to using the "xspp" command
+    line script, except that there is no guarantee for "xspp" to be
+    installed in the system PATH.
 
 OVERVIEW
     XS++ is just a thin layer over plain XS, hence to use it you are
@@ -15,6 +24,20 @@ OVERVIEW
 
     This means that you will need typemaps for both the normal XS
     pre-processor *xsubpp* and the XS++ pre-processor *xspp*.
+
+COMMAND LINE
+  "--typemap=/path/to/typemap.xsp"
+    Can be specified multiple times to process additional typemap files
+    before the main XS++ input files. Typemap files are processed the same
+    way as regular XS++ files, except that output code is discarded.
+
+  "--xsubpp[=/path/to/xsubpp]"
+    If specified, XS++ will run xsubpp after processing the XS++ input file.
+    If the path to xsubpp is not specified, xspp expects to find it in the
+    system PATH.
+
+  "--xsubpp-args="extra xsubpp args""
+    Can be used to pass additional command line arguments to xsubpp.
 
 TYPEMAPS
     There is nothing special about typemap files (i.e. you can put typemaps
@@ -50,7 +73,9 @@ DESCRIPTION
       %}
 
   %code
-    See under Classes.
+    See under Classes. Note that custom %code blocks are the only exception
+    to the exception handling. By specifying a custom %code block, you forgo
+    the automatic exception handlers.
 
   %file
       %file{file/path.h};
@@ -77,8 +102,22 @@ DESCRIPTION
   %typemap
     See TYPEMAPS above.
 
+  %length
+    When you need to pass a string from Perl to an XSUB that takes the C
+    string and its length as arguments, you may have XS++ pass the length of
+    the string automatically. For example, if you declare a method as
+    follows,
+
+      void PrintLine( char* line, unsigned int %length{line} );
+
+    you can call the method from Perl like this:
+
+      $object->PrintLine( $string );
+
+    This feature is also present in plain XS. See also: perlxs
+
   Classes
-      %name{My::Class} class MyClass
+      %name{My::Class} class MyClass : public %name{My::Base} MyBase
       {
           // can be called in Perl as My::Class->new( ... );
           MyClass( int arg );
@@ -100,9 +139,18 @@ DESCRIPTION
       };
 
   Comments
-    C-style "/* ... */" comments will be passed through unchanged. C++-style
-    comments "// ..." will be passed throug with the leading "//" replaced
-    with "##".
+    XS++ recognizes both C-style comments "/* ... */" and C++-style comments
+    "// ...". Comments are removed from the XS output.
+
+  Exceptions
+    C++ Exceptions are always caught and transformed to Perl "croak()"
+    calls. If the exception that was caught inherited from "std::exception",
+    then the "what()" message is included in the Perl-level error message.
+    All other exceptions will result in the "croak()" message "Caught
+    unhandled C++ exception of unknown type".
+
+    Note that if you supply a custom %code block for a function or method,
+    the automatic exception handling is turned off.
 
 AUTHOR
     Mattia Barbon <mbarbon@cpan.org>
