@@ -10,7 +10,23 @@ __DATA__
 
 === Basic exception declaration
 --- xsp_stdout
+%module{Foo};
+
 %exception{myException}{std::exception}{stdmessage};
 
---- expected
+int foo(int a);
 
+--- expected
+MODULE=Foo
+int
+foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
