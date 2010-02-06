@@ -3,15 +3,6 @@
 use strict;
 use warnings;
 use t::lib::XSP::Test tests => 2;
-use File::Spec;
-BEGIN {
-  if (-d 't') {
-    unshift @INC, File::Spec->catdir(qw(t lib));
-  }
-  elsif (-d "lib") {
-    unshift @INC, "lib";
-  }
-}
 
 run_diff xsp_stdout => 'expected';
 

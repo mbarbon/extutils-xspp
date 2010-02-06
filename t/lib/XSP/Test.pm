@@ -2,13 +2,23 @@ package t::lib::XSP::Test;
 
 use strict;
 use warnings;
-use lib 't/lib';
 use if -d 'blib' => 'blib';
 
 use Test::Base -Base;
 use Test::Differences;
 
 our @EXPORT = qw(run_diff);
+
+# allows running tests both from t and from the top directory
+use File::Spec;
+BEGIN {
+  if (-d 't') {
+    unshift @INC, File::Spec->catdir(qw(t lib));
+  }
+  elsif (-d "lib") {
+    unshift @INC, "lib";
+  }
+}
 
 filters { xsp_stdout => 'xsp_stdout',
           xsp_file   => 'xsp_file',
