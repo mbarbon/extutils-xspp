@@ -15,7 +15,7 @@ ExtUtils::XSpp::Exception - Map C++ exceptions to Perl exceptions
 
 This class is both the base class for the different exception handling
 mechanisms and the container for the global set of exception
-mappings from C++ exceptions (indicated by a data type to catch)
+mappings from C++ exceptions (indicated by a C++ data type to catch)
 to Perl exceptions. The Perl exceptions are implemented via C<croak()>.
 There are different cases of Perl exceptions that are implemented
 as sub-classes of C<ExtUtils::XSpp::Exception>:
@@ -37,14 +37,69 @@ and the exception's C<what()> message.
 
 =item L<ExtUtils::XSpp::Exception::message>
 
-translate C++ exceptions to Perl error messages using a printf-like
-mask for the message. Potentially by calling methods on the
-C++ exception object(!). Details to be hammered out.
+translates C++ exceptions to Perl error messages using a printf-like
+mask for the message. Potentially filling in place-holders by calling
+methods on the C++ exception object(!). Details to be hammered out.
 
 =item L<ExtUtils::XSpp::Exception::object>
 
 maps C++ exceptions to throwing an instance of some Perl exception class.
 Details to be hammered out.
+
+=back
+
+The basic idea is that you can declare the C++ exception types that
+you want to handle and how you plan to do so by using the C<%exception>
+directive in your XS++ (or rather XS++ typemap!):
+
+  // OutOfBoundsException would have been declared
+  // elsewhere as:
+  //
+  // class OutOfBoundsException : public std::exception {
+  // public:
+  //   OutOfBoundsException() {}
+  //   virtual const char* what() const throw() {
+  //     return "You accessed me out of bounds, fool!";
+  //   }
+  // }
+  
+  // tentative syntax...
+  %exception{outOfBounds}{OutOfBoundsException}{stdmessage};
+
+If you know a function or method may throw C<MyOutOfBoundsException>s, you
+can annotate the declaration in your XS++ as follows:
+
+  // tentative syntax...
+  double get_from_array(unsigned int index)
+    %catch{outOfBounds};
+
+When C<get_from_array> now throws an C<OutOfBoundsException>, the user
+gets a Perl croak with the message
+C<"Caught exception of type 'OutOfBoundsException': You accessed me out of bounds, fool!">.
+
+I<Note:> Why do we assign another name (C<outOfBounds>) to the
+existing C<OutOfBoundsException>?
+Because you may need to catch exceptions of the same C++ type with different
+handlers for different methods. You can, in principle, re-use the C++ exception
+class name for the exception I<map> name, but that may be confusing to posterity.
+
+If there are no C<%catch> decorators on a method, exceptions derived
+from C<std::exception> will be caught with a generic C<stdmessage>
+handler such as above (FIXME, implement).
+Even if there are C<%catch> clauses for the given method,
+all otherwise uncaught exceptions will be caught with a generic error message
+for safety.
+
+=head1 METHODS
+
+=cut
+
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Exception>.
+
+Calls the C<$self->init(@_)> method after construction.
+C<init()> must be overridden in subclasses.
 
 =cut
 
@@ -57,104 +112,94 @@ sub new {
   return $this;
 }
 
-=head2 ExtUtils::XSpp::Exception::type
+sub init {
+  my $self = shift;
+  my %args = @_;
+  $self->{TYPE} = $args{type};
+  $self->{NAME} = $args{name};
+  
+  Carp::croak("Missing or invalid exception 'type'")
+    if not ref $self->{TYPE}
+    or not $self->{TYPE}->isa("ExtUtils::XSpp::Node::Type");
+  Carp::croak("Missing exception 'name'")
+    if not defined $self->{NAME};
+}
 
-Returns the ExtUtils::XSpp::Node::Type that is used for this Exception.
+=head2 handler_code
+
+Unimplemented in this base class, but must be implemented
+in all actual exception classes.
+
+Generates the C<catch(){}> block of code for inclusion
+in the XS output.
+
+=cut
+
+sub handler_code {
+  Carp::croak("Programmer left 'handler_code' method of his Exception subclass unimplemented");  
+}
+
+=head1 ACCESSORS
+
+=head2 name
+
+Returns the name of the exception.
+This is the C<myException> in C<%exception{myException}{char*}{handler}>.
+
+=cut
+
+sub name { $_[0]->{NAME} }
+
+=head2 type
+
+Returns the L<ExtUtils::XSpp::Node::Type> C++ type that is used for this exception.
+This is the C<char*> in C<%exception{myException}{char*}{handler}>.
 
 =cut
 
 sub type { $_[0]->{TYPE} }
 
-=head2 ExtUtils::XSpp::Exception::cpp_type()
 
-Returns the C++ type to be used for the local variable declaration.
-
-=head2 ExtUtils::XSpp::Exception::input_code( perl_argument_name, cpp_var_name1, ... )
-
-Code to put the contents of the perl_argument (typically ST(x)) into
-the C++ variable(s).
-
-=head2 ExtUtils::XSpp::Exception::output_code()
-
-=head2 ExtUtils::XSpp::Exception::cleanup_code()
-
-=head2 ExtUtils::XSpp::Exception::call_parameter_code( parameter_name )
-
-=head2 ExtUtils::XSpp::Exception::call_function_code( function_call_code, return_variable )
+=head1 CLASS METHODS
 
 =cut
 
-sub init { }
+my %ExceptionsByName;
+#my %ExceptionsByType;
 
-sub cpp_type { die; }
-sub input_code { die; }
-sub precall_code { undef }
-sub output_code { undef }
-sub cleanup_code { undef }
-sub call_parameter_code { undef }
-sub call_function_code { undef }
+=head2 add_exception
 
-my @Exceptions;
+Given an C<ExtUtils::XSpp::Exception> object,
+adds this object to the global registry, potentially
+overwriting an exception map of the same name that was
+in effect before.
 
-# add Exceptions for basic C types
-add_default_Exceptions();
+=cut
 
-sub add_Exception_for_type {
-  my( $type, $Exception ) = @_;
+sub add_exception {
+  my ($class, $exception) = @_;
 
-  unshift @Exceptions, [ $type, $Exception ];
+  $ExceptionsByName{$exception->name} = $exception;
+  #push @{$ExceptionsByType{$exception->print} }, $exception;
+  return();
 }
 
-# a weak Exception does not override an already existing Exception for the
-# same type
-sub add_weak_Exception_for_type {
-  my( $type, $Exception ) = @_;
+=head2 get_exception_for_name
 
-  foreach my $t ( @Exceptions ) {
-    return if $t->[0]->equals( $type );
+Given the XS++ name of the exception map, fetches
+the corresponding C<ExtUtils::XSpp::Exception> object
+from the global registry and returns it. Croaks on error.
+
+=cut
+
+sub get_exception_for_name {
+  my ($class, $name) = @_;
+
+  if (not exists $ExceptionsByName{$name}) {
+    Carp::confess( "No Exception with the name $name declared" );
   }
-  unshift @Exceptions, [ $type, $Exception ];
+  return $ExceptionsByName{$name};
 }
 
-sub get_Exception_for_type {
-  my $type = shift;
-
-  foreach my $t ( @Exceptions ) {
-    return ${$t}[1] if $t->[0]->equals( $type );
-  }
-
-  Carp::confess( "No Exception for type ", $type->print );
-}
-
-sub add_default_Exceptions {
-  # void, integral and floating point types
-  foreach my $t ( 'char', 'short', 'int', 'long',
-                  'unsigned char', 'unsigned short', 'unsigned int',
-                  'unsigned long', 'void',
-                  'float', 'double', 'long double' ) {
-    my $type = ExtUtils::XSpp::Node::Type->new( base => $t );
-
-    ExtUtils::XSpp::Exception::add_Exception_for_type
-        ( $type, ExtUtils::XSpp::Exception::simple->new( type => $type ) );
-  }
-
-  # char*, const char*
-  my $char_p = ExtUtils::XSpp::Node::Type->new
-                   ( base    => 'char',
-                     pointer => 1,
-                     );
-
-  ExtUtils::XSpp::Exception::add_Exception_for_type
-      ( $char_p, ExtUtils::XSpp::Exception::simple->new( type => $char_p ) );
-
-  my $const_char_p = ExtUtils::XSpp::Node::Type->new
-                         ( base    => 'char',
-                           pointer => 1,
-                           const   => 1,
-                           );
-
-  ExtUtils::XSpp::Exception::add_Exception_for_type
-      ( $const_char_p, ExtUtils::XSpp::Exception::simple->new( type => $const_char_p ) );
-}
 
 1;
