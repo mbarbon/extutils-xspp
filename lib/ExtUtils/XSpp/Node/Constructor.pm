@@ -1,7 +1,34 @@
 package ExtUtils::XSpp::Node::Constructor;
-
 use strict;
 use base 'ExtUtils::XSpp::Node::Method';
+
+=head1 NAME
+
+ExtUtils::XSpp::Node::Constructor - Node representing a constructor method
+
+=head1 DESCRIPTION
+
+An L<ExtUtils::XSpp::Node::Method> subclass representing a 
+constructor such as:
+
+  class FooBar {
+    FooBar(); // <-- this one
+  };
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Node::Constructor>.
+
+Most of the functionality of this class is inherited. This
+means that all named parameters of L<ExtUtils::XSpp::Node::Method>
+and its base class are also valid for this class' constructor.
+
+Additionally, this class requires that no return type has
+been specified as constructors do not have return types.
+
+=cut
 
 sub init {
   my $this = shift;
@@ -10,11 +37,20 @@ sub init {
   die "Can't specify return value in constructor" if $this->{RET_TYPE};
 }
 
+
+=head2 ret_type
+
+Unlike the C<ret_type> method of the L<ExtUtils::XSpp::Node::Method> class,
+C<ret_type> will return the type "pointer to object of this class"
+as return type of the constructor.
+
+=cut
+
 sub ret_type {
   my $this = shift;
 
-  ExtUtils::XSpp::Node::Type->new( base      => $this->class->cpp_name,
-                            pointer   => 1 );
+  ExtUtils::XSpp::Node::Type->new( base    => $this->class->cpp_name,
+                                   pointer => 1 );
 }
 
 sub perl_function_name {
