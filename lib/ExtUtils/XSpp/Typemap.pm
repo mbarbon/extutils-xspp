@@ -1,13 +1,16 @@
 package ExtUtils::XSpp::Typemap;
+use strict;
+use warnings;
+
+require ExtUtils::XSpp::Typemap::parsed;
+require ExtUtils::XSpp::Typemap::simple;
+require ExtUtils::XSpp::Typemap::reference;
 
 =head1 NAME
 
 ExtUtils::XSpp::Typemap - map types
 
 =cut
-
-use strict;
-use warnings;
 
 sub new {
   my $class = shift;
@@ -116,87 +119,6 @@ sub add_default_typemaps {
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type
       ( $const_char_p, ExtUtils::XSpp::Typemap::simple->new( type => $const_char_p ) );
-}
-
-package ExtUtils::XSpp::Typemap::parsed;
-
-use base 'ExtUtils::XSpp::Typemap';
-
-sub _dl { return defined( $_[0] ) && length( $_[0] ) ? $_[0] : undef }
-
-sub init {
-  my $this = shift;
-  my %args = @_;
-
-  $this->{TYPE} = $args{type};
-  $this->{CPP_TYPE} = $args{cpp_type} || $args{arg1};
-  $this->{CALL_FUNCTION_CODE} = _dl( $args{call_function_code} || $args{arg2} );
-  $this->{OUTPUT_CODE} = _dl( $args{output_code} || $args{arg3} );
-  $this->{CLEANUP_CODE} = _dl( $args{cleanup_code} || $args{arg4} );
-  $this->{PRECALL_CODE} = _dl( $args{precall_code} || $args{arg5} );
-}
-
-sub cpp_type { $_[0]->{CPP_TYPE} }
-sub output_code { $_[0]->{OUTPUT_CODE} }
-sub cleanup_code { $_[0]->{CLEANUP_CODE} }
-sub call_parameter_code { undef }
-sub call_function_code {
-  my( $this, $func, $var ) = @_;
-  return unless defined $this->{CALL_FUNCTION_CODE};
-  return _replace( $this->{CALL_FUNCTION_CODE}, '$1' => $func, '$$' => $var );
-}
-
-sub precall_code {
-  my( $this, $pvar, $cvar ) = @_;
-  return unless defined $_[0]->{PRECALL_CODE};
-  return _replace( $this->{PRECALL_CODE}, '$1' => $pvar, '$2' => $cvar );
-}
-
-sub _replace {
-  my( $code ) = shift;
-  while( @_ ) {
-    my( $f, $t ) = ( shift, shift );
-    $code =~ s/\Q$f\E/$t/g;
-  }
-  return $code;
-}
-
-package ExtUtils::XSpp::Typemap::simple;
-
-use base 'ExtUtils::XSpp::Typemap';
-
-sub init {
-  my $this = shift;
-  my %args = @_;
-
-  $this->{TYPE} = $args{type};
-}
-
-sub cpp_type { $_[0]->{TYPE}->print }
-sub output_code { undef } # likewise
-sub call_parameter_code { undef }
-sub call_function_code { undef }
-
-package ExtUtils::XSpp::Typemap::reference;
-
-use base 'ExtUtils::XSpp::Typemap';
-
-sub init {
-  my $this = shift;
-  my %args = @_;
-
-  $this->{TYPE} = $args{type};
-}
-
-sub cpp_type {
-  my $type = $_[0]->type;
-  $type->base_type . $type->print_tmpl_args . ('*' x ($type->is_pointer+1))
-}
-sub output_code { undef }
-sub call_parameter_code { "*( $_[1] )" }
-sub call_function_code {
-  my $type = $_[0]->type;
-  $_[2] . ' = new ' . $type->base_type . $type->print_tmpl_args . '( ' . $_[1] . " )";
 }
 
 1;
