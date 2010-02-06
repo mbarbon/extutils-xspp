@@ -2,8 +2,8 @@ package ExtUtils::XSpp::Exception;
 use strict;
 use warnings;
 
-#require ExtUtils::XSpp::Exception::simple;
-#require ExtUtils::XSpp::Exception::stdmessage;
+require ExtUtils::XSpp::Exception::simple;
+require ExtUtils::XSpp::Exception::stdmessage;
 #require ExtUtils::XSpp::Exception::message;
 #require ExtUtils::XSpp::Exception::object;
 
@@ -137,6 +137,18 @@ in the XS output.
 
 sub handler_code {
   Carp::croak("Programmer left 'handler_code' method of his Exception subclass unimplemented");  
+}
+
+=head2 cpp_type
+
+Fetches the C++ type of the exception from the C<type> attribute and returns it.
+
+=cut
+
+# TODO: Strip pointers and references
+sub cpp_type {
+  my $this = shift;
+  return $this->type->print;
 }
 
 =head1 ACCESSORS

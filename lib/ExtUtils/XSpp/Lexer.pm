@@ -21,6 +21,7 @@ use ExtUtils::XSpp::Node::Raw;
 use ExtUtils::XSpp::Node::Type;
 
 use ExtUtils::XSpp::Typemap;
+use ExtUtils::XSpp::Exception;
 
 my %tokens = ( '::' => 'DCOLON',
                ':'  => 'COLON',
