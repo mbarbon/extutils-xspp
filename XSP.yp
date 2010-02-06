@@ -13,7 +13,7 @@
 %token OPCURLY CLCURLY OPPAR CLPAR OPANG CLANG SEMICOLON TILDE DCOLON
 %token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
 %token INTEGER RAW_CODE COMMENT ID COLON
-%expect 1
+%expect 2
 
 %%
 
@@ -35,7 +35,8 @@ directive:      perc_module SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
-              | typemap { };
+              | typemap { }
+              | exceptionmap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
@@ -46,6 +47,17 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                                      @{$_[8] || []};
                       my $tm = $package->new( type => $type, %args );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      undef };
+
+exceptionmap:   p_exceptionmap OPCURLY type_name CLCURLY OPCURLY ID CLCURLY
+                  special_blocks SEMICOLON
+                    { my $package = "ExtUtils::XSpp::Exception::" . $_[6];
+                      my $type = make_type($_[3]); my $c = 0;
+                      my %args = map { "arg" . ++$c => $_ }
+                                 map { join( '', @$_ ) }
+                                     @{$_[8] || []};
+                      my $tm = $package->new( type => $type, %args );
+                      ExtUtils::XSpp::Exception::add_exceptionmap_for_type( $type, $tm );
                       undef };
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
@@ -90,7 +102,7 @@ class_body_list:
           { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-class_body_element: method | raw | typemap | access_specifier;
+class_body_element: method | raw | typemap | exceptionmap | access_specifier;
 
 access_specifier:
       'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }

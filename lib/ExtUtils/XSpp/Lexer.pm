@@ -46,6 +46,7 @@ my %tokens = ( '::' => 'DCOLON',
                # these are here due to my lack of skill with yacc
                '%name'       => 'p_name',
                '%typemap'    => 'p_typemap',
+               '%exception'  => 'p_exceptionmap',
                '%file'       => 'p_file',
                '%module'     => 'p_module',
                '%code'       => 'p_code',
@@ -155,6 +156,7 @@ sub yylex {
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
                       | \%loadplugin | \%include | \%postcall
+                      | \%exception
                       | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
