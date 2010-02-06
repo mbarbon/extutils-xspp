@@ -3,9 +3,37 @@ package ExtUtils::XSpp::Node::Function;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
-=head1 ExtUtils::XSpp::Node::Function
+=head1 NAME
 
-A function; this is also a base class for C<Method>.
+ExtUtils::XSpp::Node::Function - Node representing a function
+
+=head1 DESCRIPTION
+
+An L<ExtUtils::XSpp::Node> subclass representing a single function declaration
+such as
+
+  int foo();
+
+More importantly, L<ExtUtils::XSpp::Node::Method> inherits from this class,
+so all in here equally applies to method nodes.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new C<ExtUtils::XSpp::Node::Function>.
+
+Named parameters: C<cpp_name> indicating the C++ name of the function,
+C<perl_name> indicating the Perl name of the function (defaults to the
+same as C<cpp_name>), C<arguments> can be a reference to an
+array of C<ExtUtils::XSpp::Node::Argument> objects,
+C<ret_type> indicates the (C++) return type of the function,
+and finally, C<class>, which can be an L<ExtUtils::XSpp::Node::Class>
+object (FIXME: Should this be part of ::Function, not ::Method?)
+
+Additionally, there are several optional decorators for a function
+declaration (see L<ExtUtils::XSpp> for a list). These can be
+passed to the constructor as C<code>, C<cleanup>, and C<postcall>.
 
 =cut
 
@@ -23,6 +51,10 @@ sub init {
   $this->{CLASS} = $args{class};
 }
 
+=head2 resolve_typemaps
+
+=cut
+
 sub resolve_typemaps {
   my $this = shift;
 
@@ -36,42 +68,13 @@ sub resolve_typemaps {
   }
 }
 
-=head2 ExtUtils::XSpp::Node::Function::cpp_name
-
-=head2 ExtUtils::XSpp::Node::Function::perl_name
-
-=head2 ExtUtils::XSpp::Node::Function::arguments
-
-=head2 ExtUtils::XSpp::Node::Function::ret_type
-
-=head2 ExtUtils::XSpp::Node::Function::code
-
-=head2 ExtUtils::XSpp::Node::Function::cleanup
-
-=head2 ExtUtils::XSpp::Node::Function::postcall
-
-=head2 ExtUtils::XSpp::Node::Function::argument_style
+=head2 argument_style
 
 Returns either C<ansi> or C<kr>. C<kr> is the default.
 C<ansi> is returned if any one of the arguments uses the XS
 C<length> feature.
 
 =cut
-
-sub cpp_name { $_[0]->{CPP_NAME} }
-sub perl_name { $_[0]->{PERL_NAME} }
-sub arguments { $_[0]->{ARGUMENTS} }
-sub ret_type { $_[0]->{RET_TYPE} }
-sub code { $_[0]->{CODE} }
-sub cleanup { $_[0]->{CLEANUP} }
-sub postcall { $_[0]->{POSTCALL} }
-sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
-sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
-sub virtual { $_[0]->{VIRTUAL} }
-
-sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
-sub set_static { $_[0]->{STATIC} = $_[1] }
-sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 
 sub argument_style {
   my $this = shift;
@@ -239,7 +242,22 @@ EOT
   $out .= "\n";
 }
 
+=head2 perl_function_name
+
+Returns the name of the Perl function to generate.
+
+=cut
+
 sub perl_function_name { $_[0]->perl_name }
+
+=head2 is_method
+
+Returns whether the object at hand is a method. Hard-wired
+to be false for C<ExtUtils::XSpp::Node::Function> object,
+but overridden in the L<ExtUtils::XSpp::Node::Method> sub-class.
+
+=cut
+
 sub is_method { 0 }
 
 =begin documentation
@@ -253,5 +271,83 @@ Return something like "foo( $argument_string )".
 =cut
 
 sub _call_code { return $_[0]->cpp_name . '(' . $_[1] . ')'; }
+
+
+=head1 ACCESSORS
+
+=head2 cpp_name
+
+Returns the C++ name of the function.
+
+=head2 perl_name
+
+Returns the Perl name of the function (defaults to same as C++).
+
+=head2 set_perl_name
+
+Sets the Perl name of the function.
+
+=head2 arguments
+
+Returns the internal array reference of L<ExtUtils::XSpp::Node::Argument>
+objects that represent the function arguments.
+
+=head2 ret_type
+
+Returns the C++ return type.
+
+=head2 code
+
+Returns the C<%code> decorator if any.
+
+=head2 cleanup
+
+Returns the C<%cleanup> decorator if any.
+
+=head2 postcall
+
+Returns the C<%postcall> decorator if any.
+
+=head2 virtual
+
+Returns whether the method was declared virtual.
+
+=head2 set_virtual
+
+Set whether the method is to be considered virtual.
+
+=cut
+
+sub cpp_name { $_[0]->{CPP_NAME} }
+sub perl_name { $_[0]->{PERL_NAME} }
+sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
+sub arguments { $_[0]->{ARGUMENTS} }
+sub ret_type { $_[0]->{RET_TYPE} }
+sub code { $_[0]->{CODE} }
+sub cleanup { $_[0]->{CLEANUP} }
+sub postcall { $_[0]->{POSTCALL} }
+sub virtual { $_[0]->{VIRTUAL} }
+sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
+
+=head2 set_static
+
+Sets the C<static>-ness attribute of the function.
+Can be either undef (i.e. not static), C<package_static>,
+or C<class_static>.
+
+=head2 package_static
+
+Returns whether the function is package static.
+
+=head2 class_static
+
+Returns whether the function is class static.
+
+=cut
+
+sub set_static { $_[0]->{STATIC} = $_[1] }
+sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
+sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
+
 
 1;
