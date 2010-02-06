@@ -161,9 +161,7 @@ sub yylex {
         return ( $tokens{$1}, $1 );
       } elsif( $$buf =~ s/^(INCLUDE(?:_COMMAND)?:.*)(?:\r\n|\r|\n)// ) {
         return ( 'RAW_CODE', "$1\n" );
-      } elsif( $$buf =~ m/^([a-zA-Z_]\w*)\W/ ) {
-        $$buf =~ s/^(\w+)//;
-
+      } elsif( $$buf =~ s/^([a-zA-Z_]\w*)// ) {
         return ( $1, $1 ) if exists $keywords{$1};
 
         return ( 'ID', $1 );
