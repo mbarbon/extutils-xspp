@@ -49,15 +49,16 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
                       undef };
 
-exceptionmap:   p_exceptionmap OPCURLY type_name CLCURLY OPCURLY ID CLCURLY
+exceptionmap:   p_exceptionmap OPCURLY ID CLCURLY OPCURLY type_name CLCURLY
+                  OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
-                    { my $package = "ExtUtils::XSpp::Exception::" . $_[6];
-                      my $type = make_type($_[3]); my $c = 0;
+                    { my $package = "ExtUtils::XSpp::Exception::" . $_[9];
+                      my $type = make_type($_[6]); my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
                                  map { join( '', @$_ ) }
-                                     @{$_[8] || []};
-                      my $tm = $package->new( type => $type, %args );
-                      ExtUtils::XSpp::Exception::add_exceptionmap_for_type( $type, $tm );
+                                     @{$_[11] || []};
+                      my $e = $package->new( name => $_[3], type => $type, %args );
+                      ExtUtils::XSpp::Exception->add_exception( $e );
                       undef };
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
