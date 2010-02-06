@@ -3,6 +3,8 @@ package ExtUtils::XSpp::Node::Type;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
+# TODO: Document...
+
 # normalized names for some integral C types
 my %normalize =
   ( 'unsigned'           => 'unsigned int',
@@ -16,10 +18,10 @@ sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{BASE} = $normalize{$args{base}} || $args{base};
-  $this->{POINTER} = $args{pointer} ? 1 : 0;
-  $this->{REFERENCE} = $args{reference} ? 1 : 0;
-  $this->{CONST} = $args{const} ? 1 : 0;
+  $this->{BASE}          = $normalize{$args{base}} || $args{base};
+  $this->{POINTER}       = $args{pointer} ? 1 : 0;
+  $this->{REFERENCE}     = $args{reference} ? 1 : 0;
+  $this->{CONST}         = $args{const} ? 1 : 0;
   $this->{TEMPLATE_ARGS} = $args{template_args} || [];
 }
 
