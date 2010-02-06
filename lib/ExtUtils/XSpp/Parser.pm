@@ -151,4 +151,77 @@ sub add_post_process_plugin {
 
 sub post_process_plugins { $_[0]->{PLUGINS}{POST_PROCESS} || [] }
 
+=head2 ExtUtils::XSpp::Parser::add_class_tag_plugin
+
+Adds the specified plugin to the list of plugins that can handle custom
+%foo annotations for a class.
+
+=cut
+
+sub add_class_tag_plugin {
+  my $this = shift;
+  my( $plugin ) = @_;
+
+  push @{$this->{PLUGINS}{CLASS_TAG}}, $plugin;
+}
+
+sub handle_class_tag_plugins {
+  my( $this, $class, @args ) = @_;
+
+  _handle_plugin( $this, $this->{PLUGINS}{CLASS_TAG}, 'class',
+                  'handle_class_tag', [ $class, @args ] );
+}
+
+=head2 ExtUtils::XSpp::Parser::add_function_tag_plugin
+
+Adds the specified plugin to the list of plugins that can handle custom
+%foo annotations for a function.
+
+=cut
+
+sub add_function_tag_plugin {
+  my( $this, $plugin ) = @_;
+
+  push @{$this->{PLUGINS}{FUNCTION_TAG}}, $plugin;
+}
+
+sub handle_function_tag_plugins {
+  my( $this, $function, @args ) = @_;
+
+  _handle_plugin( $this, $this->{PLUGINS}{FUNCTION_TAG}, 'function',
+                  'handle_function_tag', [ $function, @args ] );
+}
+
+=head2 ExtUtils::XSpp::Parser::add_method_tag_plugin
+
+Adds the specified plugin to the list of plugins that can handle custom
+%foo annotations for a function.
+
+=cut
+
+sub add_method_tag_plugin {
+  my( $this, $plugin ) = @_;
+
+  push @{$this->{PLUGINS}{METHOD_TAG}}, $plugin;
+}
+
+sub handle_method_tag_plugins {
+  my( $this, $method, @args ) = @_;
+
+  _handle_plugin( $this, $this->{PLUGINS}{METHOD_TAG}, 'method',
+                  'handle_method_tag', [ $method, @args ] );
+}
+
+sub _handle_plugin {
+  my( $this, $plugins, $plugin_type, $plugin_method, $plugin_args ) = @_;
+
+  my $handled;
+  foreach my $plugin ( @$plugins ) {
+    $handled ||= $plugin->$plugin_method( @$plugin_args );
+    last if $handled;
+  }
+
+  die "Unhandled $plugin_type annotation $plugin_args->[1]" unless $handled;
+}
+
 1;

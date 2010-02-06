@@ -233,15 +233,23 @@ sub make_argument {
 
 sub create_class {
   my( $parser, $name, $bases, $metadata, $methods ) = @_;
-  my %metadata = @$metadata;
-  _merge_keys('catch', \%metadata, $metadata);
+  my %args = @$metadata;
+  _merge_keys( 'catch', \%args, $metadata );
 
-  my $class = ExtUtils::XSpp::Node::Class->new( %metadata, # <-- catch only for now
+  my $class = ExtUtils::XSpp::Node::Class->new( %args, # <-- catch only for now
                                                 cpp_name     => $name,
                                                 base_classes => $bases );
 
   # when adding a class C, automatically add weak typemaps for C* and C&
   ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name );
+
+  if( $args{any} ) {
+    $parser->YYData->{PARSER}->handle_class_tag_plugins
+      ( $class, $args{any},
+        any_perc_argument => $args{any_perc_argument},
+        any_special_block => $args{any_special_block},
+        );
+  }
 
   # finish creating the class
   $class->add_methods( @$methods );
@@ -266,45 +274,65 @@ sub _merge_keys {
 }
 
 sub add_data_function {
-  my $parser = shift @_;
-  my %args   = @_;
-  _merge_keys('catch', \%args, \@_);
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'catch', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Function->new
-      ( cpp_name  => $args{name},
-        perl_name => $args{perl_name},
-        class     => $args{class},
-        ret_type  => $args{ret_type},
-        arguments => $args{arguments},
-        code      => $args{code},
-        cleanup   => $args{cleanup},
-        postcall  => $args{postcall},
-        catch     => $args{catch},
+  my $f = ExtUtils::XSpp::Node::Function->new
+              ( cpp_name  => $args{name},
+                perl_name => $args{perl_name},
+                class     => $args{class},
+                ret_type  => $args{ret_type},
+                arguments => $args{arguments},
+                code      => $args{code},
+                cleanup   => $args{cleanup},
+                postcall  => $args{postcall},
+                catch     => $args{catch},
+                );
+
+  if( $args{any} ) {
+    $parser->YYData->{PARSER}->handle_function_tag_plugins
+      ( $f, $args{any},
+        any_perc_argument => $args{any_perc_argument},
+        any_special_block => $args{any_special_block},
         );
+  }
+
+  return $f;
 }
 
 sub add_data_method {
-  my $parser = shift @_;
-  my %args   = @_;
-  _merge_keys('catch', \%args, \@_);
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'catch', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Method->new
-      ( cpp_name  => $args{name},
-        ret_type  => $args{ret_type},
-        arguments => $args{arguments},
-        const     => $args{const},
-        code      => $args{code},
-        cleanup   => $args{cleanup},
-        postcall  => $args{postcall},
-        perl_name => $args{perl_name},
-        catch     => $args{catch},
+  my $m = ExtUtils::XSpp::Node::Method->new
+            ( cpp_name  => $args{name},
+              ret_type  => $args{ret_type},
+              arguments => $args{arguments},
+              const     => $args{const},
+              code      => $args{code},
+              cleanup   => $args{cleanup},
+              postcall  => $args{postcall},
+              perl_name => $args{perl_name},
+              catch     => $args{catch},
+              );
+
+  if( $args{any} ) {
+    $parser->YYData->{PARSER}->handle_method_tag_plugins
+      ( $m, $args{any},
+        any_perc_argument => $args{any_perc_argument},
+        any_special_block => $args{any_special_block},
         );
+  }
+
+  return $m;
 }
 
 sub add_data_ctor {
-  my $parser = shift @_;
-  my %args   = @_;
-  _merge_keys('catch', \%args, \@_);
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'catch', \%args, \@args );
 
   ExtUtils::XSpp::Node::Constructor->new
       ( cpp_name  => $args{name},
@@ -317,9 +345,9 @@ sub add_data_ctor {
 }
 
 sub add_data_dtor {
-  my $parser = shift @_;
-  my %args   = @_;
-  _merge_keys('catch', \%args, \@_);
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'catch', \%args, \@args );
 
   ExtUtils::XSpp::Node::Destructor->new
       ( cpp_name  => $args{name},
