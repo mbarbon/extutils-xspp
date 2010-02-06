@@ -2,12 +2,6 @@ package ExtUtils::XSpp::Node::Package;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
-=head1 ExtUtils::XSpp::Node::Package
-
-Used to put global functions inside a Perl package.
-
-=cut
-
 =head1 NAME
 
 ExtUtils::XSpp::Node::Package - Node representing a Perl package
