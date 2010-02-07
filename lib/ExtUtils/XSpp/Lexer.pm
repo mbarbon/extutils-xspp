@@ -270,7 +270,8 @@ sub _merge_keys {
 }
 
 sub add_data_function {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
   _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Function->new
@@ -286,7 +287,8 @@ sub add_data_function {
 }
 
 sub add_data_method {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
   _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Method->new
@@ -302,7 +304,8 @@ sub add_data_method {
 }
 
 sub add_data_ctor {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
   _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Constructor->new
@@ -316,7 +319,9 @@ sub add_data_ctor {
 }
 
 sub add_data_dtor {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Destructor->new
       ( cpp_name  => $args{name},
