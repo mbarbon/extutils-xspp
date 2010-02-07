@@ -48,6 +48,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%name'       => 'p_name',
                '%typemap'    => 'p_typemap',
                '%exception'  => 'p_exceptionmap',
+               '%catch'      => 'p_catch',
                '%file'       => 'p_file',
                '%module'     => 'p_module',
                '%code'       => 'p_code',
@@ -157,7 +158,7 @@ sub yylex {
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
                       | \%loadplugin | \%include | \%postcall
-                      | \%exception
+                      | \%exception | \%catch
                       | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
@@ -253,8 +254,24 @@ sub create_class {
   return $class;
 }
 
+# support multiple occurrances of specific keys
+# => transform to array ref
+sub _merge_keys {
+  my $key = shift;
+  my $argshash = shift;
+  my $paramlist = shift;
+  my @occurrances;
+  for (my $i = 0; $i < @$paramlist; $i += 2) {
+    if (defined $paramlist->[$i] and $paramlist->[$i] eq $key) {
+      push @occurrances, $paramlist->[$i+1];
+    }
+  }
+  $argshash->{$key} = \@occurrances;
+}
+
 sub add_data_function {
   my( $parser, %args ) = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Function->new
       ( cpp_name  => $args{name},
@@ -264,11 +281,13 @@ sub add_data_function {
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
 sub add_data_method {
   my( $parser, %args ) = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Method->new
       ( cpp_name  => $args{name},
@@ -278,11 +297,13 @@ sub add_data_method {
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
         perl_name => $args{perl_name},
+        catch     => $args{catch},
         );
 }
 
 sub add_data_ctor {
   my( $parser, %args ) = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Constructor->new
       ( cpp_name  => $args{name},
@@ -290,6 +311,7 @@ sub add_data_ctor {
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
@@ -301,6 +323,7 @@ sub add_data_dtor {
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
