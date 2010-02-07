@@ -87,15 +87,26 @@ sub resolve_exceptions {
   my $this = shift;
 
   my @catch = @{$this->{CATCH} || []};
-  # TODO: add default handler
-  #push @catch,
 
-  $this->{EXCEPTIONS} = {};
-  my $exceptions = $this->{EXCEPTIONS};
+  my @exceptions;
   foreach my $catch (@catch) {
-    $exceptions->{$catch} =
+    push @exceptions,
       ExtUtils::XSpp::Exception->get_exception_for_name($catch);
   }
+
+  # If nothing else, catch std::exceptions nicely
+  if (not @exceptions) {
+    my $typenode = ExtUtils::XSpp::Node::Type->new(base => 'std::exception');
+    push @exceptions,
+      ExtUtils::XSpp::Exception::stdmessage->new( name => 'default',
+                                                  type => $typenode );
+  }
+
+  # always catch the rest with an unspecific error message
+  push @exceptions,
+    ExtUtils::XSpp::Exception::unknown->new( name => '', type => '' );
+
+  $this->{EXCEPTIONS} = \@exceptions;
 }
 
 
@@ -228,11 +239,11 @@ sub print {
     if( $has_ret && defined $ret_typemap->output_code ) {
       $code .= '      ' . $ret_typemap->output_code . ";\n";
     }
-    $code .= "    } catch (std::exception& e) {\n";
-    $code .= '      croak("Caught unhandled C++ exception: %s", e.what());' . "\n";
-    $code .= "    } catch (...) {\n";
-    $code .= '      croak("Caught unhandled C++ exception of unknown type");' . "\n";
     $code .= "    }\n";
+    my @catchers = @{$this->{EXCEPTIONS}};
+    foreach my $exception_handler (@catchers) {
+      $code .= $exception_handler->handler_code;
+    }
 
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
