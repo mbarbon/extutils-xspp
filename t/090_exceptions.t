@@ -47,7 +47,7 @@ foo( a )
   CODE:
     try {
       RETVAL = foo( a );
-    } catch (SomeException& e) {
+    } catch (myException& e) {
       croak("Caught C++ exception of type 'SomeException': %s", e.what());
     } catch (...) {
       croak("Caught unhandled C++ exception of unknown type");
