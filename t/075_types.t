@@ -31,10 +31,12 @@ foo()
   CODE:
     try {
       RETVAL = foo();
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -44,10 +46,12 @@ boo( a )
   CODE:
     try {
       RETVAL = boo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -75,10 +79,12 @@ foo( a )
   CODE:
     try {
       foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 void
@@ -87,10 +93,12 @@ boo( a )
   CODE:
     try {
       boo( *( a ) );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 === Template type
@@ -119,10 +127,12 @@ foo( a )
   CODE:
     try {
       foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 void
@@ -131,10 +141,12 @@ boo( a )
   CODE:
     try {
       boo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 === Template argument transformed to pointer
 --- xsp_stdout
@@ -159,8 +171,10 @@ foo( a )
   CODE:
     try {
       foo( *( a ) );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }

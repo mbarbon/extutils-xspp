@@ -51,10 +51,12 @@ boo( a )
   CODE:
     try {
       RETVAL = foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
   CLEANUP:
@@ -81,10 +83,12 @@ foo( a )
   CODE:
     try {
       RETVAL = foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   POSTCALL:
      blub( a ); 
@@ -156,10 +160,12 @@ foo( a )
   CODE:
     try {
       foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   POSTCALL:
      blub( a ); 

@@ -29,10 +29,12 @@ boo( a )
   CODE:
     try {
       RETVAL = foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -44,10 +46,12 @@ boo( a )
   CODE:
     try {
       RETVAL = foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -73,10 +77,12 @@ Foo::bar( a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -102,10 +108,12 @@ Foo::newFoo( a )
   CODE:
     try {
       RETVAL = new Foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -131,10 +139,12 @@ Foo::foo()
   CODE:
     try {
       THIS->foo();
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 int
@@ -143,9 +153,11 @@ Foo::foo_int( a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL

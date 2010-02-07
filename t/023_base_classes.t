@@ -29,10 +29,12 @@ Foo::foo()
   CODE:
     try {
       THIS->foo();
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 BOOT:
@@ -62,10 +64,12 @@ Foo::foo()
   CODE:
     try {
       THIS->foo();
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
 
 BOOT:

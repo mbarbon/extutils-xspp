@@ -41,10 +41,12 @@ foo( a, b, c )
   CODE:
     try {
       RETVAL = foo( a, b, c );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
 
@@ -89,9 +91,11 @@ bar( x )
   CODE:
     try {
       RETVAL = bar( x );
-    } catch (std::exception& e) {
-      croak("Caught unhandled C++ exception: %s", e.what());
-    } catch (...) {
-      croak("Caught unhandled C++ exception of unknown type");
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
