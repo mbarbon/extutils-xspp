@@ -1,4 +1,6 @@
 package ExtUtils::XSpp::Exception::simple;
+use strict;
+use warnings;
 
 use base 'ExtUtils::XSpp::Exception';
 
@@ -12,8 +14,9 @@ sub handler_code {
   my $no_spaces_indent = shift;
   $no_spaces_indent = 4 if not defined $no_spaces_indent;
 
+  my $ctype = $this->cpp_type;
   my $msg = "Caught C++ exception of type '$ctype'";
-  return <<HERE;
+  my $code = <<HERE;
 catch ($ctype& e) {
   croak("$msg");
 }
