@@ -56,6 +56,10 @@ sub init {
 
 =head2 resolve_typemaps
 
+Fetches the L<ExtUtils::XSpp::Typemap> object for
+the return type and the arguments from the typemap registry
+and stores a reference to those objects.
+
 =cut
 
 sub resolve_typemaps {
@@ -112,17 +116,20 @@ sub argument_style {
 # (rest as above)
 
 sub print {
-  my $this = shift;
-  my $state = shift;
-  my $out = '';
-  my $fname = $this->perl_function_name;
-  my $args = $this->arguments;
-  my $ret_type = $this->ret_type;
-  my $ret_typemap = $this->{TYPEMAPS}{RET_TYPE};
+  my $this               = shift;
+  my $state              = shift;
+
+  my $out                = '';
+  my $fname              = $this->perl_function_name;
+  my $args               = $this->arguments;
+  my $ret_type           = $this->ret_type;
+  my $ret_typemap        = $this->{TYPEMAPS}{RET_TYPE};
   my $need_call_function = 0;
+
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
       $postcall, $precall ) =
     ( '', '', '', '', '', '', '', '' );
+
   my $use_ansi_style = $this->argument_style() eq 'ansi';
 
   if( $args && @$args ) {
@@ -130,14 +137,15 @@ sub print {
     my( @arg_list, @call_arg_list );
     foreach my $i ( 0 .. $#$args ) {
       my $arg = ${$args}[$i];
-      my $t = $this->{TYPEMAPS}{ARGUMENTS}[$i];
-      my $pc = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
-                                 $arg->name );
+      my $t   = $this->{TYPEMAPS}{ARGUMENTS}[$i];
+      my $pc  = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
+                                  $arg->name );
 
       $need_call_function ||=    defined $t->call_parameter_code( '' )
                               || defined $pc;
       my $type = $use_ansi_style ? $t->cpp_type . ' ' : '';
-      push @arg_list, $type . $arg->name . ( $arg->has_default ? ' = ' . $arg->default : '' );
+      push @arg_list, $type . $arg->name .
+                      ( $arg->has_default ? ' = ' . $arg->default : '' );
       if (!$use_ansi_style) {
         $init .= '    ' . $t->cpp_type . ' ' . $arg->name . "\n";
       }
@@ -150,6 +158,7 @@ sub print {
     $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
     $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
   }
+
   # same for return value
   $need_call_function ||= $ret_typemap &&
     ( defined $ret_typemap->call_function_code( '', '' ) ||
