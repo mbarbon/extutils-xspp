@@ -23,7 +23,7 @@ top_list:
     ;
 
 top: raw | class | directive
-   | function { $_[1]->resolve_typemaps; $_[1] };
+   | function { $_[1]->resolve_typemaps; $_[1]->resolve_exceptions; $_[1] };
 
 directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
@@ -121,6 +121,7 @@ method_decl:    function_decl
                                code      => $f->code,
                                cleanup   => $f->cleanup,
                                postcall  => $f->postcall,
+                               catch     => $f->catch,
                                );
                            $m
                          }

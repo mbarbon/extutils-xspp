@@ -68,6 +68,7 @@ sub add_methods {
           $meth->{CLASS} = $this;
           $meth->{ACCESS} = $access;
           $meth->resolve_typemaps;
+          $meth->resolve_exceptions;
       } elsif( $meth->isa( 'ExtUtils::XSpp::Node::Access' ) ) {
           $access = $meth->access;
           next;
