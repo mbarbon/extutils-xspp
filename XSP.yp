@@ -186,7 +186,7 @@ perc_include:    p_include OPCURLY file_name CLCURLY     { $_[3] };
 perc_code:       p_code special_block                    { [ code => $_[2] ] };
 perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
 perc_postcall:   p_postcall special_block                { [ postcall => $_[2] ] };
-perc_catch:      p_catch OPCURLY class_name CLCURLY      { [ catch => $_[3] ] };
+perc_catch:      p_catch OPCURLY class_name_list CLCURLY { [ map {(catch => $_)} @{$_[3]} ] };
 
 type:
     'const' nconsttype          { make_const( $_[2] ) }
@@ -220,6 +220,11 @@ type_list:
 
 class_name:     ID
               | ID class_suffix { $_[1] . '::' . $_[2] };
+
+class_name_list:
+    class_name                          { [ $_[1] ] }
+  | class_name_list COMMA class_name    { push @{$_[1]}, $_[3]; $_[1] }
+  ;
 
 class_suffix:   DCOLON ID                   { $_[2] }
               | class_suffix DCOLON ID { $_[1] . '::' . $_[3] };
