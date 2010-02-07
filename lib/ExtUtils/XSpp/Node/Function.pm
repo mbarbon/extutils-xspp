@@ -33,7 +33,9 @@ object (FIXME: Should this be part of ::Function, not ::Method?)
 
 Additionally, there are several optional decorators for a function
 declaration (see L<ExtUtils::XSpp> for a list). These can be
-passed to the constructor as C<code>, C<cleanup>, and C<postcall>.
+passed to the constructor as C<code>, C<cleanup>, C<postcall>,
+and C<catch>. C<catch> is special in that it must be a reference
+to an array of class names.
 
 =cut
 
@@ -41,14 +43,15 @@ sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{CPP_NAME} = $args{cpp_name};
+  $this->{CPP_NAME}  = $args{cpp_name};
   $this->{PERL_NAME} = $args{perl_name} || $args{cpp_name};
   $this->{ARGUMENTS} = $args{arguments} || [];
-  $this->{RET_TYPE} = $args{ret_type};
-  $this->{CODE} = $args{code};
-  $this->{CLEANUP} = $args{cleanup};
-  $this->{POSTCALL} = $args{postcall};
-  $this->{CLASS} = $args{class};
+  $this->{RET_TYPE}  = $args{ret_type};
+  $this->{CODE}      = $args{code};
+  $this->{CLEANUP}   = $args{cleanup};
+  $this->{POSTCALL}  = $args{postcall};
+  $this->{CLASS}     = $args{class};
+  $this->{CATCH}     = $args{catch};
 }
 
 =head2 resolve_typemaps
