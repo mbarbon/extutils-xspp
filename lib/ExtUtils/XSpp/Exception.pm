@@ -6,8 +6,9 @@ require ExtUtils::XSpp::Exception::unknown;
 require ExtUtils::XSpp::Exception::simple;
 require ExtUtils::XSpp::Exception::stdmessage;
 require ExtUtils::XSpp::Exception::code;
+require ExtUtils::XSpp::Exception::perlcode;
 #require ExtUtils::XSpp::Exception::message;
-#require ExtUtils::XSpp::Exception::object;
+require ExtUtils::XSpp::Exception::object;
 
 =head1 NAME
 
@@ -53,13 +54,29 @@ methods on the C++ exception object(!). Details to be hammered out.
 =item L<ExtUtils::XSpp::Exception::object>
 
 maps C++ exceptions to throwing an instance of some Perl exception class.
-Details to be hammered out.
+
+Syntax:
+
+  %exception{myClassyException}{CppException}{object}{PerlClass};
+
+Currently, this means just calling C<PerlClass-E<gt>new()> and
+then die()ing with that object in C<$@>. There is no good way to pass
+information from the C++ exception object to the Perl object.
+Will change in future.
 
 =item L<ExtUtils::XSpp::Exception::unknown>
 
 is the default exception handler that is added to the list of handlers
 automatically during code generation. It simply throws an entirely
 unspecific error and catches the type C<...> (meaning: anything).
+
+=item L<ExtUtils::XSpp::Exception::code>
+
+allows the user to supply custom Perl code that will be executed
+in the exception handler. The code currently has no access to the
+C++ exception object. It is supposed to return a scalar value
+that is assigned to C<$@>.
+Highly experimental.
 
 =back
 

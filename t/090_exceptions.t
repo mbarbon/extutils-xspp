@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 4;
+use t::lib::XSP::Test tests => 6;
 
 run_diff xsp_stdout => 'expected';
 
@@ -183,3 +183,71 @@ foo( a )
     }
   OUTPUT: RETVAL
 
+=== 'object' exception
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{object}{PerlClass};
+
+int foo(int a)
+  %catch{myException};
+
+--- expected
+MODULE=Foo
+int
+foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    }
+    catch (SomeException& e) {
+      SV* errsv;
+      SV* objsv;
+      objsv = eval_pv("PerlClass->new()", 1);
+      errsv = get_sv("@", TRUE);
+      sv_setsv(errsv, exception_object);
+      croak(NULL);
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== 'perlcode' exception
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{perlcode}{%some
+perl
+code%};
+
+int foo(int a)
+  %catch{myException};
+
+--- expected
+MODULE=Foo
+int
+foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    }
+    catch (SomeException& e) {
+      SV* errsv;
+      SV* excsv;
+      excsv = eval_pv(
+        "some"
+        "perl"
+        "code",
+        1
+      );
+      errsv = get_sv("@", TRUE);
+      sv_setsv(errsv, excsv);
+      croak(NULL);
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL

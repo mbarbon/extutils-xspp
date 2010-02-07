@@ -51,15 +51,28 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
 
 exceptionmap:   p_exceptionmap OPCURLY ID CLCURLY OPCURLY type_name CLCURLY
                   OPCURLY ID CLCURLY
-                  special_blocks SEMICOLON
+                  mixed_blocks SEMICOLON
                     { my $package = "ExtUtils::XSpp::Exception::" . $_[9];
                       my $type = make_type($_[6]); my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
-                                 map { join( '', @$_ ) }
+                                 map { join( "\n", @$_ ) }
                                      @{$_[11] || []};
                       my $e = $package->new( name => $_[3], type => $type, %args );
                       ExtUtils::XSpp::Exception->add_exception( $e );
                       undef };
+
+mixed_blocks:  special_block
+                     { [ $_[1] ] }
+               | simple_block
+                     { [ [$_[1]] ] }
+               | mixed_blocks special_block
+                     { [ @{$_[1]}, $_[2] ] }
+               | mixed_blocks simple_block
+                     { [ @{$_[1]}, $_[2] ] }
+               | ;
+
+simple_block:  OPCURLY ID CLCURLY
+                { $_[2] };
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
