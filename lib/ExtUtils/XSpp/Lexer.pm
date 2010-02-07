@@ -255,7 +255,7 @@ sub create_class {
 }
 
 # support multiple occurrances of specific keys
-# => transform to array ref
+# => transform to flattened array ref
 sub _merge_keys {
   my $key = shift;
   my $argshash = shift;
@@ -266,6 +266,7 @@ sub _merge_keys {
       push @occurrances, $paramlist->[$i+1];
     }
   }
+  @occurrances = map {ref($_) eq 'ARRAY' ? @$_ : $_}  @occurrances;
   $argshash->{$key} = \@occurrances;
 }
 
