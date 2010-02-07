@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 3;
+use t::lib::XSP::Test tests => 4;
 
 run_diff xsp_stdout => 'expected';
 
@@ -156,3 +156,30 @@ Foo::buz( a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+=== 'code' exception
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{code}{% croak(e.what()); %};
+
+int foo(int a)
+  %catch{myException};
+
+--- expected
+MODULE=Foo
+int
+foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    }
+    catch (SomeException& e) {
+      croak(e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+

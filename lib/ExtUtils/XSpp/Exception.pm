@@ -5,6 +5,7 @@ use warnings;
 require ExtUtils::XSpp::Exception::unknown;
 require ExtUtils::XSpp::Exception::simple;
 require ExtUtils::XSpp::Exception::stdmessage;
+require ExtUtils::XSpp::Exception::code;
 #require ExtUtils::XSpp::Exception::message;
 #require ExtUtils::XSpp::Exception::object;
 
@@ -16,6 +17,7 @@ ExtUtils::XSpp::Exception - Map C++ exceptions to Perl exceptions
 
 This class is both the base class for the different exception handling
 mechanisms and the container for the global set of exception
+=over 2
 mappings from C++ exceptions (indicated by a C++ data type to catch)
 to Perl exceptions. The Perl exceptions are implemented via C<croak()>.
 There are different cases of Perl exceptions that are implemented
@@ -35,6 +37,12 @@ handles C++ exceptions that are derived from C<std::exception> and
 which provide a C<char* what()> method that will provide an error message.
 The Perl-level error message will include the C++ exception type name
 and the exception's C<what()> message.
+
+=item L<ExtUtils::XSpp::Exception::code>
+
+allows the user to supply custom C/C++/XS code that will be included in
+the exception handler verbatim. The code has access to the exception
+object as the variable C<e>.
 
 =item L<ExtUtils::XSpp::Exception::message>
 
