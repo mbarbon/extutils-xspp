@@ -22,8 +22,8 @@ sub handler_code {
   my $pcode = $this->{PERL_CODE};
   $pcode =~ s/^\s+//;
   $pcode =~ s/\s+$//;
-  $pcode =~ s/\\/\\\\/;
-  $pcode =~ s/"/\\"/;
+  $pcode =~ s/\\/\\\\/g;
+  $pcode =~ s/"/\\"/g;
   my @lines = split /\n/, $pcode;
   $pcode = '"' . join(qq{"\n"}, @lines) . qq{"};
   $pcode = $this->indent_code($pcode, 4);
