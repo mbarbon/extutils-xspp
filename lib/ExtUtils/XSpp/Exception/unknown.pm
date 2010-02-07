@@ -1,4 +1,4 @@
-package ExtUtils::XSpp::Exception::simple;
+package ExtUtils::XSpp::Exception::unknown;
 
 use base 'ExtUtils::XSpp::Exception';
 
@@ -12,9 +12,9 @@ sub handler_code {
   my $no_spaces_indent = shift;
   $no_spaces_indent = 4 if not defined $no_spaces_indent;
 
-  my $msg = "Caught C++ exception of type '$ctype'";
-  return <<HERE;
-catch ($ctype& e) {
+  my $msg = "Caught C++ exception of unknown type";
+  my $code = <<HERE;
+catch (...) {
   croak("$msg");
 }
 HERE

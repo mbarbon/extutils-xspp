@@ -2,6 +2,7 @@ package ExtUtils::XSpp::Exception;
 use strict;
 use warnings;
 
+require ExtUtils::XSpp::Exception::unknown;
 require ExtUtils::XSpp::Exception::simple;
 require ExtUtils::XSpp::Exception::stdmessage;
 #require ExtUtils::XSpp::Exception::message;
@@ -45,6 +46,12 @@ methods on the C++ exception object(!). Details to be hammered out.
 
 maps C++ exceptions to throwing an instance of some Perl exception class.
 Details to be hammered out.
+
+=item L<ExtUtils::XSpp::Exception::unknown>
+
+is the default exception handler that is added to the list of handlers
+automatically during code generation. It simply throws an entirely
+unspecific error and catches the type C<...> (meaning: anything).
 
 =back
 
@@ -117,12 +124,6 @@ sub init {
   my %args = @_;
   $self->{TYPE} = $args{type};
   $self->{NAME} = $args{name};
-  
-  Carp::croak("Missing or invalid exception 'type'")
-    if not ref $self->{TYPE}
-    or not $self->{TYPE}->isa("ExtUtils::XSpp::Node::Type");
-  Carp::croak("Missing exception 'name'")
-    if not defined $self->{NAME};
 }
 
 =head2 handler_code
@@ -131,12 +132,29 @@ Unimplemented in this base class, but must be implemented
 in all actual exception classes.
 
 Generates the C<catch(){}> block of code for inclusion
-in the XS output.
+in the XS output. First (optional) argument is an integer indicating
+the number of spaces to use for the first indentation level.
 
 =cut
 
 sub handler_code {
   Carp::croak("Programmer left 'handler_code' method of his Exception subclass unimplemented");  
+}
+
+=head2 indent_code
+
+Given a piece of code and a number of spaces to use for
+global indentation, indents the code and returns it.
+
+=cut
+
+sub indent_code {
+  my $this = shift;
+  my $code = shift;
+  my $n = shift;
+  my $indent = " " x $n;
+  $code =~ s/^/$indent/gm;
+  return $code;
 }
 
 =head2 cpp_type
