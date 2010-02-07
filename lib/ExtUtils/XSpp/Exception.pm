@@ -18,7 +18,9 @@ ExtUtils::XSpp::Exception - Map C++ exceptions to Perl exceptions
 
 This class is both the base class for the different exception handling
 mechanisms and the container for the global set of exception
+
 =over 2
+
 mappings from C++ exceptions (indicated by a C++ data type to catch)
 to Perl exceptions. The Perl exceptions are implemented via C<croak()>.
 There are different cases of Perl exceptions that are implemented
@@ -95,13 +97,11 @@ directive in your XS++ (or rather XS++ typemap!):
   //   }
   // }
   
-  // tentative syntax...
   %exception{outOfBounds}{OutOfBoundsException}{stdmessage};
 
 If you know a function or method may throw C<MyOutOfBoundsException>s, you
 can annotate the declaration in your XS++ as follows:
 
-  // tentative syntax...
   double get_from_array(unsigned int index)
     %catch{outOfBounds};
 
@@ -121,6 +121,10 @@ handler such as above (FIXME, implement).
 Even if there are C<%catch> clauses for the given method,
 all otherwise uncaught exceptions will be caught with a generic error message
 for safety.
+
+There may be an arbitrary number of C<%catch> clauses for any method or function.
+They will be tested in order. As a shorthand for C<%catch{E1} %catch{E2} ...>,
+you may write C<%catch{E1, E2, ...}>.
 
 =head1 METHODS
 

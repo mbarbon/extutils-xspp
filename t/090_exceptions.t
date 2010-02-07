@@ -75,8 +75,7 @@ class Foo {
     %catch{myException2};
 
   int baz(int a)
-    %catch{myException3}
-    %catch{myException}
+    %catch{myException3, myException}
     %catch{myException2};
 
   int buz(int a)
