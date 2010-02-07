@@ -75,6 +75,30 @@ sub resolve_typemaps {
   }
 }
 
+
+=head2 resolve_exceptions
+
+Fetches the L<ExtUtils::XSpp::Exception> object for
+the C<%catch> directives associated with this function.
+
+=cut
+
+sub resolve_exceptions {
+  my $this = shift;
+
+  my @catch = @{$this->{CATCH} || []};
+  # TODO: add default handler
+  #push @catch,
+
+  $this->{EXCEPTIONS} = {};
+  my $exceptions = $this->{EXCEPTIONS};
+  foreach my $catch (@catch) {
+    $exceptions->{$catch} =
+      ExtUtils::XSpp::Exception->get_exception_for_name($catch);
+  }
+}
+
+
 =head2 argument_style
 
 Returns either C<ansi> or C<kr>. C<kr> is the default.
@@ -328,6 +352,11 @@ Returns whether the method was declared virtual.
 
 Set whether the method is to be considered virtual.
 
+=head2 catch
+
+Returns the set of exception types that were associated
+with the function via C<%catch>. (array reference)
+
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
@@ -340,6 +369,7 @@ sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
 sub virtual { $_[0]->{VIRTUAL} }
 sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
+sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 
 =head2 set_static
 
