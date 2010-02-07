@@ -1,6 +1,6 @@
 package ExtUtils::XSpp::Node::Type;
-
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node';
 
 # TODO: Document...

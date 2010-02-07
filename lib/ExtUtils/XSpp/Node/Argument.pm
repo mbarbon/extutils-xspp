@@ -1,6 +1,6 @@
 package ExtUtils::XSpp::Node::Argument;
-
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node';
 
 =head1 NAME

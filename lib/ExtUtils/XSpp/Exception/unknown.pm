@@ -1,4 +1,6 @@
 package ExtUtils::XSpp::Exception::unknown;
+use strict;
+use warnings;
 
 use base 'ExtUtils::XSpp::Exception';
 

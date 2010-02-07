@@ -1,5 +1,6 @@
 package ExtUtils::XSpp::Node::Class;
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node::Package';
 
 =head1 NAME

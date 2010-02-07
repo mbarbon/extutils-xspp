@@ -1,5 +1,6 @@
 package ExtUtils::XSpp::Node::Comment;
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node::Raw';
 
 =head1 NAME

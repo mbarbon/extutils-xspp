@@ -1,5 +1,6 @@
 package ExtUtils::XSpp::Node::Destructor;
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node::Method';
 
 =head1 NAME

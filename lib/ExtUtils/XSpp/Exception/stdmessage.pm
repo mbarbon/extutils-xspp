@@ -1,5 +1,6 @@
 package ExtUtils::XSpp::Exception::stdmessage;
-
+use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Exception';
 
 sub init {

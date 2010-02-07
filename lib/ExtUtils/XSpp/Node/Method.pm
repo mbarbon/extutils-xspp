@@ -1,6 +1,6 @@
 package ExtUtils::XSpp::Node::Method;
-
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node::Function';
 
 =head1 NAME
