@@ -89,7 +89,9 @@ sub resolve_exceptions {
   my @catch = @{$this->{CATCH} || []};
 
   my @exceptions;
+  my %seen;
   foreach my $catch (@catch) {
+    next if $seen{$catch}++;
     push @exceptions,
       ExtUtils::XSpp::Exception->get_exception_for_name($catch);
   }
