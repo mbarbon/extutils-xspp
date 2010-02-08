@@ -229,8 +229,12 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $bases, $methods ) = @_;
-  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name     => $name,
+  my( $parser, $name, $bases, $metadata, $methods ) = @_;
+  my %metadata = @$metadata;
+  _merge_keys('catch', \%metadata, $metadata);
+
+  my $class = ExtUtils::XSpp::Node::Class->new( %metadata, # <-- catch only for now
+                                                cpp_name     => $name,
                                                 base_classes => $bases );
 
   # when adding a class C, automatically add weak typemaps for C* and C&

@@ -88,8 +88,8 @@ decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
                   | static method { $_[2]->set_static( $_[1] ); $_[2] }
                   | virtual method { $_[2]->set_virtual( 1 ); $_[2] };
 
-class_decl: 'class' ID base_classes OPCURLY class_body_list CLCURLY SEMICOLON
-                { create_class( $_[0], $_[2], $_[3], $_[5] ) };
+class_decl: 'class' ID base_classes class_metadata OPCURLY class_body_list CLCURLY SEMICOLON
+                { create_class( $_[0], $_[2], $_[3], $_[4], $_[6] ) };
 
 base_classes:
       COLON base_class              { [ $_[2] ] }
@@ -109,6 +109,10 @@ class_name_rename:
                              $klass
                              }
     ;
+
+class_metadata:   class_metadata perc_catch { [ @{$_[1]}, @{$_[2]} ] }
+                |                           { [] }
+                ;
 
 class_body_list:
           { [] }
@@ -150,32 +154,33 @@ static: 'package_static'
       | 'class_static'
       ;
 
-function_decl:  type ID OPPAR arg_list CLPAR const metadata SEMICOLON
+function_decl:  type ID OPPAR arg_list CLPAR const function_metadata SEMICOLON
                     { add_data_function( $_[0],
                                          name      => $_[2],
                                          ret_type  => $_[1],
                                          arguments => $_[4],
                                          @{ $_[7] } ) };
 
-ctor:           ID OPPAR arg_list CLPAR metadata SEMICOLON
+ctor:           ID OPPAR arg_list CLPAR function_metadata SEMICOLON
                     { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
                                             @{ $_[5] } ) };
 
-dtor:           TILDE ID OPPAR CLPAR metadata SEMICOLON
+dtor:           TILDE ID OPPAR CLPAR function_metadata SEMICOLON
                     { add_data_dtor( $_[0], name  => $_[2],
                                             @{ $_[5] },
                                       ) };
 
-metadata:       metadata _metadata { [ @{$_[1]}, @{$_[2]} ] }
-              |                    { [] }
-              ;
+function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]} ] }
+                   |                                      { [] }
+                   ;
 
-_metadata:      perc_code
-              | perc_cleanup
-              | perc_postcall
-              | perc_catch
-              ;
+
+_function_metadata:    perc_code
+                     | perc_cleanup
+                     | perc_postcall
+                     | perc_catch
+                     ;
 
 perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
 perc_package:    p_package OPCURLY class_name CLCURLY    { $_[3] };
