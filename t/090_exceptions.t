@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 6;
+use t::lib::XSP::Test tests => 7;
 
 run_diff xsp_stdout => 'expected';
 
@@ -245,6 +245,45 @@ foo( a )
       errsv = get_sv("@", TRUE);
       sv_setsv(errsv, excsv);
       croak(NULL);
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Class-wide catch with precedence test
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{stdmessage};
+%exception{myException2}{SomeException2}{stdmessage};
+%exception{myException3}{SomeException3}{stdmessage};
+
+class Foo %catch{myException, myException3} {
+  int foo(int a)
+    %catch{myException3, myException2};
+};
+
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->foo( a );
+    }
+    catch (SomeException3& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException3': %s", e.what());
+    }
+    catch (SomeException2& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException2': %s", e.what());
+    }
+    catch (SomeException& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException': %s", e.what());
     }
     catch (...) {
       croak("Caught C++ exception of unknown type");
