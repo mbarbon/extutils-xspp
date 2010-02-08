@@ -71,8 +71,7 @@ sub add_methods {
       if( $meth->isa( 'ExtUtils::XSpp::Node::Method' ) ) {
           $meth->{CLASS} = $this;
           $meth->{ACCESS} = $access;
-          $meth->{CATCH} ||= [];
-          push @{$meth->{CATCH}}, @{$this->{CATCH}||[]};
+          $meth->add_exception_handlers( @{$this->{CATCH} || []} );
           $meth->resolve_typemaps;
           $meth->resolve_exceptions;
       } elsif( $meth->isa( 'ExtUtils::XSpp::Node::Access' ) ) {

@@ -137,6 +137,15 @@ Highly experimental.
 
 =back
 
+There is a special exception handler C<nothing> which is always
+available:
+
+  int foo() %catch{nothing};
+
+It indicates that the given method (or function) is to handle no
+exceptions. It squishes any exception handlers that might otherwise
+be inherited from the method's class.
+
 =head1 METHODS
 
 =cut

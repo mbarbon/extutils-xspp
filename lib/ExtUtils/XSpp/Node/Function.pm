@@ -1,6 +1,7 @@
 package ExtUtils::XSpp::Node::Function;
 use strict;
 use warnings;
+use Carp ();
 use base 'ExtUtils::XSpp::Node';
 
 =head1 NAME
@@ -52,6 +53,17 @@ sub init {
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
+
+  if (ref($this->{CATCH})
+      and @{$this->{CATCH}} > 1
+      and grep {$_ eq 'nothing'} @{$this->{CATCH}})
+  {
+    Carp::croak( ref($this) . " '" . $this->{CPP_NAME}
+                 . "' is supposed to catch no exceptions, yet"
+                 . " there are exception handlers ("
+                 . join(", ", @{$this->{CATCH}}) . ")" );
+  }
+  return $this;
 }
 
 =head2 resolve_typemaps
@@ -89,26 +101,62 @@ sub resolve_exceptions {
   my @catch = @{$this->{CATCH} || []};
 
   my @exceptions;
-  my %seen;
-  foreach my $catch (@catch) {
-    next if $seen{$catch}++;
-    push @exceptions,
-      ExtUtils::XSpp::Exception->get_exception_for_name($catch);
+
+  # If this method is not hard-wired to catch nothing...
+  if (not grep {$_ eq 'nothing'} @catch) {
+    my %seen;
+    foreach my $catch (@catch) {
+      next if $seen{$catch}++;
+      push @exceptions,
+        ExtUtils::XSpp::Exception->get_exception_for_name($catch);
+    }
+
+    # If nothing else, catch std::exceptions nicely
+    if (not @exceptions) {
+      my $typenode = ExtUtils::XSpp::Node::Type->new(base => 'std::exception');
+      push @exceptions,
+        ExtUtils::XSpp::Exception::stdmessage->new( name => 'default',
+                                                    type => $typenode );
+    }
   }
 
-  # If nothing else, catch std::exceptions nicely
-  if (not @exceptions) {
-    my $typenode = ExtUtils::XSpp::Node::Type->new(base => 'std::exception');
-    push @exceptions,
-      ExtUtils::XSpp::Exception::stdmessage->new( name => 'default',
-                                                  type => $typenode );
-  }
-
-  # always catch the rest with an unspecific error message
+  # Always catch the rest with an unspecific error message.
+  # If the method is hard-wired to catch nothing, we lie to the user
+  # for his own safety! (FIXME: debate this)
   push @exceptions,
     ExtUtils::XSpp::Exception::unknown->new( name => '', type => '' );
 
   $this->{EXCEPTIONS} = \@exceptions;
+}
+
+=head2 add_exception_handlers
+
+Adds a list of exception names to the list of exception handlers.
+This is mainly called by a class' C<add_methods> method.
+If the function is hard-wired to have no exception handlers,
+any extra handlers from the class are ignored.
+
+=cut
+
+
+sub add_exception_handlers {
+  my $this = shift;
+
+  # ignore class %catch'es if overridden with "nothing" in the method
+  if ($this->{CATCH} and @{$this->{CATCH}} == 1
+      and $this->{CATCH} eq 'nothing') {
+    return();
+  }
+
+  # ignore class %catch{nothing} if overridden in the method
+  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->{CATCH}}) {
+    return();
+  }
+
+  $this->{CATCH} ||= [];
+  push @{$this->{CATCH}}, @_;
+
+  return();
 }
 
 
