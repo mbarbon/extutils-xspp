@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 7;
+use t::lib::XSP::Test tests => 9;
 
 run_diff xsp_stdout => 'expected';
 
@@ -284,6 +284,112 @@ Foo::foo( a )
     }
     catch (SomeException& e) {
       croak("Caught C++ exception of type or derived from 'SomeException': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Catch nothing
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{stdmessage};
+%exception{myException3}{SomeException3}{stdmessage};
+
+class Foo %catch{myException, myException3} {
+  int foo(int a);
+  int bar(int a)
+    %catch{nothing};
+};
+
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->foo( a );
+    }
+    catch (SomeException& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException': %s", e.what());
+    }
+    catch (SomeException3& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException3': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+int
+Foo::bar( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->bar( a );
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Catch nothing (via class)
+--- xsp_stdout
+%module{Foo};
+
+%exception{myException}{SomeException}{stdmessage};
+
+class Foo %catch{nothing} {
+  int foo(int a)
+    %catch{myException};
+  int bar(int a)
+    %catch{nothing};
+  int buz(int a);
+};
+
+--- expected
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::foo( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->foo( a );
+    }
+    catch (SomeException& e) {
+      croak("Caught C++ exception of type or derived from 'SomeException': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+int
+Foo::bar( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->bar( a );
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+int
+Foo::buz( a )
+    int a
+  CODE:
+    try {
+      RETVAL = THIS->buz( a );
     }
     catch (...) {
       croak("Caught C++ exception of unknown type");
