@@ -18,11 +18,65 @@ ExtUtils::XSpp::Exception - Map C++ exceptions to Perl exceptions
 
 This class is both the base class for the different exception handling
 mechanisms and the container for the global set of exception
-
-=over 2
-
 mappings from C++ exceptions (indicated by a C++ data type to catch)
 to Perl exceptions. The Perl exceptions are implemented via C<croak()>.
+
+The basic idea is that you can declare the C++ exception types that
+you want to handle and how you plan to do so by using the C<%exception>
+directive in your XS++ (or better yet, in the XS++ typemap):
+
+  // OutOfBoundsException would have been declared
+  // elsewhere as:
+  //
+  // class OutOfBoundsException : public std::exception {
+  // public:
+  //   OutOfBoundsException() {}
+  //   virtual const char* what() const throw() {
+  //     return "You accessed me out of bounds, fool!";
+  //   }
+  // }
+  
+  %exception{outOfBounds}{OutOfBoundsException}{stdmessage};
+
+If you know a function or method may throw C<MyOutOfBoundsException>s, you
+can annotate the declaration in your XS++ as follows:
+
+  double get_from_array(unsigned int index)
+    %catch{outOfBounds};
+
+When C<get_from_array> now throws an C<OutOfBoundsException>, the user
+gets a Perl croak with the message
+C<"Caught exception of type 'OutOfBoundsException': You accessed me out of bounds, fool!">.
+There may be any number of C<%catch> directives per method.
+
+I<Note:> Why do we assign another name (C<outOfBounds>) to the
+existing C<OutOfBoundsException>?
+Because you may need to catch exceptions of the same C++ type with different
+handlers for different methods. You can, in principle, re-use the C++ exception
+class name for the exception I<map> name, but that may be confusing to posterity.
+
+Instead of adding C<%catch> to methods, you may also specify exceptions that
+you wish to handle for all methods of a class:
+
+  class Foo %catch{SomeException,AnotherException} {
+    ...
+  };
+
+The C<%catch{Foo,Bar,...}> syntax is shorthand for C<%catch{Foo} %catch{Bar} ...>.
+If there are exceptions to be caught both from the class and attached
+to a method directly, the exceptions that are attached to the method only will
+be handled first. No single type of exceptions will be handled more than once,
+therefore it is safe to use this precedence to re-order the class-global
+exception handling for a single method.
+
+If there are no C<%catch> decorators on a method, exceptions derived
+from C<std::exception> will be caught with a generic C<stdmessage>
+handler such as above. Even if there are C<%catch> clauses for the given method,
+all otherwise uncaught exceptions will be caught with a generic error message
+for safety.
+
+=head1 Exception handlers
+
 There are different cases of Perl exceptions that are implemented
 as sub-classes of C<ExtUtils::XSpp::Exception>:
 
@@ -51,7 +105,8 @@ object as the variable C<e>.
 
 translates C++ exceptions to Perl error messages using a printf-like
 mask for the message. Potentially filling in place-holders by calling
-methods on the C++ exception object(!). Details to be hammered out.
+methods on the C++ exception object(!). Not yet implemented.
+Details to be hammered out.
 
 =item L<ExtUtils::XSpp::Exception::object>
 
@@ -70,7 +125,7 @@ Will change in future.
 
 is the default exception handler that is added to the list of handlers
 automatically during code generation. It simply throws an entirely
-unspecific error and catches the type C<...> (meaning: anything).
+unspecific error and catches the type C<...> (meaning I<anything>).
 
 =item L<ExtUtils::XSpp::Exception::code>
 
@@ -81,50 +136,6 @@ that is assigned to C<$@>.
 Highly experimental.
 
 =back
-
-The basic idea is that you can declare the C++ exception types that
-you want to handle and how you plan to do so by using the C<%exception>
-directive in your XS++ (or rather XS++ typemap!):
-
-  // OutOfBoundsException would have been declared
-  // elsewhere as:
-  //
-  // class OutOfBoundsException : public std::exception {
-  // public:
-  //   OutOfBoundsException() {}
-  //   virtual const char* what() const throw() {
-  //     return "You accessed me out of bounds, fool!";
-  //   }
-  // }
-  
-  %exception{outOfBounds}{OutOfBoundsException}{stdmessage};
-
-If you know a function or method may throw C<MyOutOfBoundsException>s, you
-can annotate the declaration in your XS++ as follows:
-
-  double get_from_array(unsigned int index)
-    %catch{outOfBounds};
-
-When C<get_from_array> now throws an C<OutOfBoundsException>, the user
-gets a Perl croak with the message
-C<"Caught exception of type 'OutOfBoundsException': You accessed me out of bounds, fool!">.
-
-I<Note:> Why do we assign another name (C<outOfBounds>) to the
-existing C<OutOfBoundsException>?
-Because you may need to catch exceptions of the same C++ type with different
-handlers for different methods. You can, in principle, re-use the C++ exception
-class name for the exception I<map> name, but that may be confusing to posterity.
-
-If there are no C<%catch> decorators on a method, exceptions derived
-from C<std::exception> will be caught with a generic C<stdmessage>
-handler such as above (FIXME, implement).
-Even if there are C<%catch> clauses for the given method,
-all otherwise uncaught exceptions will be caught with a generic error message
-for safety.
-
-There may be an arbitrary number of C<%catch> clauses for any method or function.
-They will be tested in order. As a shorthand for C<%catch{E1} %catch{E2} ...>,
-you may write C<%catch{E1, E2, ...}>.
 
 =head1 METHODS
 
