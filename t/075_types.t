@@ -19,6 +19,9 @@ __DATA__
 int* foo();
 int* boo(const int* a);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -59,6 +62,9 @@ boo( a )
 void foo(const std::string a);
 void boo(const std::string& a);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -99,6 +105,9 @@ boo( a )
 void foo(const std::vector<int>& a);
 void boo(const std::map<int, std::string> a);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -136,6 +145,9 @@ boo( a )
 
 void foo(const std::vector<double>& a);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

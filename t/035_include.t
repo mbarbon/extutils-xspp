@@ -17,6 +17,9 @@ __DATA__
 %include{t/files/include.xsp};
 int bar(int y);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

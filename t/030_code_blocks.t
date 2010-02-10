@@ -16,6 +16,9 @@ __DATA__
 %name{boo} int foo(int a)
     %code{% RETVAL = a + 12; %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -35,6 +38,9 @@ boo( a )
 %name{boo} int foo(int a)
     %cleanup{% free( it ); %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -62,6 +68,9 @@ boo( a )
 int foo(int a)
     %postcall{% blub( a ); %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -89,6 +98,9 @@ foo( a )
 %name{boo} void foo(int a)
     %code{% blub( a ); %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -108,6 +120,9 @@ boo( a )
     %code{% blub( a ); %}
     %cleanup{% free( it ); %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -128,6 +143,9 @@ boo( a )
 void foo(int a)
     %postcall{% blub( a ); %};
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

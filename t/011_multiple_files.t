@@ -22,9 +22,15 @@ text
 
 int foo( int a, int b, int c );
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
+
+
+#include <exception>
 
 
 int
@@ -56,6 +62,10 @@ text
 
 int foo( int a, int b, int c );
 --- expected
+#include <exception>
+
+
+
 Some verbatim
 text
 
@@ -70,6 +80,9 @@ int bar( int x );
 
 int foo( int a, int b, int c );
 --- expected
+#include <exception>
+
+
 int
 bar( x )
     int x

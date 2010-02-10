@@ -30,6 +30,9 @@ class Y
     void bar();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -74,6 +77,9 @@ class Y
     void bar();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

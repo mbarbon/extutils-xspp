@@ -17,6 +17,9 @@ class Foo
     void foo( Foo& a );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -42,6 +45,9 @@ class Foo
     Foo& foo();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

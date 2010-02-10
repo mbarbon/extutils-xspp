@@ -30,12 +30,18 @@ sub slurp($) {
 }
 
 eq_or_diff( $out, <<EOT, 'Output on stdout' );
+#include <exception>
+
+
 MODULE=Foo::Bar::Baz
 #include <foo.h>
 
 
 
 MODULE=Foo::Bar::Baz PACKAGE=Foo::Bar::Baz::Buz
+
+
+#include <exception>
 
 
 int
@@ -56,6 +62,9 @@ foo( a, b, c )
 EOT
 
 eq_or_diff( slurp 't/files/foo.h', <<EOT, 'Output on external file' );
+
+#include <exception>
+
 
 
 /* header file */

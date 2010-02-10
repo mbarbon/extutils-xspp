@@ -17,6 +17,9 @@ class Foo
     package_static int foo(int a);
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

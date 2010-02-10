@@ -66,6 +66,10 @@ sub parse {
                                     yyerror => \&ExtUtils::XSpp::Grammar::yyerror,
                                     yydebug => 0x00,
                                    );
+  if (ref($this->{DATA})) {
+    unshift @{$this->{DATA}},
+      ExtUtils::XSpp::Node::Raw->new(rows =>['#include <exception>']);
+  }
 }
 
 sub include_file {

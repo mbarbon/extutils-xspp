@@ -17,6 +17,9 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -44,6 +47,9 @@ class Foo
 {
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -55,6 +61,9 @@ MODULE=Foo PACKAGE=Foo
 
 int foo( int a );
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo::Bar
@@ -81,6 +90,9 @@ class Foo
     int foo( int a = 1 );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -107,6 +119,9 @@ class Foo
     Foo( int a = 1 );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -133,6 +148,9 @@ class Foo
     ~Foo();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -157,6 +175,9 @@ class Foo
     void foo( int a );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -182,6 +203,9 @@ class Foo
     void foo();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -227,6 +251,10 @@ class Foo
  * class
  */
 --- expected
+#include <exception>
+
+
+
 ## comment before %module
 
 
@@ -278,6 +306,9 @@ Foo::foo( a, b, c )
 unsigned int
 bar( char* line, unsigned long %length{line} );
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Bar
@@ -302,6 +333,9 @@ bar( char* line, unsigned long length(line) )
 short int
 bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f, long int g, unsigned long int h );
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Bar
@@ -338,6 +372,9 @@ bar( a, b, c, d, e, f, g, h )
              %};
 };
 --- expected
+#include <exception>
+
+
 MODULE=Wx
 
 MODULE=Wx PACKAGE=Wx::RichTextCtrl

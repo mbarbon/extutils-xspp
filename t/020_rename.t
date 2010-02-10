@@ -16,6 +16,9 @@ __DATA__
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo::Bar
@@ -57,6 +60,9 @@ class Foo
     %name{bar} int foo( int a );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -83,6 +89,9 @@ class Foo
     %name{newFoo} Foo( int a );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -110,6 +119,9 @@ Foo::newFoo( a )
     %name{foo_int} int foo( int a );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Bar::Baz

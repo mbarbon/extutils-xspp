@@ -19,6 +19,9 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -48,6 +51,9 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -77,6 +83,9 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -107,6 +116,9 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -139,6 +151,9 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo

@@ -17,6 +17,9 @@ class Foo : public Moo
     void foo();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -47,6 +50,9 @@ class Foo : public %name{PlMoo} Moo, public Boo
     void foo();
 };
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
