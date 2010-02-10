@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.09  Wed Feb 10 19:20:00 CET 2010
+	- Automatically include an #include <exception> into the output
+          for the exception handling.
+	- Documentation for ExtUtils::XSpp::Node and subclasses.
+	- Split ExtUtils/XSpp/Node.pm into separate per-class files.
+
 0.08  Fri Feb  5 19:00:00 CET 2010
 	- Catch all C++ exceptions in the generated wrapper XS.
           The exceptions are turned into plain Perl croak() calls
