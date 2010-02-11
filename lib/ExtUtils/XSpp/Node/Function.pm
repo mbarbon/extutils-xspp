@@ -345,6 +345,20 @@ EOT
   $out .= "\n";
 }
 
+=head2 print_declaration
+
+Returns a string with a C++ method declaration for the node.
+
+=cut
+
+sub print_declaration {
+    my( $this ) = @_;
+
+    return $this->ret_type->print . ' ' . $this->cpp_name . '( ' .
+           join( ', ', map $_->print, @{$this->arguments} ) . ')' .
+           ( $this->const ? ' const' : '' );
+}
+
 =head2 perl_function_name
 
 Returns the name of the Perl function to generate.
