@@ -38,8 +38,9 @@ sub init {
   my %args = @_;
 
   $this->SUPER::init( @_ );
-  $this->{METHODS} = $args{methods} || [];
+  $this->{METHODS} = [];
   $this->{BASE_CLASSES} = $args{base_classes} || [];
+  $this->add_methods( @{$args{methods}} ) if $args{methods};
 }
 
 =head2 add_methods
