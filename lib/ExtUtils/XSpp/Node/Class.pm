@@ -97,6 +97,13 @@ sub add_methods {
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 }
 
+sub delete_methods {
+    my( $this, @methods ) = @_;
+    my %methods = map { $_ => 1 } @methods;
+
+    $this->{METHODS} = [ grep !$methods{$_}, @{$this->{METHODS}} ];
+}
+
 sub print {
   my $this = shift;
   my $state = shift;
