@@ -127,8 +127,8 @@ access_specifier:
 
 method_decl: nmethod | vmethod | ctor | dtor;
 
-const: 'const'
-     | ;
+const: 'const'   { 1 }
+     |           { 0 };
 
 virtual: 'virtual';
 
@@ -143,6 +143,7 @@ looks_like_function:
               return { ret_type  => $_[1],
                        name      => $_[2],
                        arguments => $_[4],
+                       const     => $_[6],
                        };
           };
 
@@ -183,6 +184,7 @@ nmethod:
                           perl_name => $_[1]->{perl_name},
                           ret_type  => $_[1]->{ret_type},
                           arguments => $_[1]->{arguments},
+                          const     => $_[1]->{const},
                           @{$_[2]},
                           );
             $m
@@ -204,6 +206,7 @@ _vmethod:
                           perl_name => $_[2]->{perl_name},
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
+                          const     => $_[2]->{const},
                           @{$_[3]},
                           );
             $m->set_virtual( 1 );
@@ -216,6 +219,7 @@ _vmethod:
                           perl_name => $_[2]->{perl_name},
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
+                          const     => $_[2]->{const},
                           @{$_[5]},
                           );
             die "Invalid pure virtual method" unless $_[4] eq '0';

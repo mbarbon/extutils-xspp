@@ -52,6 +52,7 @@ sub init {
   $this->{CLEANUP}   = $args{cleanup};
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
+  $this->{CONST}     = $args{const};
   $this->{CATCH}     = $args{catch};
 
   if (ref($this->{CATCH})
@@ -418,6 +419,10 @@ Set whether the method is to be considered virtual.
 Returns the set of exception types that were associated
 with the function via C<%catch>. (array reference)
 
+=head2 const
+
+Returns whether the method was declared const.
+
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
@@ -431,6 +436,7 @@ sub postcall { $_[0]->{POSTCALL} }
 sub virtual { $_[0]->{VIRTUAL} }
 sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
+sub const { $_[0]->{CONST} }
 
 =head2 set_static
 

@@ -302,6 +302,7 @@ sub add_data_method {
       ( cpp_name  => $args{name},
         ret_type  => $args{ret_type},
         arguments => $args{arguments},
+        const     => $args{const},
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
