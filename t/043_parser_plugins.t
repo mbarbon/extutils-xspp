@@ -14,11 +14,13 @@ __DATA__
 %package{Foo};
 %loadplugin{TestParserPlugin};
 
-int foo(int y) %MyFuncRename{%Foo%};
+int foo(int y) %MyFuncRename{Foo};
 
-class klass %MyClassRename{%Klass%}
+class klass
 {
-    void bar() %MyMethodRename{%Bar%};
+    %MyClassRename{Klass};
+
+    void bar() %MyMethodRename{Bar};
 };
 --- expected
 #include <exception>

@@ -128,7 +128,11 @@ class_body_list:
           { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-class_body_element: method | raw | typemap | exceptionmap | access_specifier;
+class_body_element:
+    method | raw | typemap | exceptionmap | access_specifier
+  | perc_any SEMICOLON
+        { ExtUtils::XSpp::Node::PercAny->new( @{$_[1]} ) }
+  ;
 
 access_specifier:
       'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
@@ -257,9 +261,16 @@ perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] 
 perc_postcall:   p_postcall special_block                { [ postcall => $_[2] ] };
 perc_catch:      p_catch OPCURLY class_name_list CLCURLY { [ map {(catch => $_)} @{$_[3]} ] };
 
+# this expands mixed_blocks to avoid ambiguity in the OPCURLY case
 perc_any:
-    p_any OPCURLY perc_any_args CLCURLY { [ any => $_[1], any_perc_arguments => $_[3] ] }
-  | p_any special_block                 { [ any => $_[1], any_special_block => $_[2] ] }
+    p_any OPCURLY perc_any_args CLCURLY
+        { [ any => $_[1], any_named_arguments => $_[3] ] }
+  | p_any OPCURLY ID CLCURLY mixed_blocks
+        { [ any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] ] }
+  | p_any special_block mixed_blocks
+        { [ any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] ] }
+  | p_any
+        { [ any => $_[1] ] }
   ;
 
 perc_any_args:

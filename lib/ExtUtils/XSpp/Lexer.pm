@@ -19,6 +19,7 @@ use ExtUtils::XSpp::Node::Module;
 use ExtUtils::XSpp::Node::Package;
 use ExtUtils::XSpp::Node::Raw;
 use ExtUtils::XSpp::Node::Type;
+use ExtUtils::XSpp::Node::PercAny;
 
 use ExtUtils::XSpp::Typemap;
 use ExtUtils::XSpp::Exception;
@@ -243,16 +244,19 @@ sub create_class {
   # when adding a class C, automatically add weak typemaps for C* and C&
   ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name );
 
-  if( $args{any} ) {
+  my @any  = grep  $_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
+  my @rest = grep !$_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
+
+  foreach my $any ( @any ) {
     $parser->YYData->{PARSER}->handle_class_tag_plugins
-      ( $class, $args{any},
-        any_perc_argument => $args{any_perc_argument},
-        any_special_block => $args{any_special_block},
+      ( $class, $any->{NAME},
+        any_named_arguments      => $any->{NAMED_ARGUMENTS},
+        any_positional_arguments => $any->{POSITIONAL_ARGUMENTS},
         );
   }
 
   # finish creating the class
-  $class->add_methods( @$methods );
+  $class->add_methods( @rest );
 
   return $class;
 }
@@ -293,8 +297,8 @@ sub add_data_function {
   if( $args{any} ) {
     $parser->YYData->{PARSER}->handle_function_tag_plugins
       ( $f, $args{any},
-        any_perc_argument => $args{any_perc_argument},
-        any_special_block => $args{any_special_block},
+        any_named_arguments      => $args{any_named_arguments},
+        any_positional_arguments => $args{any_positional_arguments},
         );
   }
 
@@ -321,8 +325,8 @@ sub add_data_method {
   if( $args{any} ) {
     $parser->YYData->{PARSER}->handle_method_tag_plugins
       ( $m, $args{any},
-        any_perc_argument => $args{any_perc_argument},
-        any_special_block => $args{any_special_block},
+        any_named_arguments      => $args{any_named_arguments},
+        any_positional_arguments => $args{any_positional_arguments},
         );
   }
 

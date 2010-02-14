@@ -16,7 +16,7 @@ sub register_plugin {
 
 sub handle_method_tag {
     my( $self, $method, $any_tag, %args ) = @_;
-    my $name = $args{any_special_block}[0];
+    my $name = $args{any_positional_arguments}[0];
 
     $method->set_perl_name( $name );
 
@@ -25,7 +25,7 @@ sub handle_method_tag {
 
 sub handle_function_tag {
     my( $self, $function, $any_tag, %args ) = @_;
-    my $name = $args{any_special_block}[0];
+    my $name = $args{any_positional_arguments}[0];
 
     $function->set_perl_name( $name );
 
@@ -34,7 +34,7 @@ sub handle_function_tag {
 
 sub handle_class_tag {
     my( $self, $class, $any_tag, %args ) = @_;
-    my $name = $args{any_special_block}[0];
+    my $name = $args{any_positional_arguments}[0];
 
     $class->set_perl_name( $name );
 

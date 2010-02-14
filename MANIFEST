@@ -38,6 +38,7 @@ lib/ExtUtils/XSpp/Node/Function.pm
 lib/ExtUtils/XSpp/Node/Method.pm
 lib/ExtUtils/XSpp/Node/Module.pm
 lib/ExtUtils/XSpp/Node/Package.pm
+lib/ExtUtils/XSpp/Node/PercAny.pm
 lib/ExtUtils/XSpp/Node/Raw.pm
 lib/ExtUtils/XSpp/Node/Type.pm
 lib/ExtUtils/XSpp/Parser.pm
