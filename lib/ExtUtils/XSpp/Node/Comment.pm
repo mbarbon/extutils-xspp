@@ -21,7 +21,7 @@ would become something like
 
 =head2 new
 
-Creates a new C<ExtUtils::XSpp::Node::Comment.
+Creates a new C<ExtUtils::XSpp::Node::Comment>.
 
 Named parameters: C<rows> should be a reference to
 an array of source code comment lines.
