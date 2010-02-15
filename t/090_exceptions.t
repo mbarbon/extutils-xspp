@@ -17,6 +17,9 @@ __DATA__
 int foo(int a);
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -42,6 +45,9 @@ int foo(int a)
   %catch{myException};
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -83,6 +89,9 @@ class Foo {
 };
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -166,6 +175,9 @@ int foo(int a)
   %catch{myException};
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -192,6 +204,9 @@ int foo(int a)
   %catch{myException};
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -225,6 +240,9 @@ int foo(int a)
   %catch{myException};
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 int
 foo( a )
@@ -265,6 +283,9 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -304,6 +325,9 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
@@ -353,6 +377,9 @@ class Foo %catch{nothing} {
 };
 
 --- expected
+#include <exception>
+
+
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
