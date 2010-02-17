@@ -91,6 +91,25 @@ sub get_typemap_for_type {
   Carp::confess( "No typemap for type ", $type->print );
 }
 
+# adds default typemaps for C* and C&
+sub add_class_default_typemaps {
+  my( $name ) = @_;
+
+  my $ptr = ExtUtils::XSpp::Node::Type->new
+                ( base    => $name,
+                  pointer => 1,
+                  );
+  my $ref = ExtUtils::XSpp::Node::Type->new
+                ( base      => $name,
+                  reference => 1,
+                  );
+
+  add_weak_typemap_for_type
+      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr ) );
+  add_weak_typemap_for_type
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref ) );
+}
+
 sub add_default_typemaps {
   # void, integral and floating point types
   foreach my $t ( 'char', 'short', 'int', 'long',
