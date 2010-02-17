@@ -89,6 +89,7 @@ sub print {
   my $out = $this->SUPER::print( $state );
 
   foreach my $m ( @{$this->methods} ) {
+    next if $m->can( 'access' ) && $m->access ne 'public';
     $out .= $m->print( $state );
   }
 
