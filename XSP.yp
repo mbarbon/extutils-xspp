@@ -47,7 +47,21 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                                      @{$_[8] || []};
                       my $tm = $package->new( type => $type, %args );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
-                      undef };
+                      undef }
+              | p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
+                  OPCURLY perc_any_args CLCURLY SEMICOLON
+                    { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
+                      my $type = $_[3];
+                      # this assumes that there will be at most one named
+                      # block for each directive inside the typemap
+                      for( my $i = 1; $i <= $#{$_[9]}; $i += 2 ) {
+                          $_[9][$i] = join "\n", @{$_[9][$i][0]}
+                              if ref( $_[9][$i] ) && ref( $_[9][$i][0] );
+                      }
+                      my $tm = $package->new( type => $type, @{$_[9]} );
+                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      undef }
+              ;
 
 exceptionmap:   p_exceptionmap OPCURLY ID CLCURLY OPCURLY type_name CLCURLY
                   OPCURLY ID CLCURLY
