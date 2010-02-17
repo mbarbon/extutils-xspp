@@ -93,11 +93,18 @@ Set whether the method is to be considered virtual.
 
 Returns whether the method was declared const.
 
+=head2 access
+
+Returns C<'public'>, C<'protected'> or C<'private'> depending on
+method access declaration.  By default, only public methods are
+generated.
+
 =cut
 
 sub class { $_[0]->{CLASS} }
 sub virtual { $_[0]->{VIRTUAL} }
 sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 sub const { $_[0]->{CONST} }
+sub access { $_[0]->{ACCESS} }
 
 1;
