@@ -269,6 +269,8 @@ sub print {
   # to configuration later. --Steffen
   $need_call_function = 1;
 
+  my $ppcode = $has_ret && $ret_typemap->output_list ? 1 : 0;
+  my $code_type = $ppcode ? "PPCODE" : "CODE";
   if( $need_call_function ) {
     my $ccode = $this->_call_code( $call_arg_list );
     if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
@@ -280,12 +282,15 @@ sub print {
       $ccode = "RETVAL = $ccode";
     }
 
-    $code .= "  CODE:\n";
+    $code .= "  $code_type:\n";
     $code .= "    try {\n";
     $code .= '      ' . $precall if $precall;
     $code .= '      ' . $ccode . ";\n";
     if( $has_ret && defined $ret_typemap->output_code ) {
       $code .= '      ' . $ret_typemap->output_code . ";\n";
+    }
+    if( $has_ret && defined $ret_typemap->output_list ) {
+      $code .= '      ' . $ret_typemap->output_list . ";\n";
     }
     $code .= "    }\n";
     my @catchers = @{$this->{EXCEPTIONS}};
@@ -302,7 +307,7 @@ sub print {
   }
 
   if( $this->code ) {
-    $code = "  CODE:\n    " . join( "\n", @{$this->code} ) . "\n";
+    $code = "  $code_type:\n    " . join( "\n", @{$this->code} ) . "\n";
     # cleanup potential multiple newlines because they break XSUBs
     $code =~ s/^\s*\z//m;
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
@@ -315,6 +320,9 @@ sub print {
     $cleanup ||= "  CLEANUP:\n";
     my $clcode = join( "\n", @{$this->cleanup} );
     $cleanup .= "    $clcode\n";
+  }
+  if( $ppcode ) {
+    $output = '';
   }
 
   if( !$this->is_method && $fname =~ /^(.*)::(\w+)$/ ) {

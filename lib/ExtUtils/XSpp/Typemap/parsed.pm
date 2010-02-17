@@ -14,10 +14,12 @@ sub init {
   $this->{OUTPUT_CODE} = _dl( $args{output_code} || $args{arg3} );
   $this->{CLEANUP_CODE} = _dl( $args{cleanup_code} || $args{arg4} );
   $this->{PRECALL_CODE} = _dl( $args{precall_code} || $args{arg5} );
+  $this->{OUTPUT_LIST} = _dl( $args{output_list} );
 }
 
-sub cpp_type { $_[0]->{CPP_TYPE} }
+sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }
 sub output_code { $_[0]->{OUTPUT_CODE} }
+sub output_list { $_[0]->{OUTPUT_LIST} }
 sub cleanup_code { $_[0]->{CLEANUP_CODE} }
 sub call_parameter_code { undef }
 sub call_function_code {

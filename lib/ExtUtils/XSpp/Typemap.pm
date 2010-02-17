@@ -57,6 +57,7 @@ sub output_code { undef }
 sub cleanup_code { undef }
 sub call_parameter_code { undef }
 sub call_function_code { undef }
+sub output_list { undef }
 
 my @typemaps;
 
