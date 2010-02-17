@@ -440,11 +440,17 @@ or C<class_static>.
 
 =head2 package_static
 
-Returns whether the function is package static.
+Returns whether the function is package static.  A package static
+function can be invoked as:
+
+    My::Package::Function( ... );
 
 =head2 class_static
 
-Returns whether the function is class static.
+Returns whether the function is class static. A class static function
+can be invoked as:
+
+    My::Package->Function( ... );
 
 =cut
 
