@@ -152,6 +152,7 @@ virtual: 'virtual';
 
 static: 'package_static'
       | 'class_static'
+      | 'static'         { 'package_static' }
       ;
 
 function_decl:  type ID OPPAR arg_list CLPAR const function_metadata SEMICOLON
