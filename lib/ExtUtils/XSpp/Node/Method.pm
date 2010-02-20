@@ -21,13 +21,28 @@ declaration in a class such as
 
 =head2 new
 
-Creates a new C<ExtUtils::XSpp::Node::Argument>.
+Creates a new C<ExtUtils::XSpp::Node::Method>.
 
 Most of the functionality of this class is inherited. This
 means that all named parameters of L<ExtUtils::XSpp::Node::Function>
 are also valid for this class.
 
+Additional named parameters accepted by the constructor:
+C<class>, which can be an L<ExtUtils::XSpp::Node::Class>
+object, C<const> and C<virtual> that are true if the method has
+been declared C<const> or C<virtual>.
+
 =cut
+
+sub init {
+  my $this = shift;
+  my %args = @_;
+
+  $this->SUPER::init( %args );
+  $this->{CLASS} = $args{class};
+  $this->{CONST} = $args{const};
+  $this->{VIRTUAL} = $args{virtual};
+}
 
 =head2 perl_function_name
 
@@ -66,9 +81,23 @@ sub is_method { 1 }
 Returns the class (L<ExtUtils::XSpp::Node::Class>) that the
 method belongs to.
 
+=head2 virtual
+
+Returns whether the method was declared virtual.
+
+=head2 set_virtual
+
+Set whether the method is to be considered virtual.
+
+=head2 const
+
+Returns whether the method was declared const.
+
 =cut
 
 sub class { $_[0]->{CLASS} }
-
+sub virtual { $_[0]->{VIRTUAL} }
+sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
+sub const { $_[0]->{CONST} }
 
 1;

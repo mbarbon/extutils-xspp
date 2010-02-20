@@ -27,10 +27,8 @@ Creates a new C<ExtUtils::XSpp::Node::Function>.
 Named parameters: C<cpp_name> indicating the C++ name of the function,
 C<perl_name> indicating the Perl name of the function (defaults to the
 same as C<cpp_name>), C<arguments> can be a reference to an
-array of C<ExtUtils::XSpp::Node::Argument> objects,
-C<ret_type> indicates the (C++) return type of the function,
-and finally, C<class>, which can be an L<ExtUtils::XSpp::Node::Class>
-object (FIXME: Should this be part of ::Function, not ::Method?)
+array of C<ExtUtils::XSpp::Node::Argument> objects and finally
+C<ret_type> indicates the (C++) return type of the function.
 
 Additionally, there are several optional decorators for a function
 declaration (see L<ExtUtils::XSpp> for a list). These can be
@@ -52,7 +50,6 @@ sub init {
   $this->{CLEANUP}   = $args{cleanup};
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
-  $this->{CONST}     = $args{const};
   $this->{CATCH}     = $args{catch};
 
   if (ref($this->{CATCH})
@@ -406,22 +403,10 @@ Returns the C<%cleanup> decorator if any.
 
 Returns the C<%postcall> decorator if any.
 
-=head2 virtual
-
-Returns whether the method was declared virtual.
-
-=head2 set_virtual
-
-Set whether the method is to be considered virtual.
-
 =head2 catch
 
 Returns the set of exception types that were associated
 with the function via C<%catch>. (array reference)
-
-=head2 const
-
-Returns whether the method was declared const.
 
 =cut
 
@@ -433,10 +418,7 @@ sub ret_type { $_[0]->{RET_TYPE} }
 sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
-sub virtual { $_[0]->{VIRTUAL} }
-sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
-sub const { $_[0]->{CONST} }
 
 =head2 set_static
 
@@ -463,6 +445,5 @@ can be invoked as:
 sub set_static { $_[0]->{STATIC} = $_[1] }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
-
 
 1;
