@@ -8,6 +8,7 @@ Revision history for Perl extension ExtUtils::XSpp.
 	- Grammar simplifications.
 	- Fixed 'methods' argument of Class node constructor.
 	- Parse 'static' as a synonym of 'package_static'.
+	- Parse pure virtual functions correctly.
 
 0.09  Wed Feb 10 19:20:00 CET 2010
 	- Automatically include an #include <exception> into the output
