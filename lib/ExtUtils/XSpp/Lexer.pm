@@ -282,6 +282,7 @@ sub add_data_function {
 
   ExtUtils::XSpp::Node::Function->new
       ( cpp_name  => $args{name},
+        perl_name => $args{perl_name},
         class     => $args{class},
         ret_type  => $args{ret_type},
         arguments => $args{arguments},

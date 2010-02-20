@@ -79,14 +79,16 @@ raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
 class:    class_decl | decorate_class;
-function: function_decl | decorate_function;
+function: function_decl;
 method:   method_decl | decorate_method;
 
-decorate_class:     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
-decorate_function:  perc_name function { $_[2]->set_perl_name( $_[1] ); $_[2] };
-decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
-                  | static method { $_[2]->set_static( $_[1] ); $_[2] }
-                  | virtual method { $_[2]->set_virtual( 1 ); $_[2] };
+decorate_class:
+    perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
+
+decorate_method:
+    static method    { $_[2]->set_static( $_[1] ); $_[2] }
+  | virtual method   { $_[2]->set_virtual( 1 ); $_[2] }
+  ;
 
 class_decl: 'class' ID base_classes class_metadata OPCURLY class_body_list CLCURLY SEMICOLON
                 { create_class( $_[0], $_[2], $_[3], $_[4], $_[6] ) };
@@ -128,17 +130,14 @@ access_specifier:
     | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
     ;
 
-method_decl:    function_decl
-                         { my $f = $_[1];
-                           my $m = add_data_method
+method_decl:    looks_like_function SEMICOLON
+                         { my $m = add_data_method
                              ( $_[0],
-                               name      => $f->cpp_name,
-                               ret_type  => $f->ret_type,
-                               arguments => $f->arguments,
-                               code      => $f->code,
-                               cleanup   => $f->cleanup,
-                               postcall  => $f->postcall,
-                               catch     => $f->catch,
+                               name      => $_[1]->{name},
+                               perl_name => $_[1]->{perl_name},
+                               ret_type  => $_[1]->{ret_type},
+                               arguments => $_[1]->{arguments},
+                               @{ $_[1]->{metadata} },
                                );
                            $m
                          }
@@ -155,22 +154,37 @@ static: 'package_static'
       | 'static'         { 'package_static' }
       ;
 
-function_decl:  type ID OPPAR arg_list CLPAR const function_metadata SEMICOLON
+looks_like_function:
+    type ID OPPAR arg_list CLPAR const function_metadata
+        {
+            return { ret_type  => $_[1],
+                     name      => $_[2],
+                     arguments => $_[4],
+                     metadata  => $_[7],
+                     };
+        }
+  | perc_name looks_like_function { $_[2]->{perl_name} = $_[1]; $_[2] }
+  ;
+
+function_decl:  looks_like_function SEMICOLON
                     { add_data_function( $_[0],
-                                         name      => $_[2],
-                                         ret_type  => $_[1],
-                                         arguments => $_[4],
-                                         @{ $_[7] } ) };
+                                         name      => $_[1]->{name},
+                                         perl_name => $_[1]->{perl_name},
+                                         ret_type  => $_[1]->{ret_type},
+                                         arguments => $_[1]->{arguments},
+                                         @{ $_[1]->{metadata} } ) };
 
 ctor:           ID OPPAR arg_list CLPAR function_metadata SEMICOLON
                     { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
-                                            @{ $_[5] } ) };
+                                            @{ $_[5] } ) }
+              | perc_name ctor { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
 dtor:           TILDE ID OPPAR CLPAR function_metadata SEMICOLON
                     { add_data_dtor( $_[0], name  => $_[2],
                                             @{ $_[5] },
-                                      ) };
+                                      ) }
+              | perc_name dtor { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
 function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]} ] }
                    |                                      { [] }
