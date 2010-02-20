@@ -438,6 +438,7 @@ with the function via C<%catch>. (array reference)
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
+sub set_cpp_name { $_[0]->{CPP_NAME} = $_[1] }
 sub perl_name { $_[0]->{PERL_NAME} }
 sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
 sub arguments { $_[0]->{ARGUMENTS} }
