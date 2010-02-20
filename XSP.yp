@@ -315,7 +315,7 @@ arg_list:       argument                { [ $_[1] ] }
 
 argument:       type p_length OPCURLY ID CLCURLY
                     { make_argument( @_[0, 1], "length($_[4])" ) }
-              | type ID EQUAL value
+              | type ID EQUAL expression
                     { make_argument( @_[0, 1, 2, 4] ) }
               | type ID                 { make_argument( @_ ) };
 
@@ -332,6 +332,14 @@ value_list:
   | value_list COMMA value      { "$_[1], $_[2]" }
   |                             { "" }
   ;
+
+expression:
+      value
+    | value AMP value
+          { "$_[1] & $_[2]" }
+    | value PIPE value
+          { "$_[1] | $_[2]" }
+    ;
 
 special_blocks:  special_block
                      { [ $_[1] ] }

@@ -37,6 +37,7 @@ my %tokens = ( '::' => 'DCOLON',
                 '~' => 'TILDE',
                 '*' => 'STAR',
                 '&' => 'AMP',
+                '|' => 'PIPE',
                 ',' => 'COMMA',
                 '=' => 'EQUAL',
                 '/' => 'SLASH',
@@ -161,7 +162,7 @@ sub yylex {
         return ( 'p_any', substr $1, 1 );
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
-                      | [{}();%~*&,=\/\.\-<>]
+                      | [{}();%~*&,=\/\.\-<>|]
                       | :: | :
                        )//x ) {
         return ( $tokens{$1}, $1 );
