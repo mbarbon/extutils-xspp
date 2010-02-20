@@ -36,7 +36,9 @@ directive:      perc_module SEMICOLON
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
               | typemap { }
-              | exceptionmap { };
+              | exceptionmap { }
+              | enum    { }
+              ;
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
@@ -87,6 +89,25 @@ simple_block:  OPCURLY ID CLCURLY
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
+
+# ignore enums for now
+enum:
+      'enum' OPCURLY enum_element_list CLCURLY SEMICOLON
+          { undef };
+
+enum_element_list:
+          { [] }
+    | enum_element_list enum_element
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    | enum_element_list enum_element COMMA
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
+
+enum_element:
+      ID
+    | ID EQUAL expression
+    | raw
+    ;
 
 class:    class_decl SEMICOLON | decorate_class SEMICOLON;
 function: function_decl SEMICOLON;
