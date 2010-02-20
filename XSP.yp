@@ -80,7 +80,7 @@ raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
 
 class:    class_decl | decorate_class;
 function: function_decl;
-method:   method_decl | decorate_method;
+method:   method_decl;
 
 decorate_class:
     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
@@ -130,19 +130,7 @@ access_specifier:
     | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
     ;
 
-method_decl:    looks_like_function SEMICOLON
-                         { my $m = add_data_method
-                             ( $_[0],
-                               name      => $_[1]->{name},
-                               perl_name => $_[1]->{perl_name},
-                               ret_type  => $_[1]->{ret_type},
-                               arguments => $_[1]->{arguments},
-                               @{ $_[1]->{metadata} },
-                               );
-                           $m
-                         }
-              | ctor
-              | dtor ;
+method_decl: nmethod | vmethod | ctor | dtor;
 
 const: 'const'
      | ;
@@ -155,24 +143,26 @@ static: 'package_static'
       ;
 
 looks_like_function:
-    type ID OPPAR arg_list CLPAR const function_metadata
-        {
-            return { ret_type  => $_[1],
-                     name      => $_[2],
-                     arguments => $_[4],
-                     metadata  => $_[7],
-                     };
-        }
-  | perc_name looks_like_function { $_[2]->{perl_name} = $_[1]; $_[2] }
-  ;
+      type ID OPPAR arg_list CLPAR const
+          {
+              return { ret_type  => $_[1],
+                       name      => $_[2],
+                       arguments => $_[4],
+                       };
+          };
 
-function_decl:  looks_like_function SEMICOLON
+looks_like_renamed_function:
+      looks_like_function
+    | perc_name looks_like_function
+          { $_[2]->{perl_name} = $_[1]; $_[2] };
+
+function_decl:  looks_like_renamed_function function_metadata SEMICOLON
                     { add_data_function( $_[0],
                                          name      => $_[1]->{name},
                                          perl_name => $_[1]->{perl_name},
                                          ret_type  => $_[1]->{ret_type},
                                          arguments => $_[1]->{arguments},
-                                         @{ $_[1]->{metadata} } ) };
+                                         @{$_[2]} ) };
 
 ctor:           ID OPPAR arg_list CLPAR function_metadata SEMICOLON
                     { add_data_ctor( $_[0], name      => $_[1],
@@ -190,6 +180,58 @@ function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]}
                    |                                      { [] }
                    ;
 
+nmethod:
+      looks_like_renamed_function function_metadata SEMICOLON
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[1]->{name},
+                          perl_name => $_[1]->{perl_name},
+                          ret_type  => $_[1]->{ret_type},
+                          arguments => $_[1]->{arguments},
+                          @{$_[2]},
+                          );
+            $m
+          }
+    | static nmethod
+          { $_[2]->set_static( $_[1] ); $_[2] };
+
+vmethod:
+      _vmethod
+    | perc_name vmethod
+          { $_[2]->set_perl_name( $_[1] ); $_[2] }
+    ;
+
+_vmethod:
+      virtual looks_like_function function_metadata SEMICOLON
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[2]->{name},
+                          perl_name => $_[2]->{perl_name},
+                          ret_type  => $_[2]->{ret_type},
+                          arguments => $_[2]->{arguments},
+                          @{$_[3]},
+                          );
+            $m->set_virtual( 1 );
+            $m
+          }
+    | virtual looks_like_function EQUAL INTEGER function_metadata SEMICOLON
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[2]->{name},
+                          perl_name => $_[2]->{perl_name},
+                          ret_type  => $_[2]->{ret_type},
+                          arguments => $_[2]->{arguments},
+                          @{$_[5]},
+                          );
+            die "Invalid pure virtual method" unless $_[4] eq '0';
+            $m->set_virtual( 2 );
+            $m
+          }
+    ;
+
+metadata:       metadata _metadata { [ @{$_[1]}, @{$_[2]} ] }
+              |                    { [] }
+              ;
 
 _function_metadata:    perc_code
                      | perc_cleanup

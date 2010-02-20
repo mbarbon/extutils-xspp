@@ -49,6 +49,7 @@ t/011_multiple_files.t
 t/015_reference.t
 t/020_rename.t
 t/022_static.t
+t/022_virtual.t
 t/023_base_classes.t
 t/030_code_blocks.t
 t/031_verbatim_blocks.t
