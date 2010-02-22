@@ -99,7 +99,12 @@ and the exception's C<what()> message.
 
 allows the user to supply custom C/C++/XS code that will be included in
 the exception handler verbatim. The code has access to the exception
-object as the variable C<e>.
+object as the variable C<e>. Your user supplied code
+is expected to propagate the exception to Perl by calling croak().
+
+=cut
+
+=begin comment
 
 =item L<ExtUtils::XSpp::Exception::message>
 
@@ -107,6 +112,8 @@ translates C++ exceptions to Perl error messages using a printf-like
 mask for the message. Potentially filling in place-holders by calling
 methods on the C++ exception object(!). Not yet implemented.
 Details to be hammered out.
+
+=end comment
 
 =item L<ExtUtils::XSpp::Exception::object>
 
@@ -127,13 +134,19 @@ is the default exception handler that is added to the list of handlers
 automatically during code generation. It simply throws an entirely
 unspecific error and catches the type C<...> (meaning I<anything>).
 
-=item L<ExtUtils::XSpp::Exception::code>
+=cut
+
+=begin comment
+
+=item L<ExtUtils::XSpp::Exception::perlcode>
 
 allows the user to supply custom Perl code that will be executed
 in the exception handler. The code currently has no access to the
 C++ exception object. It is supposed to return a scalar value
 that is assigned to C<$@>.
 Highly experimental.
+
+=end comment
 
 =back
 
