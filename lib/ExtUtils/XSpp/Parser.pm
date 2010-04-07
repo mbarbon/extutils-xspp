@@ -143,10 +143,9 @@ modify the parse tree before it is emitted.
 =cut
 
 sub add_post_process_plugin {
-  my $this = shift;
-  my( $plugin ) = @_;
+  my( $this, %args ) = @_;
 
-  push @{$this->{PLUGINS}{POST_PROCESS}}, $plugin;
+  push @{$this->{PLUGINS}{POST_PROCESS}}, $args{plugin};
 }
 
 sub post_process_plugins { $_[0]->{PLUGINS}{POST_PROCESS} || [] }
@@ -159,10 +158,10 @@ Adds the specified plugin to the list of plugins that can handle custom
 =cut
 
 sub add_class_tag_plugin {
-  my $this = shift;
-  my( $plugin ) = @_;
+  my( $this, %args ) = @_;
+  my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{CLASS_TAG}}, $plugin;
+  push @{$this->{PLUGINS}{CLASS_TAG}{$tag}}, $args{plugin};
 }
 
 sub handle_class_tag_plugins {
@@ -180,9 +179,10 @@ Adds the specified plugin to the list of plugins that can handle custom
 =cut
 
 sub add_function_tag_plugin {
-  my( $this, $plugin ) = @_;
+  my( $this, %args ) = @_;
+  my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{FUNCTION_TAG}}, $plugin;
+  push @{$this->{PLUGINS}{FUNCTION_TAG}{$tag}}, $args{plugin};
 }
 
 sub handle_function_tag_plugins {
@@ -200,9 +200,10 @@ Adds the specified plugin to the list of plugins that can handle custom
 =cut
 
 sub add_method_tag_plugin {
-  my( $this, $plugin ) = @_;
+  my( $this, %args ) = @_;
+  my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{METHOD_TAG}}, $plugin;
+  push @{$this->{PLUGINS}{METHOD_TAG}{$tag}}, $args{plugin};
 }
 
 sub handle_method_tag_plugins {
@@ -214,9 +215,10 @@ sub handle_method_tag_plugins {
 
 sub _handle_plugin {
   my( $this, $plugins, $plugin_type, $plugin_method, $plugin_args ) = @_;
+  my $tag = $plugin_args->[1];
 
   my $handled;
-  foreach my $plugin ( @$plugins ) {
+  foreach my $plugin ( @{$plugins->{$tag} || []}, @{$plugins->{_any_} || []} ) {
     $handled ||= $plugin->$plugin_method( @$plugin_args );
     last if $handled;
   }

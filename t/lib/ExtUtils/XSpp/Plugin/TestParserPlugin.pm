@@ -9,9 +9,9 @@ sub register_plugin {
     my( $class, $parser ) = @_;
     my $inst = $class->new;
 
-    $parser->add_function_tag_plugin( $inst );
-    $parser->add_class_tag_plugin( $inst );
-    $parser->add_method_tag_plugin( $inst );
+    $parser->add_function_tag_plugin( plugin => $inst, tag => 'MyFuncRename' );
+    $parser->add_class_tag_plugin( plugin => $inst, tag => 'MyClassRename' );
+    $parser->add_method_tag_plugin( plugin => $inst, tag => 'MyMethodRename' );
 }
 
 sub handle_method_tag {

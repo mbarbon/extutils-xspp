@@ -8,7 +8,7 @@ sub new { return bless {}, $_[0] }
 sub register_plugin {
     my( $class, $parser ) = @_;
 
-    $parser->add_post_process_plugin( $class->new );
+    $parser->add_post_process_plugin( plugin => $class->new );
 }
 
 # add _perl to all function/method names
