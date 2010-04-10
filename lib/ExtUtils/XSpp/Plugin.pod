@@ -103,10 +103,11 @@ These methods can be defined by the plugin to modify the emitted code.
         # call the various add_*_plugin methods to register the plugin
     }
 
-This method is called for each loaded plugin.
+This method is called once for each loaded plugin, the first time the
+parses sees the C<%load_plugin> directive.
 
-TODO call this only once, and add another method that is called once for
-each %loadplugin declaration.
+TODO add another method that is called once for each C<%loadplugin>
+declaration, and allow passing parameters to the plugin.
 
 =head2 post_process
 

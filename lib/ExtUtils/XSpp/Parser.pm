@@ -82,6 +82,7 @@ sub include_file {
                   };
 
   $this->{PARSER}->YYData->{LEX} = $new_lex;
+  $this->{PLUGINS} = {};
 }
 
 =head2 ExtUtils::XSpp::Parser::get_data
@@ -118,20 +119,24 @@ Loads the specified plugin and calls its C<register_plugin> method.
 =cut
 
 sub load_plugin {
-  my $this = shift;
-  my( $package ) = @_;
+  my( $this, $package ) = @_;
 
   if (eval "require ExtUtils::XSpp::Plugin::$package;") {
     $package = "ExtUtils::XSpp::Plugin::$package";
-    $package->register_plugin( $this );
   }
-  elsif (eval "require $package;") {
-    $package->register_plugin( $this );
-  }
-  else {
+  elsif (!eval "require $package;") {
     die "Could not load XS++ plugin '$package' (neither via the namespace "
        ."'ExtUtils::XS++::Plugin::$package' nor via '$package'). Reason: $@";
   }
+
+  # only call register_plugin once
+  if (!$this->{PLUGINS}{$package}) {
+    $package->register_plugin( $this );
+    $this->{PLUGINS}{$package} = 1;
+  }
+
+  # TODO handle %load_plugin parameters
+
   return 1;
 }
 

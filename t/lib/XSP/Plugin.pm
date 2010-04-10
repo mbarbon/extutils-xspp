@@ -5,10 +5,15 @@ use warnings;
 
 sub new { return bless {}, $_[0] }
 
+my $called = 0;
+
 sub register_plugin {
     my( $class, $parser ) = @_;
 
+    die "register_plugin called twice!" if $called;
+
     $parser->add_post_process_plugin( plugin => $class->new );
+    $called = 1;
 }
 
 # add _perl to all function/method names

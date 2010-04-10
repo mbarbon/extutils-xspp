@@ -13,6 +13,7 @@ __DATA__
 %module{Foo};
 %package{Foo};
 %loadplugin{t::lib::XSP::Plugin};
+%loadplugin{t::lib::XSP::Plugin};
 
 int foo(int y);
 
