@@ -22,9 +22,10 @@ If you still want to use it, read the source of this module.
         void bar() %MethodTag{Bar};
     };
 
-A plugin can both run after the parsing is finished and modify the
-expression tree before it is emitted and handle tags associated with a
-class/function/method.
+There are two ways a plugin can modify the code emitted by XS++: in
+can run after the parsing completes and modify the expression tree
+before it is emitted or it can handle custom annotation tags
+associated with a class/function/method.
 
 A custom tag can have either positional or named parameters:
 
@@ -40,27 +41,28 @@ A custom tag can have either positional or named parameters:
         %AThirdParam{AnotherId};
     };
 
-During parsing no check is performed on parameter names/types/count.
-The parser only gives an error if the tag is not handled by any
-plugin.
+No check is performed on parameter names/types/count.  The parser only
+gives an error if the tag is not handled by any plugin.
 
 Positional parameters are passed to tag handlers in the
-C<any_named_arguments> parameter as an array reference, named handlers
-are passed in the C<any_positional_arguments> parameter as an hash
-reference.
+C<any_named_arguments> parameter, as an array reference; named
+handlers are passed in the C<any_positional_arguments> parameter, as
+an hash reference.
 
-If the parameter is an identifier its value is a plain string.  The
-value of a special block parameter is an array reference with an
-element for each line in the special block.
+The value of a special block parameter is an array reference with an
+element for each line in the special block.  For consistency, the
+value of an identifier parameter is a single-element array reference.
 
 =head1 XS++ METHODS
+
+These methods are defined in the parser object.
 
 =head2 add_post_process_plugin
 
     $parser->add_post_process_plugin( plugin => $instance );
 
-Register a post-processing plugin to be called after the parsing
-finished.
+Registers a post-processing plugin to be called after the parsing
+finishes.
 
 =head2 add_function_tag_plugin
 
@@ -90,6 +92,8 @@ Add a plugin to handle classes annotated with tags.
 Add a plugin to handle methods annotated with tags.
 
 =head1 PLUGIN METHODS
+
+These methods can be defined by the plugin to modify the emitted code.
 
 =head2 register_plugin
 
