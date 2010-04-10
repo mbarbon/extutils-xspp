@@ -7,7 +7,7 @@ ExtUtils::XSpp::Plugin - XS++ plugin interface
 The XS++ plugin interface is B<EXPERIMENTAL> and subject to change.
 If you still want to use it, read the source of this module.
 
-=for internal documentation
+=begin internal
 
 =head1 SYNTAX
 
@@ -152,5 +152,7 @@ C<$method> is a C<Method> node.  C<$tag> is the tag string, without
 the C<%> prefix.  C<%args> are the arguments passed to the tag.
 
 If the method handles the tag, it must return C<1> to the caller.
+
+=end internal
 
 =cut
