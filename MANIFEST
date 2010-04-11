@@ -17,6 +17,13 @@ lib/ExtUtils/XSpp.pm
 lib/ExtUtils/XSpp.pod
 lib/ExtUtils/XSpp/Cmd.pm
 lib/ExtUtils/XSpp/Driver.pm
+lib/ExtUtils/XSpp/Exception.pm
+lib/ExtUtils/XSpp/Exception/code.pm
+lib/ExtUtils/XSpp/Exception/object.pm
+lib/ExtUtils/XSpp/Exception/perlcode.pm
+lib/ExtUtils/XSpp/Exception/simple.pm
+lib/ExtUtils/XSpp/Exception/stdmessage.pm
+lib/ExtUtils/XSpp/Exception/unknown.pm
 lib/ExtUtils/XSpp/Grammar.pm
 lib/ExtUtils/XSpp/Lexer.pm
 lib/ExtUtils/XSpp/Node.pm
@@ -57,6 +64,7 @@ t/035_include.t
 t/040_plugin.t
 t/075_types.t
 t/080_complex_typemap.t
+t/090_exceptions.t
 t/files/include.xsp
 t/files/test1.xsp
 t/files/typemap.xsp
