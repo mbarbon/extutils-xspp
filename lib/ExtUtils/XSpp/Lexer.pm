@@ -20,6 +20,8 @@ use ExtUtils::XSpp::Node::Package;
 use ExtUtils::XSpp::Node::Raw;
 use ExtUtils::XSpp::Node::Type;
 use ExtUtils::XSpp::Node::PercAny;
+use ExtUtils::XSpp::Node::Enum;
+use ExtUtils::XSpp::Node::EnumValue;
 
 use ExtUtils::XSpp::Typemap;
 use ExtUtils::XSpp::Exception;

@@ -37,7 +37,7 @@ directive:      perc_module SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
               | typemap { }
               | exceptionmap { }
-              | enum    { }
+              | enum
               ;
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
@@ -90,10 +90,13 @@ raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
-# ignore enums for now
 enum:
       'enum' OPCURLY enum_element_list CLCURLY SEMICOLON
-          { undef };
+          { ExtUtils::XSpp::Node::Enum->new( elements => $_[3] ) }
+    | 'enum' ID OPCURLY enum_element_list CLCURLY SEMICOLON
+          { ExtUtils::XSpp::Node::Enum->new( name     => $_[2],
+                                             elements => $_[4] ) }
+    ;
 
 enum_element_list:
           { [] }
@@ -105,7 +108,11 @@ enum_element_list:
 
 enum_element:
       ID
+          { ExtUtils::XSpp::Node::EnumValue->new( name => $_[1] ) }
     | ID EQUAL expression
+          { ExtUtils::XSpp::Node::EnumValue->new( name  => $_[1],
+                                                  value => $_[3],
+                                                  ) }
     | raw
     ;
 
