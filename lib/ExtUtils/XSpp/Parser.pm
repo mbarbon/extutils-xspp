@@ -35,6 +35,7 @@ sub new {
   $this->{FILE} = $args{file};
   $this->{STRING} = $args{string};
   $this->{PARSER} = ExtUtils::XSpp::Grammar->new;
+  $this->{PLUGINS} = {};
 
   return $this;
 }
@@ -84,7 +85,6 @@ sub include_file {
                   };
 
   $this->{PARSER}->YYData->{LEX} = $new_lex;
-  $this->{PLUGINS} = {};
 }
 
 =head2 ExtUtils::XSpp::Parser::get_data
