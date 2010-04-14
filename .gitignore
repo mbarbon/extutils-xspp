@@ -11,3 +11,5 @@ t/files/foo.h
 *.swp
 *.swo
 padre.yml
+MANIFEST.bak
+XSP.output
