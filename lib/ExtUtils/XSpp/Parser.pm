@@ -60,6 +60,7 @@ sub parse {
   my $parser = $this->{PARSER};
   $parser->YYData->{LEX}{FH} = $fh;
   $parser->YYData->{LEX}{BUFFER} = \$buf;
+  $parser->YYData->{LEX}{FILE} = $this->{FILE};
   local $parser->YYData->{PARSER} = $this;
 
   $this->{DATA} = $parser->YYParse( yylex   => \&ExtUtils::XSpp::Grammar::yylex,
@@ -77,6 +78,7 @@ sub include_file {
   my( $file ) = @_;
   my $buf = '';
   my $new_lex = { FH     => _my_open( $file ),
+                  FILE   => $file,
                   BUFFER => \$buf,
                   NEXT   => $this->{PARSER}->YYData->{LEX},
                   };
@@ -230,5 +232,7 @@ sub _handle_plugin {
 
   die "Unhandled $plugin_type annotation $plugin_args->[1]" unless $handled;
 }
+
+sub current_file { $_[0]->{PARSER}->YYData->{LEX}{FILE} }
 
 1;
