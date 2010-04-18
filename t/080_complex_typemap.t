@@ -12,7 +12,9 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%foobar%};
+%typemap{int}{parsed}{
+    %cpp_type{foobar};
+};
 
 class Foo
 {
@@ -42,11 +44,13 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, custom return value conversion
+=== Complex typemap, custom return value conversion, $2 = C++ retval, $c = call code
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{% $$ = fancy_conversion( $1 ) %};
+%typemap{int}{parsed}{
+    %call_function_code{% $2 = fancy_conversion( $c ) %};
+};
 
 class Foo
 {
@@ -76,11 +80,13 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, output code
+=== Complex typemap, output code, $2 = C++ return val
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{% custom_code( RETVAL ) %};
+%typemap{int}{parsed}{
+    %output_code{% $1 = custom_code( $2 ) %};
+};
 
 class Foo
 {
@@ -101,7 +107,7 @@ Foo::foo( a, b )
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
-       custom_code( RETVAL ) ;
+       ST(0) = custom_code( RETVAL ) ;
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
@@ -111,11 +117,13 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, cleanup code
+=== Complex typemap, cleanup code, $1 = Perl, $2 = C++
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{%%}{% custom_code( ST(0), RETVAL ) %};
+%typemap{int}{parsed}{
+    %cleanup_code{% custom_code( $1, $2 ) %};
+};
 
 class Foo
 {
@@ -147,12 +155,13 @@ Foo::foo( a, b )
   CLEANUP:
      custom_code( ST(0), RETVAL ) ;
 
-=== Complex typemap, pre-call code
+=== Complex typemap, pre-call code, $1 = Perl, $2 = C++
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{%%}{%%}
-    {% custom_code( $1, RETVAL ) %};
+%typemap{int}{parsed}{
+    %precall_code{% custom_code( $1, $2 ) %};
+};
 
 class Foo
 {
@@ -172,8 +181,8 @@ Foo::foo( a, b )
     int b
   CODE:
     try {
-       custom_code( ST(1), RETVAL ) ;
- custom_code( ST(2), RETVAL ) ;
+       custom_code( ST(1), a ) ;
+ custom_code( ST(2), b ) ;
       RETVAL = THIS->foo( a, b );
     }
     catch (std::exception& e) {
@@ -184,12 +193,12 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, output list code, $$ = C++ retval
+=== Complex typemap, output list code, $2 = C++ retval
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %output_list{% PUTBACK; XPUSHi( RETVAL ); SPAGAIN %};
+    %output_list{% PUTBACK; XPUSHi( $2 ); SPAGAIN %};
 };
 
 class Foo
