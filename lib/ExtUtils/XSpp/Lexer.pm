@@ -156,12 +156,11 @@ sub yylex {
           $$buf =~ s/(?:\r\n|\r|\n)$//;
           push @rows, $$buf;
         }
+      } elsif( $$buf =~ s/^(\%\w+)// ) {
+        return ( $tokens{$1}, $1 ) if exists $tokens{$1};
+        return ( 'p_any', substr $1, 1 );
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
-                      | \%name | \%typemap | \%module  | \%code
-                      | \%file | \%cleanup | \%package | \%length
-                      | \%loadplugin | \%include | \%postcall
-                      | \%exception | \%catch
                       | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
