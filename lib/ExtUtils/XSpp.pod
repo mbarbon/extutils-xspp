@@ -58,17 +58,88 @@ Just let XS++ that this is a valid type, the type will be passed
 unchanged to XS code B<except> that any C<const> qualifiers will be
 stripped.
 
-  %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
-
-When C<C++ type 1> is used, replace it with C<C++ type 2> in the
-generated XS code.
-
   %typemap{<C++ reference type>}{reference};
 
 Handle C++ references: the XS variable will be declared as a pointer,
 and it will be explicitly dereferenced in the function call. If it is
 used in the return value, the function will create B<copy> of the
 returned value using a copy constructor.
+
+  %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
+
+When C<C++ type 1> is used, replace it with C<C++ type 2> in the
+generated XS code.
+
+  %typemap{<C++ type>}{parsed}{
+      %cpp_type{<C++ type 2>};
+      %call_function_code{% $2 = new Foo( $a ) %};
+      %cleanup_code{% ... %};
+      %precall_code{% ... %};
+
+      # use only one of the following
+      %output_code{% $1 = newSViv( $2 ) %};
+      %output_list{% PUTBACK; XPUSHi( $2 ); SPAGAIN %};
+  };
+
+Is a more flexible form for the C<parsed> typemap.  All the parameters
+are optional.
+
+=over 4
+
+=item cpp_type
+
+Specifies the C++ type used for the variable declaration in the
+generated XS code.
+
+If not specified defaults to the type specified in the typemap.
+
+=item call_function_code
+
+Used when the typemap applies to the return value of the function.
+
+Specifies the code to use in the function call.  The special variables
+C<$c> and C<$2> are replaced with the actual call code and the name of
+the C++ return variable.
+
+=item output_code
+
+Used when the typemap applies to the return value of the function.
+See also C<%output_list>.
+
+Specifies the code emitted right after the function call to convert
+the C++ return value into a Perl return value.  The special variable
+C<$2> is replaced with the C++ return variable name.
+
+=item cleanup_code
+
+Used when the typemap applies to the return value of the function.
+
+Specifies some code emitted after output value processing.  The
+special variables C<$1> and C<$2> are replaced with the names of the
+C++ variables containing the Perl scalar and the corresponding C++
+value.
+
+=item precall_code
+
+Used when the typemap applies to a parameter.
+
+Specifies some code emitted after argument processing and before
+calling the C++ method.  The special variables C<$1> and C<$2> are
+replaced with the names of the C++ variables containing the Perl
+scalar and the corresponding C++ value.
+
+=item output_list
+
+Used when the typemap applies to the return value of the function, as
+an alternative to C<%output_code>.
+
+Specifies some code that manipulates the Perl stack directly in order
+to return a list.  The special variable C<$2> is replaced with the C++
+name of the output variable.
+
+The code must use PUTBACK/SPAGAIN if appropriate.
+
+=back
 
 =head1 DESCRIPTION
 
