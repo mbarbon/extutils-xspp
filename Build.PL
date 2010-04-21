@@ -12,6 +12,7 @@ my $build = My::Build->new
     requires    =>
       { 'perl'                => '5.6.1',
         'ExtUtils::ParseXS'   => '2.2202',
+        'Digest::MD5'         => '2.0',
         },
     build_requires =>
       { 'Test::Base'          => '0',

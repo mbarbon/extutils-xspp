@@ -88,6 +88,10 @@ simple_block:  OPCURLY ID CLCURLY
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
+      | PREPROCESSOR    { ExtUtils::XSpp::Node::Preprocessor->new
+                              ( rows   => [ $_[1][0] ],
+                                symbol => $_[1][1],
+                                ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
 enum:

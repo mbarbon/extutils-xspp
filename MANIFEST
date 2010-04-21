@@ -41,6 +41,7 @@ lib/ExtUtils/XSpp/Node/Method.pm
 lib/ExtUtils/XSpp/Node/Module.pm
 lib/ExtUtils/XSpp/Node/Package.pm
 lib/ExtUtils/XSpp/Node/PercAny.pm
+lib/ExtUtils/XSpp/Node/Preprocessor.pm
 lib/ExtUtils/XSpp/Node/Raw.pm
 lib/ExtUtils/XSpp/Node/Type.pm
 lib/ExtUtils/XSpp/Parser.pm
@@ -57,6 +58,7 @@ t/001_load.t
 t/005_io.t
 t/010_base.t
 t/011_multiple_files.t
+t/012_preprocessor.t
 t/015_reference.t
 t/020_rename.t
 t/022_static.t

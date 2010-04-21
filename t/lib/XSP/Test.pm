@@ -42,6 +42,7 @@ package t::lib::XSP::Test::Filter;
 use Test::Base::Filter -base;
 
 sub xsp_stdout {
+    srand 0;
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
 
@@ -49,6 +50,7 @@ sub xsp_stdout {
 }
 
 sub xsp_file {
+    srand 0;
     my $name = Test::Base::filter_arguments();
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
