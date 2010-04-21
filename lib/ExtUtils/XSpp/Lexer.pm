@@ -271,13 +271,15 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $bases, $metadata, $methods ) = @_;
+  my( $parser, $name, $bases, $metadata, $methods, $condition ) = @_;
   my %args = @$metadata;
   _merge_keys( 'catch', \%args, $metadata );
 
   my $class = ExtUtils::XSpp::Node::Class->new( %args, # <-- catch only for now
                                                 cpp_name     => $name,
-                                                base_classes => $bases );
+                                                base_classes => $bases,
+                                                condition    => $condition,
+                                                );
 
   # when adding a class C, automatically add weak typemaps for C* and C&
   ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name );
@@ -330,6 +332,7 @@ sub add_data_function {
                 cleanup   => $args{cleanup},
                 postcall  => $args{postcall},
                 catch     => $args{catch},
+                condition => $args{condition},
                 );
 
   if( $args{any} ) {
@@ -358,6 +361,7 @@ sub add_data_method {
               postcall  => $args{postcall},
               perl_name => $args{perl_name},
               catch     => $args{catch},
+              condition => $args{condition},
               );
 
   if( $args{any} ) {
@@ -383,6 +387,7 @@ sub add_data_ctor {
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
         catch     => $args{catch},
+        condition => $args{condition},
         );
 }
 
@@ -397,6 +402,7 @@ sub add_data_dtor {
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
         catch     => $args{catch},
+        condition => $args{condition},
         );
 }
 

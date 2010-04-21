@@ -57,5 +57,6 @@ sub print {
   );
 }
 
+sub condition { $_[0]->{CONDITION} }
 
 1;

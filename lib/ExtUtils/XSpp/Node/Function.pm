@@ -51,6 +51,7 @@ sub init {
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
+  $this->{CONDITION} = $args{condition};
 
   if (ref($this->{CATCH})
       and @{$this->{CATCH}} > 1

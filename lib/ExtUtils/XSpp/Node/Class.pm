@@ -49,6 +49,7 @@ sub init {
   $this->{BASE_CLASSES} = $args{base_classes} || [];
   $this->add_methods( @{$args{methods}} ) if $args{methods};
   $this->{CATCH}     = $args{catch};
+  $this->{CONDITION} = $args{condition};
 
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 

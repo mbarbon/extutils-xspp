@@ -42,8 +42,9 @@ sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{NAME} = $args{name};
-  $this->{VALUE} = $args{value};
+  $this->{NAME}      = $args{name};
+  $this->{VALUE}     = $args{value};
+  $this->{CONDITION} = $args{condition};
 }
 
 sub print {
