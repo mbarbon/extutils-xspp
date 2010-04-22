@@ -41,8 +41,16 @@ package t::lib::XSP::Test::Filter;
 
 use Test::Base::Filter -base;
 
+# some fixed "random" values to simplify testing
+my( @random_list, @random_digits ) =
+    qw(017082 074990 737474 643532 738748 630394 284033);
+sub ExtUtils::XSpp::Grammar::_random_digits {
+    die "No more random values" unless @random_digits;
+    return shift @random_digits;
+}
+
 sub xsp_stdout {
-    srand 0;
+    @random_digits = @random_list;
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
 
@@ -50,7 +58,7 @@ sub xsp_stdout {
 }
 
 sub xsp_file {
-    srand 0;
+    @random_digits = @random_list;
     my $name = Test::Base::filter_arguments();
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
