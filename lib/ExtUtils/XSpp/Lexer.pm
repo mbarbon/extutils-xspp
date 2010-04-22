@@ -127,8 +127,9 @@ sub _random_digits { sprintf '%06d', rand 100000 }
 
 sub push_conditional {
   my $p = $_[0];
-  my $file = $p->YYData->{LEX}{FILE} ? md5_hex( $p->YYData->{LEX}{FILE} ) :
-                                       'zzzzzzzz';
+  my $file = $p->YYData->{LEX}{FILE} ?
+                 substr md5_hex( $p->YYData->{LEX}{FILE} ), 0, 8 :
+                 'zzzzzzzz';
   my $rand = _random_digits;
 
   my $symbol = 'XSpp_' . $file . '_' . $rand;
