@@ -122,6 +122,10 @@ sub print {
       $out .= <<EOT;
 BOOT:
     {
+EOT
+
+      $out .= '#ifdef ' . $this->condition . "\n" if $this->condition;
+      $out .= <<EOT;
         AV* isa = get_av( "${class}::ISA", 1 );
 EOT
 
@@ -134,6 +138,7 @@ EOT
     }
 
       # close block in BOOT
+      $out .= '#endif // ' . $this->condition . "\n" if $this->condition;
       $out .= <<EOT;
     } // blank line here is important
 
