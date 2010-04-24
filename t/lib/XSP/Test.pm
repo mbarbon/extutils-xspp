@@ -41,6 +41,8 @@ package t::lib::XSP::Test::Filter;
 
 use Test::Base::Filter -base;
 
+no warnings 'redefine';
+
 # some fixed "random" values to simplify testing
 my( @random_list, @random_digits ) =
     qw(017082 074990 737474 643532 738748 630394 284033);
