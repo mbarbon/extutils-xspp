@@ -72,13 +72,13 @@ generated XS code.
 
   %typemap{<C++ type>}{parsed}{
       %cpp_type{<C++ type 2>};
-      %call_function_code{% $2 = new Foo( $a ) %};
+      %call_function_code{% $CVar = new Foo( $Call ) %};
       %cleanup_code{% ... %};
       %precall_code{% ... %};
 
       # use only one of the following
-      %output_code{% $1 = newSViv( $2 ) %};
-      %output_list{% PUTBACK; XPUSHi( $2 ); SPAGAIN %};
+      %output_code{% $PerlVar = newSViv( $CVar ) %};
+      %output_list{% PUTBACK; XPUSHi( $CVar ); SPAGAIN %};
   };
 
 Is a more flexible form for the C<parsed> typemap.  All the parameters
@@ -98,7 +98,7 @@ If not specified defaults to the type specified in the typemap.
 Used when the typemap applies to the return value of the function.
 
 Specifies the code to use in the function call.  The special variables
-C<$c> and C<$2> are replaced with the actual call code and the name of
+C<$Call> and C<$CVar> are replaced with the actual call code and the name of
 the C++ return variable.
 
 =item output_code
@@ -108,14 +108,14 @@ See also C<%output_list>.
 
 Specifies the code emitted right after the function call to convert
 the C++ return value into a Perl return value.  The special variable
-C<$2> is replaced with the C++ return variable name.
+C<$CVar> is replaced with the C++ return variable name.
 
 =item cleanup_code
 
 Used when the typemap applies to the return value of the function.
 
 Specifies some code emitted after output value processing.  The
-special variables C<$1> and C<$2> are replaced with the names of the
+special variables C<$PerlVar> and C<$CVar> are replaced with the names of the
 C++ variables containing the Perl scalar and the corresponding C++
 value.
 
@@ -124,7 +124,7 @@ value.
 Used when the typemap applies to a parameter.
 
 Specifies some code emitted after argument processing and before
-calling the C++ method.  The special variables C<$1> and C<$2> are
+calling the C++ method.  The special variables C<$PerlVar> and C<$CVar> are
 replaced with the names of the C++ variables containing the Perl
 scalar and the corresponding C++ value.
 
@@ -134,7 +134,7 @@ Used when the typemap applies to the return value of the function, as
 an alternative to C<%output_code>.
 
 Specifies some code that manipulates the Perl stack directly in order
-to return a list.  The special variable C<$2> is replaced with the C++
+to return a list.  The special variable C<$CVar> is replaced with the C++
 name of the output variable.
 
 The code must use PUTBACK/SPAGAIN if appropriate.

@@ -44,12 +44,12 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, custom return value conversion, $2 = C++ retval, $c = call code
+=== Complex typemap, custom return value conversion
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %call_function_code{% $2 = fancy_conversion( $c ) %};
+    %call_function_code{% $CVar = fancy_conversion( $Call ) %};
 };
 
 class Foo
@@ -80,12 +80,12 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, output code, $2 = C++ return val
+=== Complex typemap, output code
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %output_code{% $1 = custom_code( $2 ) %};
+    %output_code{% $PerlVar = custom_code( $CVar ) %};
 };
 
 class Foo
@@ -117,12 +117,12 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, cleanup code, $1 = Perl, $2 = C++
+=== Complex typemap, cleanup code
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %cleanup_code{% custom_code( $1, $2 ) %};
+    %cleanup_code{% custom_code( $PerlVar, $CVar ) %};
 };
 
 class Foo
@@ -155,12 +155,12 @@ Foo::foo( a, b )
   CLEANUP:
      custom_code( ST(0), RETVAL ) ;
 
-=== Complex typemap, pre-call code, $1 = Perl, $2 = C++
+=== Complex typemap, pre-call code
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %precall_code{% custom_code( $1, $2 ) %};
+    %precall_code{% custom_code( $PerlVar, $CVar ) %};
 };
 
 class Foo
@@ -193,12 +193,12 @@ Foo::foo( a, b )
     }
   OUTPUT: RETVAL
 
-=== Complex typemap, output list code, $2 = C++ retval
+=== Complex typemap, output list code
 --- xsp_stdout
 %module{Foo};
 
 %typemap{int}{parsed}{
-    %output_list{% PUTBACK; XPUSHi( $2 ); SPAGAIN %};
+    %output_list{% PUTBACK; XPUSHi( $CVar ); SPAGAIN %};
 };
 
 class Foo
