@@ -1,5 +1,13 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.10_01
+	- Improved and documented the syntax for complex "parsed" typemaps.
+	  The old syntax will be removed soon.
+	- Allow '&' and '|' operators in the default value of functions and
+	  methods.
+	- Do not generate XS code for the private and protected members of
+	  a class.
+
 0.10  Wed Apr 14 19:20:00 CET 2010
 	- Now requires ExtUtils::ParseXS 0.2202.
 	- C++ Exceptions can now be handled with code much like typemaps
