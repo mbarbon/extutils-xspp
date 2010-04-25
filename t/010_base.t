@@ -91,7 +91,7 @@ foo( a )
 
 class Foo
 {
-    int foo( int a = 1 );
+    int foo( int a = 1, int b = 0x1 );
 };
 --- expected
 #include <exception>
@@ -102,11 +102,12 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a = 1 )
+Foo::foo( a = 1, b = 0x1 )
     int a
+    int b
   CODE:
     try {
-      RETVAL = THIS->foo( a );
+      RETVAL = THIS->foo( a, b );
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());

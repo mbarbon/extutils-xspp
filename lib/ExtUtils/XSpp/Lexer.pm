@@ -141,7 +141,9 @@ sub yylex {
       $$buf =~ s/^[\s\n\r]+//;
       next unless length $$buf;
 
-      if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
+      if( $$buf =~ s/^([+-]?0x[0-9a-fA-F]+)// ) {
+        return ( 'INTEGER', $1 );
+      } elsif( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
         my $v = $1;
         return ( 'INTEGER', $v ) if $v =~ /^[+-]?\d+$/;
         return ( 'FLOAT', $v );
