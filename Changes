@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
-0.10_01
+0.10_01  Mon Apr 26 21:44:25 CEST 2010
 	- Improved and documented the syntax for complex "parsed" typemaps.
 	  The old syntax will be removed soon.
 	- Allow '&' and '|' operators in the default value of functions and
