@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.10_02  Tue Apr 27 08:06:04 CEST 2010
+	- Fix packaging error.
+
 0.10_01  Mon Apr 26 21:44:25 CEST 2010
 	- Improved and documented the syntax for complex "parsed" typemaps.
 	  The old syntax will be removed soon.
