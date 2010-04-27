@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 1;
+use t::lib::XSP::Test tests => 2;
 
 run_diff xsp_stdout => 'expected';
 
@@ -60,3 +60,21 @@ klass::Bar()
     catch (...) {
       croak("Caught C++ exception of unknown type");
     }
+
+=== Handle top level directives
+--- xsp_stdout
+%module{Foo};
+%package{Foo};
+%loadplugin{TestParserPlugin};
+
+%MyDirective{Foo};
+
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+// Foo

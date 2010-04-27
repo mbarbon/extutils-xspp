@@ -91,6 +91,15 @@ Add a plugin to handle classes annotated with tags.
 
 Add a plugin to handle methods annotated with tags.
 
+=head2 add_toplevel_tag_plugin
+
+    $parser->add_toplevel_tag_plugin( plugin => $instance,
+                                      # optional
+                                      tag    => $tag,
+                                      );
+
+Add a plugin to handle top-level directives.
+
 =head1 PLUGIN METHODS
 
 These methods can be defined by the plugin to modify the emitted code.
@@ -155,6 +164,20 @@ If the method handles the tag, it must return C<1> to the caller.
 
 C<$method> is a C<Method> node.  C<$tag> is the tag string, without
 the C<%> prefix.  C<%args> are the arguments passed to the tag.
+
+If the method handles the tag, it must return C<1> to the caller.
+
+=head2 handle_toplevel_tag
+
+    sub handle_toplevel_tag {
+        my( $self, undef, $tag, %args ) = @_;
+
+        # do something useful
+    }
+
+C<$tag> is the tag string, without the C<%> prefix.  C<%args> are the
+arguments passed to the tag.  The C<undef> value is for uniformity
+with other tag handlers.
 
 If the method handles the tag, it must return C<1> to the caller.
 

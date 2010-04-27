@@ -3,7 +3,7 @@ package ExtUtils::XSpp::Plugin::TestParserPlugin;
 use strict;
 use warnings;
 
-sub new { return bless {}, $_[0] }
+sub new { return bless { directives => [] }, $_[0] }
 
 sub register_plugin {
     my( $class, $parser ) = @_;
@@ -12,6 +12,9 @@ sub register_plugin {
     $parser->add_function_tag_plugin( plugin => $inst, tag => 'MyFuncRename' );
     $parser->add_class_tag_plugin( plugin => $inst, tag => 'MyClassRename' );
     $parser->add_method_tag_plugin( plugin => $inst, tag => 'MyMethodRename' );
+
+    $parser->add_toplevel_tag_plugin( plugin => $inst, tag => 'MyDirective' );
+    $parser->add_post_process_plugin( plugin => $inst );
 }
 
 sub handle_method_tag {
@@ -39,6 +42,23 @@ sub handle_class_tag {
     $class->set_perl_name( $name );
 
     return 1;
+}
+
+sub handle_toplevel_tag {
+    my( $self, undef, $any_tag, %args ) = @_;
+    my $name = $args{any_positional_arguments}[0];
+
+    push @{$self->{directives}}, $name;
+
+    return 1;
+}
+
+sub post_process {
+    my( $self, $nodes ) = @_;
+
+    foreach my $name ( @{$self->{directives}} ) {
+        push @$nodes, ExtUtils::XSpp::Node::Raw->new( rows => [ "// $name" ] );
+    }
 }
 
 1;

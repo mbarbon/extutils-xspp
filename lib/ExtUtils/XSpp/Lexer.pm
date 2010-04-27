@@ -266,6 +266,16 @@ sub add_data_comment {
   ExtUtils::XSpp::Node::Comment->new( rows => $rows );
 }
 
+sub add_top_level_directive {
+  my( $parser, %args ) = @_;
+
+  $parser->YYData->{PARSER}->handle_toplevel_tag_plugins
+    ( $args{any},
+      any_named_arguments      => $args{any_named_arguments},
+      any_positional_arguments => $args{any_positional_arguments},
+      );
+}
+
 sub make_argument {
   my( $p, $type, $name, $default ) = @_;
 

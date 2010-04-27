@@ -220,6 +220,27 @@ sub handle_method_tag_plugins {
                   'handle_method_tag', [ $method, @args ] );
 }
 
+=head2 ExtUtils::XSpp::Parser::add_toplevel_tag_plugin
+
+Adds the specified plugin to the list of plugins that can handle custom
+%foo top level directives.
+
+=cut
+
+sub add_toplevel_tag_plugin {
+  my( $this, %args ) = @_;
+  my $tag = $args{tag} || '_any_';
+
+  push @{$this->{PLUGINS}{TOPLEVEL_TAG}{$tag}}, $args{plugin};
+}
+
+sub handle_toplevel_tag_plugins {
+  my( $this, @args ) = @_;
+
+  _handle_plugin( $this, $this->{PLUGINS}{TOPLEVEL_TAG}, 'top-level',
+                  'handle_toplevel_tag', [ undef, @args ] );
+}
+
 sub _handle_plugin {
   my( $this, $plugins, $plugin_type, $plugin_method, $plugin_args ) = @_;
   my $tag = $plugin_args->[1];
@@ -230,7 +251,7 @@ sub _handle_plugin {
     last if $handled;
   }
 
-  die "Unhandled $plugin_type annotation $plugin_args->[1]" unless $handled;
+  die "Unhandled $plugin_type annotation $tag" unless $handled;
 }
 
 sub current_file { $_[0]->{PARSER}->YYData->{LEX}{FILE} }

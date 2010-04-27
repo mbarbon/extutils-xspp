@@ -35,6 +35,8 @@ directive:      perc_module SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
+              | perc_any SEMICOLON
+                    { add_top_level_directive( $_[0], @{$_[1]} ); undef }
               | typemap { }
               | exceptionmap { }
               ;
