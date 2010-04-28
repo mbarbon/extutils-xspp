@@ -54,7 +54,7 @@ separate file, to avoid duplication.
 
   %typemap{<C++ type>}{simple};
 
-Just let XS++ that this is a valid type, the type will be passed
+Just let XS++ know that this is a valid type, the type will be passed
 unchanged to XS code B<except> that any C<const> qualifiers will be
 stripped.
 
