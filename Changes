@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.11  Mon May  3 20:16:23 CEST 2010
+	- Released 0.10_02 as 0.11.
+
 0.10_02  Tue Apr 27 08:06:04 CEST 2010
 	- Fix packaging error.
 
