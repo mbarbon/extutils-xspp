@@ -22,7 +22,7 @@ If you still want to use it, read the source of this module.
         void bar() %MethodTag{Bar};
     };
 
-There are two ways a plugin can modify the code emitted by XS++: in
+There are two ways a plugin can modify the code emitted by XS++: it
 can run after the parsing completes and modify the expression tree
 before it is emitted or it can handle custom annotation tags
 associated with a class/function/method.
@@ -42,12 +42,11 @@ A custom tag can have either positional or named parameters:
     };
 
 No check is performed on parameter names/types/count.  The parser only
-gives an error if the tag is not handled by any plugin.
+gives an error if the annotation is not handled by any plugin.
 
-Positional parameters are passed to tag handlers in the
-C<any_named_arguments> parameter, as an array reference; named
-handlers are passed in the C<any_positional_arguments> parameter, as
-an hash reference.
+Positional parameters are passed to tag handlers as an array reference
+in the C<any_named_arguments> parameter; named handlers are passed as
+an hash reference in the C<any_positional_arguments> parameter.
 
 The value of a special block parameter is an array reference with an
 element for each line in the special block.  For consistency, the
