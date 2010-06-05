@@ -1,5 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.11_01  Sat Jun  5 11:02:09 CEST 2010
 	- Parse enum declarations.
 	- Added an experimental plugin interface.
 
