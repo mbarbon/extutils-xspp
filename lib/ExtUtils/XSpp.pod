@@ -200,7 +200,12 @@ you can call the method from Perl like this:
 
   $object->PrintLine( $string );
 
-This feature is also present in plain XS. See also: L<perlxs>
+This feature is also present in plain XS. See also: L<perlxs>.
+
+If you use C<%length(line)> in conjunction with any kind of
+special code block such as C<%code>, C<%postcall>, etc.,
+then you can refer to the length of the string
+(here: C<line>) I<efficiently> as C<length(line)> in the code.
 
 =head2 Classes
 
