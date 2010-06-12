@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 12;
+use t::lib::XSP::Test tests => 14;
 
 run_diff xsp_stdout => 'expected';
 
@@ -335,7 +335,7 @@ unsigned int
 bar( char* line, unsigned long length(line) )
   CODE:
     try {
-      RETVAL = bar( line, length(line) );
+      RETVAL = bar( line, XSauto_length_of_line );
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
@@ -344,6 +344,66 @@ bar( char* line, unsigned long length(line) )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+=== %length and %code
+--- xsp_stdout
+%module{Foo};
+
+%package{Bar};
+
+unsigned int
+bar( char* line, unsigned long %length{line} )
+  %code{%RETVAL = bar(length(line)*2);%};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Bar
+
+unsigned int
+bar( char* line, unsigned long length(line) )
+  CODE:
+    RETVAL = bar(XSauto_length_of_line*2);
+  OUTPUT: RETVAL
+
+=== %length and %postcall, %cleanup
+--- xsp_stdout
+%module{Foo};
+
+%package{Bar};
+
+unsigned int
+bar( char* line, unsigned long %length{line} )
+  %postcall{% cout << length(line) << endl;%}
+  %cleanup{% cout << 2*length(line) << endl;%};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Bar
+
+unsigned int
+bar( char* line, unsigned long length(line) )
+  CODE:
+    try {
+      RETVAL = bar( line, XSauto_length_of_line );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  POSTCALL:
+     cout << XSauto_length_of_line << endl;
+  OUTPUT: RETVAL
+  CLEANUP:
+     cout << 2*XSauto_length_of_line << endl;
+
 === various integer types
 --- xsp_stdout
 %module{Foo};

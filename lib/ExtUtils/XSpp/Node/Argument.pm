@@ -28,6 +28,29 @@ Named parameters: C<type> indicating the C++ argument type,
 C<name> indicating the variable name, and optionally
 C<default> indicating the default value of the argument.
 
+=head2 uses_length
+
+Returns true if the argument uses the XS length feature, false
+otherwise.
+
+=head2 implementation_name
+
+Returns the same as the C<name> method unless
+the argument is of the C<%length(something)> variant.
+In that case, C<implementation_name> returns a
+munged version of the name that addresses the name mangling
+done by F<xsubpp>: C<XSauto_length_of_somthing>.
+
+=head2 fix_name_in_code
+
+Given a code string, replaces any occurrances of
+the name of this C<Argument> with its implementation
+name. If the implementation name is the same as the name,
+which is the most likely case, the code remains
+completely untouched.
+
+Returns the potentially modified code.
+
 =cut
 
 sub init {
@@ -48,6 +71,30 @@ sub print {
                $this->name,
                ( $this->default ?
                  ( '=', $this->default ) : () ) );
+}
+
+sub uses_length {
+  return($_[0]->name =~ /^length\([^\)]+\)/);
+}
+
+sub implementation_name {
+  my $this = shift;
+  my $name = $this->name;
+  if ($this->uses_length) {
+    $name =~ /^length\(([^\)]+)\)/;
+    return "XSauto_length_of_$1";
+  }
+  return $name;
+}
+
+sub fix_name_in_code {
+  my $this = shift;
+  my $code = shift;
+  return $code if not $this->uses_length;
+  my $name = $this->name;
+  my $impl = $this->implementation_name;
+  $code =~ s/\b\Q$name\E/$impl/g;
+  return $code;
 }
 
 =head1 ACCESSORS
@@ -72,6 +119,7 @@ Returns whether there is a default for the function parameter.
 
 sub type { $_[0]->{TYPE} }
 sub name { $_[0]->{NAME} }
+
 sub default { $_[0]->{DEFAULT} }
 sub has_default { defined $_[0]->{DEFAULT} }
 

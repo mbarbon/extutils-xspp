@@ -169,9 +169,7 @@ C<length> feature.
 
 sub argument_style {
   my $this = shift;
-  foreach my $arg (@{$this->{ARGUMENTS}}) {
-    return 'ansi' if $arg->name =~ /length.*\(/;
-  }
+  return 'ansi' if $this->has_argument_with_length;
   return 'kr';
 }
 
@@ -215,6 +213,7 @@ sub print {
     ( '', '', '', '', '', '', '', '' );
 
   my $use_ansi_style = $this->argument_style() eq 'ansi';
+  my $using_length   = $this->has_argument_with_length;
 
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
@@ -285,25 +284,37 @@ sub print {
 
     $code .= "  $code_type:\n";
     $code .= "    try {\n";
-    $code .= '      ' . $precall if $precall;
+    if ($precall) {
+      $this->_munge_code(\$precall) if $using_length;
+      $code .= '      ' . $precall;
+    }
+    $this->_munge_code(\$ccode) if $using_length;
     $code .= '      ' . $ccode . ";\n";
     if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
-      $code .= '      ' . $ret_typemap->output_code( 'ST(0)', 'RETVAL' ) . ";\n";
+      my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
+      $this->_munge_code(\$retcode) if $using_length;
+      $code .= '      ' . $retcode . ";\n";
     }
     if( $has_ret && defined $ret_typemap->output_list( '' ) ) {
-      $code .= '      ' . $ret_typemap->output_list( 'RETVAL' ) . ";\n";
+      my $retcode = $ret_typemap->output_list( 'RETVAL' );
+      $this->_munge_code(\$retcode) if $using_length;
+      $code .= '      ' . $retcode . ";\n";
     }
     $code .= "    }\n";
     my @catchers = @{$this->{EXCEPTIONS}};
     foreach my $exception_handler (@catchers) {
-      $code .= $exception_handler->handler_code;
+      my $handler_code = $exception_handler->handler_code;
+      $this->_munge_code(\$handler_code) if $using_length;
+      $code .= $handler_code;
     }
 
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
     if( $has_ret && defined $ret_typemap->cleanup_code( '', '' ) ) {
       $cleanup .= "  CLEANUP:\n";
-      $cleanup .= '    ' . $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' ) . ";\n";
+      my $cleanupcode = $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' );
+      $this->_munge_code(\$cleanupcode) if $using_length;
+      $cleanup .= '    ' . $cleanupcode . ";\n";
     }
   }
 
@@ -311,15 +322,18 @@ sub print {
     $code = "  $code_type:\n    " . join( "\n", @{$this->code} ) . "\n";
     # cleanup potential multiple newlines because they break XSUBs
     $code =~ s/^\s*\z//m;
+    $this->_munge_code(\$code) if $using_length;
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
     $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";
+    $this->_munge_code(\$postcall) if $using_length;
     $output ||= "  OUTPUT: RETVAL\n" if $has_ret;
   }
   if( $this->cleanup ) {
     $cleanup ||= "  CLEANUP:\n";
     my $clcode = join( "\n", @{$this->cleanup} );
+    $this->_munge_code(\$clcode) if $using_length;
     $cleanup .= "    $clcode\n";
   }
   if( $ppcode ) {
@@ -344,6 +358,21 @@ EOT
   $out .= $output;
   $out .= $cleanup;
   $out .= "\n";
+}
+
+# This replaces the use of "length(varname)" with
+# the proper name of the XS variable that is auto-generated in
+# case of the XS length() feature. The Argument's take care of
+# this and do nothing if they're not of the "length" type.
+# Any additional checking "$this->_munge_code(\$code) if $using_length"
+# is just an optimization!
+sub _munge_code {
+  my $this = shift;
+  my $code = shift;
+  
+  foreach my $arg (@{$this->{ARGUMENTS}}) {
+    $$code = $arg->fix_name_in_code($$code);
+  }
 }
 
 =head2 print_declaration
@@ -378,6 +407,22 @@ but overridden in the L<ExtUtils::XSpp::Node::Method> sub-class.
 
 sub is_method { 0 }
 
+=head2 has_argument_with_length
+
+Returns true if the function has any argument that uses the XS length
+feature.
+
+=cut
+
+sub has_argument_with_length {
+  my $this = shift;
+  foreach my $arg (@{$this->{ARGUMENTS}}) {
+    return 1 if $arg->uses_length;
+  }
+  return();
+}
+
+
 =begin documentation
 
 ExtUtils::XSpp::Node::_call_code( argument_string )
@@ -389,7 +434,6 @@ Return something like "foo( $argument_string )".
 =cut
 
 sub _call_code { return $_[0]->cpp_name . '(' . $_[1] . ')'; }
-
 
 =head1 ACCESSORS
 
