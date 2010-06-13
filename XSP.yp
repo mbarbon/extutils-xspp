@@ -59,7 +59,8 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       # block for each directive inside the typemap
                       for( my $i = 1; $i <= $#{$_[9]}; $i += 2 ) {
                           $_[9][$i] = join "\n", @{$_[9][$i][0]}
-                              if ref( $_[9][$i] ) && ref( $_[9][$i][0] );
+                              if    ref( $_[9][$i] ) eq 'ARRAY'
+                                 && ref( $_[9][$i][0] ) eq 'ARRAY';
                       }
                       my $tm = $package->new( type => $type, @{$_[9]} );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
