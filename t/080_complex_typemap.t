@@ -16,9 +16,13 @@ __DATA__
     %cpp_type{foobar};
 };
 
+%typemap{funnyvoid}{parsed}{
+    %cpp_type{%void*%};
+};
+
 class Foo
 {
-    int foo( int a, int b );
+    int foo( int a, funnyvoid b );
 };
 --- expected
 #include <exception>
@@ -31,7 +35,7 @@ MODULE=Foo PACKAGE=Foo
 foobar
 Foo::foo( a, b )
     foobar a
-    foobar b
+    void* b
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
