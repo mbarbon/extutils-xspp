@@ -71,7 +71,7 @@ When C<C++ type 1> is used, replace it with C<C++ type 2> in the
 generated XS code.
 
   %typemap{<C++ type>}{parsed}{
-      %cpp_type{<C++ type 2>};
+      %cpp_type{%<C++ type 2>%};
       %call_function_code{% $CVar = new Foo( $Call ) %};
       %cleanup_code{% ... %};
       %precall_code{% ... %};
