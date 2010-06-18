@@ -213,7 +213,6 @@ sub print {
     ( '', '', '', '', '', '', '', '' );
 
   my $use_ansi_style = $this->argument_style() eq 'ansi';
-  my $using_length   = $this->has_argument_with_length;
 
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
@@ -285,26 +284,21 @@ sub print {
     $code .= "  $code_type:\n";
     $code .= "    try {\n";
     if ($precall) {
-      $this->_munge_code(\$precall) if $using_length;
       $code .= '      ' . $precall;
     }
-    $this->_munge_code(\$ccode) if $using_length;
     $code .= '      ' . $ccode . ";\n";
     if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
       my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
-      $this->_munge_code(\$retcode) if $using_length;
       $code .= '      ' . $retcode . ";\n";
     }
     if( $has_ret && defined $ret_typemap->output_list( '' ) ) {
       my $retcode = $ret_typemap->output_list( 'RETVAL' );
-      $this->_munge_code(\$retcode) if $using_length;
       $code .= '      ' . $retcode . ";\n";
     }
     $code .= "    }\n";
     my @catchers = @{$this->{EXCEPTIONS}};
     foreach my $exception_handler (@catchers) {
       my $handler_code = $exception_handler->handler_code;
-      $this->_munge_code(\$handler_code) if $using_length;
       $code .= $handler_code;
     }
 
@@ -313,7 +307,6 @@ sub print {
     if( $has_ret && defined $ret_typemap->cleanup_code( '', '' ) ) {
       $cleanup .= "  CLEANUP:\n";
       my $cleanupcode = $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' );
-      $this->_munge_code(\$cleanupcode) if $using_length;
       $cleanup .= '    ' . $cleanupcode . ";\n";
     }
   }
@@ -322,18 +315,15 @@ sub print {
     $code = "  $code_type:\n    " . join( "\n", @{$this->code} ) . "\n";
     # cleanup potential multiple newlines because they break XSUBs
     $code =~ s/^\s*\z//m;
-    $this->_munge_code(\$code) if $using_length;
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
     $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";
-    $this->_munge_code(\$postcall) if $using_length;
     $output ||= "  OUTPUT: RETVAL\n" if $has_ret;
   }
   if( $this->cleanup ) {
     $cleanup ||= "  CLEANUP:\n";
     my $clcode = join( "\n", @{$this->cleanup} );
-    $this->_munge_code(\$clcode) if $using_length;
     $cleanup .= "    $clcode\n";
   }
   if( $ppcode ) {
@@ -350,14 +340,13 @@ $cur_module PACKAGE=$pcname
 EOT
   }
 
-  $out .= "$retstr\n";
-  $out .= "$fname($arg_list)\n";
-  $out .= $init;
-  $out .= $code;
-  $out .= $postcall;
-  $out .= $output;
-  $out .= $cleanup;
-  $out .= "\n";
+  my $head = "$retstr\n"
+             . "$fname($arg_list)\n";
+  my $body = $init . $code . $postcall . $output . $cleanup . "\n";
+  $this->_munge_code(\$body) if $this->has_argument_with_length;
+
+  $out .= $head . $body;
+  return $out;
 }
 
 # This replaces the use of "length(varname)" with
