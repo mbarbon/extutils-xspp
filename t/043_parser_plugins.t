@@ -20,6 +20,8 @@ class klass
 {
     %MyClassRename{Klass};
 
+    klass() %MyMethodRename{newKlass};
+
     void bar() %MyMethodRename{Bar};
 };
 --- expected
@@ -47,6 +49,20 @@ Foo( y )
 
 
 MODULE=Foo PACKAGE=Klass
+
+static klass*
+klass::newKlass()
+  CODE:
+    try {
+      RETVAL = new klass();
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 void
 klass::Bar()

@@ -394,15 +394,25 @@ sub add_data_ctor {
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Constructor->new
-      ( cpp_name  => $args{name},
-        arguments => $args{arguments},
-        code      => $args{code},
-        cleanup   => $args{cleanup},
-        postcall  => $args{postcall},
-        catch     => $args{catch},
-        condition => $args{condition},
+  my $m = ExtUtils::XSpp::Node::Constructor->new
+            ( cpp_name  => $args{name},
+              arguments => $args{arguments},
+              code      => $args{code},
+              cleanup   => $args{cleanup},
+              postcall  => $args{postcall},
+              catch     => $args{catch},
+              condition => $args{condition},
+              );
+
+  if( $args{any} ) {
+    $parser->YYData->{PARSER}->handle_method_tag_plugins
+      ( $m, $args{any},
+        any_named_arguments      => $args{any_named_arguments},
+        any_positional_arguments => $args{any_positional_arguments},
         );
+  }
+
+  return $m;
 }
 
 sub add_data_dtor {
@@ -410,14 +420,24 @@ sub add_data_dtor {
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Destructor->new
-      ( cpp_name  => $args{name},
-        code      => $args{code},
-        cleanup   => $args{cleanup},
-        postcall  => $args{postcall},
-        catch     => $args{catch},
-        condition => $args{condition},
+  my $m = ExtUtils::XSpp::Node::Destructor->new
+            ( cpp_name  => $args{name},
+              code      => $args{code},
+              cleanup   => $args{cleanup},
+              postcall  => $args{postcall},
+              catch     => $args{catch},
+              condition => $args{condition},
+              );
+
+  if( $args{any} ) {
+    $parser->YYData->{PARSER}->handle_method_tag_plugins
+      ( $m, $args{any},
+        any_named_arguments      => $args{any_named_arguments},
+        any_positional_arguments => $args{any_positional_arguments},
         );
+  }
+
+  return $m;
 }
 
 sub is_directive {
