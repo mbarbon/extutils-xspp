@@ -70,7 +70,7 @@ If an argument is an L<ExtUtils::XSpp::Node::Access>,
 the current method scope is changed accordingly for
 all following methods.
 
-If an argument is an L<ExtUtils::XSpp::Node::Method>,
+If an argument is an L<ExtUtils::XSpp::Node::Method>
 it is added to the list of methods of the class.
 The method's class name is set to the current class
 and its scope is set to the current method scope.
@@ -81,7 +81,7 @@ sub add_methods {
   my $this = shift;
   my $access = 'public'; # good enough for now
   foreach my $meth ( @_ ) {
-      if( $meth->isa( 'ExtUtils::XSpp::Node::Method' ) ) {
+      if( $meth->isa( 'ExtUtils::XSpp::Node::Function' ) ) {
           $meth->{CLASS} = $this;
           $meth->{ACCESS} = $access;
           $meth->add_exception_handlers( @{$this->{CATCH} || []} );
