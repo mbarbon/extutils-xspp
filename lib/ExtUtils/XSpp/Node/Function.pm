@@ -453,8 +453,8 @@ sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 =head2 set_static
 
 Sets the C<static>-ness attribute of the function.
-Can be either undef (i.e. not static), C<package_static>,
-or C<class_static>.
+Can be either undef (i.e. not static), C<"package_static">,
+or C<"class_static">.
 
 =head2 package_static
 
