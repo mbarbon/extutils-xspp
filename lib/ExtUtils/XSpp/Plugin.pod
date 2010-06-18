@@ -112,7 +112,7 @@ These methods can be defined by the plugin to modify the emitted code.
     }
 
 This method is called once for each loaded plugin, the first time the
-parses sees the C<%load_plugin> directive.
+parser sees the C<%loadplugin> directive.
 
 TODO add another method that is called once for each C<%loadplugin>
 declaration, and allow passing parameters to the plugin.
