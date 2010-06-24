@@ -46,14 +46,9 @@ TYPEMAPS
 
       %typemap{<C++ type>}{simple};
 
-    Just let XS++ that this is a valid type, the type will be passed
+    Just let XS++ know that this is a valid type, the type will be passed
     unchanged to XS code except that any "const" qualifiers will be
     stripped.
-
-      %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
-
-    When "C++ type 1" is used, replace it with "C++ type 2" in the generated
-    XS code.
 
       %typemap{<C++ reference type>}{reference};
 
@@ -61,6 +56,72 @@ TYPEMAPS
     and it will be explicitly dereferenced in the function call. If it is
     used in the return value, the function will create copy of the returned
     value using a copy constructor.
+
+      %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
+
+    When "C++ type 1" is used, replace it with "C++ type 2" in the generated
+    XS code.
+
+      %typemap{<C++ type>}{parsed}{
+          %cpp_type{%<C++ type 2>%};
+          %call_function_code{% $CVar = new Foo( $Call ) %};
+          %cleanup_code{% ... %};
+          %precall_code{% ... %};
+
+          # use only one of the following
+          %output_code{% $PerlVar = newSViv( $CVar ) %};
+          %output_list{% PUTBACK; XPUSHi( $CVar ); SPAGAIN %};
+      };
+
+    Is a more flexible form for the "parsed" typemap. All the parameters are
+    optional.
+
+    cpp_type
+        Specifies the C++ type used for the variable declaration in the
+        generated XS code.
+
+        If not specified defaults to the type specified in the typemap.
+
+    call_function_code
+        Used when the typemap applies to the return value of the function.
+
+        Specifies the code to use in the function call. The special
+        variables $Call and $CVar are replaced with the actual call code and
+        the name of the C++ return variable.
+
+    output_code
+        Used when the typemap applies to the return value of the function.
+        See also %output_list.
+
+        Specifies the code emitted right after the function call to convert
+        the C++ return value into a Perl return value. The special variable
+        $CVar is replaced with the C++ return variable name.
+
+    cleanup_code
+        Used when the typemap applies to the return value of the function.
+
+        Specifies some code emitted after output value processing. The
+        special variables $PerlVar and $CVar are replaced with the names of
+        the C++ variables containing the Perl scalar and the corresponding
+        C++ value.
+
+    precall_code
+        Used when the typemap applies to a parameter.
+
+        Specifies some code emitted after argument processing and before
+        calling the C++ method. The special variables $PerlVar and $CVar are
+        replaced with the names of the C++ variables containing the Perl
+        scalar and the corresponding C++ value.
+
+    output_list
+        Used when the typemap applies to the return value of the function,
+        as an alternative to %output_code.
+
+        Specifies some code that manipulates the Perl stack directly in
+        order to return a list. The special variable $CVar is replaced with
+        the C++ name of the output variable.
+
+        The code must use PUTBACK/SPAGAIN if appropriate.
 
 DESCRIPTION
     Anything that does not look like a XS++ directive or a class declaration
@@ -114,7 +175,12 @@ DESCRIPTION
 
       $object->PrintLine( $string );
 
-    This feature is also present in plain XS. See also: perlxs
+    This feature is also present in plain XS. See also: perlxs.
+
+    If you use "%length(line)" in conjunction with any kind of special code
+    block such as %code, %postcall, etc., then you can refer to the length
+    of the string (here: "line") *efficiently* as "length(line)" in the
+    code.
 
   Classes
       %name{My::Class} class MyClass : public %name{My::Base} MyBase
