@@ -167,7 +167,7 @@ be inherited from the method's class.
 
 Creates a new C<ExtUtils::XSpp::Exception>.
 
-Calls the C<$self->init(@_)> method after construction.
+Calls the C<$self-E<gt>init(@_)> method after construction.
 C<init()> must be overridden in subclasses.
 
 =cut
