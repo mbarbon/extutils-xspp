@@ -1,0 +1,4 @@
+%typemap{std::string}{simple};
+%typemap{std::string&}{reference};
+
+%exception{noSoundException}{CannotMakeSoundException}{stdmessage};

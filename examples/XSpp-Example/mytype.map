@@ -1,0 +1,22 @@
+Animal *	O_OBJECT
+Dog *		O_OBJECT
+std::string*	T_STRINGPTR
+std::string	T_STRING
+
+
+INPUT
+
+T_STRING
+	$var = std::string(SvPV_nolen($arg))
+
+T_STRINGPTR
+	$var = new std::string(SvPV_nolen($arg))
+
+
+OUTPUT
+
+T_STRING
+	$arg = newSVpvn($var.c_str(), $var.length());
+
+T_STRINGPTR
+	$arg = newSVpvn($var->c_str(), $var->length());
