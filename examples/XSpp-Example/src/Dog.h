@@ -3,17 +3,15 @@
 
 #include <Animal.h>
 #include <string>
-#include <iostream>
 
 // Note: The implementation is in the header for simplicity only...
 
-class Dog: public Animal {
+class Dog : public Animal {
 public:
-  Dog(const std::string& name) : Animal(name) {}
-  ~Dog() {};
+  Dog(const std::string& name);
 
-  void Bark() { std::cout << "Woof" << std::endl; }
-  void MakeSound() { Bark(); }
+  void Bark() const;
+  void MakeSound() const;
 };
 
 

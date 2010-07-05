@@ -2,10 +2,7 @@
 #define _Animal_h_
 
 #include <string>
-#include <iostream>
 #include <exception>
-
-// Note: The implementation is in the header for simplicity only...
 
 class CannotMakeSoundException : public std::exception {
 public:
@@ -15,15 +12,12 @@ public:
 
 class Animal {
 public:
-  Animal(const std::string& name) : fName(name) {}
-  ~Animal() {};
+  Animal(const std::string& name);
 
-  void SetName(const std::string& newName) { fName = newName; }
-  std::string GetName() { return fName; }
+  void SetName(const std::string& newName);
+  std::string GetName() const;
 
-  void MakeSound() {
-    throw CannotMakeSoundException();
-  }
+  void MakeSound() const;
 
 private:
   std::string fName;
