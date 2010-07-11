@@ -1,8 +1,11 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.12     Sun Jul 11 17:00:00 CEST 2010
+	- Add new example using Module::Build::WithXSpp.
+
 0.11_02  Thu Jun 24 20:00:00 CEST 2010
 	- Allow applying parser plugin annotations to constructors
-	and destructors.
+	  and destructors.
 	- Use of {%...%} for the %cpp_type tag of parsed typemaps.
 	- Fix %length for anything but the most trivial wrappers.
 
