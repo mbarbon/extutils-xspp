@@ -218,6 +218,11 @@ DESCRIPTION
     Note that if you supply a custom %code block for a function or method,
     the automatic exception handling is turned off.
 
+EXAMPLES
+    The distribution contains an examples directory. The
+    examples/XSpp-Example directory therein demonstrates a particularly
+    simple way of getting started with XS++.
+
 AUTHOR
     Mattia Barbon <mbarbon@cpan.org>
 

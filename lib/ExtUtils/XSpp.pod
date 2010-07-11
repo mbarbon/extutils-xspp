@@ -246,6 +246,12 @@ C<"Caught unhandled C++ exception of unknown type">.
 Note that if you supply a custom C<%code> block for a function or method,
 the automatic exception handling is turned off.
 
+=head1 EXAMPLES
+
+The distribution contains an F<examples> directory. The
+F<examples/XSpp-Example> directory therein demonstrates
+a particularly simple way of getting started with XS++.
+
 =head1 AUTHOR
 
 Mattia Barbon <mbarbon@cpan.org>
