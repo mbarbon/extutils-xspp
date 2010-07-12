@@ -14,7 +14,9 @@ examples/Object-WithIntAndString/typemap.xsp
 examples/Object-WithIntAndString/WithIntAndString.xs
 examples/XSpp-Example/Build.PL
 examples/XSpp-Example/lib/XSpp/Example.pm
+examples/XSpp-Example/MANIFEST
 examples/XSpp-Example/MANIFEST.SKIP
+examples/XSpp-Example/META.yml
 examples/XSpp-Example/src/Animal.cc
 examples/XSpp-Example/src/Animal.h
 examples/XSpp-Example/src/Dog.cc
