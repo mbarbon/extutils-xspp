@@ -1,9 +1,11 @@
 # this module will be loaded by ExtUtils/XSpp/Grammar.pm and needs to
 # define subroutines in the ExtUtils::XSpp::Grammar namespace
-package ExtUtils::XSpp::Grammar;
-
+package ExtUtils::XSpp::Lexer;
+# for the indexer and friends
 use strict;
 use warnings;
+
+package ExtUtils::XSpp::Grammar;
 
 use ExtUtils::XSpp::Node;
 use ExtUtils::XSpp::Node::Access;
