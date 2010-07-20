@@ -65,6 +65,19 @@ and it will be explicitly dereferenced in the function call. If it is
 used in the return value, the function will create B<copy> of the
 returned value using a copy constructor.
 
+As a shortcut for the common case of declaring both of the above
+for a given type, you may use
+
+  %typemap{<C++ type>};
+
+Which has the same effect as:
+
+  %typemap{<C++ type>}{simple};
+  %typemap{<C++ type>&}{reference};
+
+For more control over the type mapping, you can use the C<parsed>
+variant as follows.
+
   %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
 
 When C<C++ type 1> is used, replace it with C<C++ type 2> in the
