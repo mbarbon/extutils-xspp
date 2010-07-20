@@ -65,6 +65,14 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       my $tm = $package->new( type => $type, @{$_[9]} );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
                       undef }
+              | p_typemap OPCURLY type CLCURLY SEMICOLON
+                    { my $type = $_[3]; # add simple and reference typemaps for this type
+                      my $tm = ExtUtils::XSpp::Typemap::simple->new( type => $type );
+                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      $type = make_type($type->base_type . '&');
+                      $tm = ExtUtils::XSpp::Typemap::reference->new( type => $type );
+                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      undef }
               ;
 
 exceptionmap:   p_exceptionmap OPCURLY ID CLCURLY OPCURLY type_name CLCURLY

@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 4;
+use t::lib::XSP::Test tests => 5;
 
 run_diff xsp_stdout => 'expected';
 
@@ -62,6 +62,51 @@ boo( a )
 
 %typemap{const std::string}{simple};
 %typemap{const std::string&}{reference};
+
+void foo(const std::string a);
+void boo(const std::string& a);
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+void
+foo( a )
+    const std::string a
+  CODE:
+    try {
+      foo( a );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+
+void
+boo( a )
+    std::string* a
+  CODE:
+    try {
+      boo( *( a ) );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+
+=== Const value/const reference type via shortcut
+--- xsp_stdout
+%module{Foo};
+%package{Foo};
+
+%typemap{const std::string};
 
 void foo(const std::string a);
 void boo(const std::string& a);
