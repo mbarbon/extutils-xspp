@@ -107,9 +107,11 @@ boo( a )
 %package{Foo};
 
 %typemap{const std::string};
+%typemap{std::vector<double>};
 
 void foo(const std::string a);
 void boo(const std::string& a);
+void foo2(std::vector<double> a, std::vector<double>& b);
 --- expected
 #include <exception>
 
@@ -145,6 +147,22 @@ boo( a )
     catch (...) {
       croak("Caught C++ exception of unknown type");
     }
+
+void
+foo2( a, b )
+    std::vector< double > a
+    std::vector< double >* b
+  CODE:
+    try {
+      foo2( a, *( b ) );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+
 
 === Template type
 --- xsp_stdout
