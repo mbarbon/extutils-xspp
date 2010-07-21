@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.14     Wed Jul 21 17:00:00 CEST 2010
+	- This release demonstrates why it is a good idea
+	  to do developer releases.
+	- Fix problem with templated types and the shorthand
+	  for typemaps that was introduced in 0.13.
+
 0.13     Wed Jul 21 17:00:00 CEST 2010
 	- Add support for simplified typemap statements
 	  a la %typemap{type}; which are a shorthand for
