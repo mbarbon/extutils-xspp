@@ -26,7 +26,6 @@ examples/XSpp-Example/t/01basic.t
 examples/XSpp-Example/xsp/Animal.xsp
 examples/XSpp-Example/xsp/Dog.xsp
 examples/XSpp-Example/xsp/mytype.map
-examples/XSpp-Example/xsp/perlobject.map
 examples/XSpp-Example/xsp/typemap.xsp
 inc/My/Build.pm
 lib/ExtUtils/XSpp.pm
