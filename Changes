@@ -1,5 +1,10 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.13     Wed Jul 21 17:00:00 CEST 2010
+	- Add support for simplified typemap statements
+	  a la %typemap{type}; which are a shorthand for
+	  {simple} and {reference}.
+
 0.12     Sun Jul 11 17:00:00 CEST 2010
 	- Add new example using Module::Build::WithXSpp.
 
