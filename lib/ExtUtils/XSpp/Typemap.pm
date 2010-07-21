@@ -88,7 +88,23 @@ sub get_typemap_for_type {
     return ${$t}[1] if $t->[0]->equals( $type );
   }
 
-  Carp::confess( "No typemap for type ", $type->print );
+  # construct verbose error message:
+  my $errmsg = "No typemap for type " . $type->print
+               . "\nThere are typemaps for the following types:\n";
+  my @types;
+  foreach my $t (@typemaps) {
+    push @types, "  - " . $t->[0]->print . "\n";
+  }
+
+  if (@types) {
+    $errmsg .= join('', @types);
+  }
+  else {
+    $errmsg .= "  (none)\n";
+  }
+  $errmsg .= "Did you forget to declare your type in an XS++ typemap?";
+
+  Carp::confess( $errmsg );
 }
 
 # adds default typemaps for C* and C&
