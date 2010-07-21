@@ -25,6 +25,13 @@ sub init {
   $this->{TEMPLATE_ARGS} = $args{template_args} || [];
 }
 
+sub clone {
+  my $this = shift;
+  my $clone = bless {%$this} => ref($this);
+  $clone->{TEMPLATE_ARGS} = [map $_->clone, @{$clone->template_args}];
+  return $clone;
+}
+
 sub is_const { $_[0]->{CONST} }
 sub is_reference { $_[0]->{REFERENCE} }
 sub is_pointer { $_[0]->{POINTER} }
