@@ -37,7 +37,6 @@ Called by the constructor. Every sub-class needs to override this.
 =cut
 
 sub init {
-  my $self = shift;
   Carp::croak(
     "Programmer was too lazy to implement init() in her Node sub-class"
   );
@@ -51,7 +50,6 @@ Every sub-class must override this method.
 =cut
 
 sub print {
-  my $self = shift;
   Carp::croak(
     "Programmer was too lazy to implement print() in her Node sub-class"
   );
