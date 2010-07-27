@@ -184,17 +184,20 @@ C<%file> directive; use C<-> for standard output.
 
 =head2 %module
 
-  %module{Module__Name};
+  %module{Module::Name};
 
-Will be used to generate the C<MODULE=Module__Name> XS directives.
+Will be used to generate the C<MODULE=Module::Name> XS directives.
+It indirectly sets the name of the shared library that is generated
+as well as the name of the module via which L<XSLoader> will be
+able to find/load it.
 
 =head2 %name
 
   %name{Perl::Class} class MyClass { ... };
   %name{Perl::Func} int foo();
 
-Specifies the perl name under which the C++ class/function will be
-accessible.
+Specifies the Perl name under which the C++ class/function will be
+accessible. By default, constructor names are mapped to C<new> in Perl.
 
 =head2 %typemap
 
