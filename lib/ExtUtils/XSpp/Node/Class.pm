@@ -111,6 +111,8 @@ sub print {
   my $state = shift;
   my $out = $this->SUPER::print( $state );
 
+  $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
+
   foreach my $m ( @{$this->methods} ) {
     next if $m->can( 'access' ) && $m->access ne 'public';
     $out .= $m->print( $state );
@@ -145,6 +147,8 @@ EOT
 
 EOT
   }
+
+  $out .= '#endif // ' . $this->emit_condition . "\n" if $this->emit_condition;
 
   return $out;
 }

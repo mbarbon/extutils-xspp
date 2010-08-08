@@ -209,6 +209,8 @@ sub print {
   my $ret_typemap        = $this->{TYPEMAPS}{RET_TYPE};
   my $need_call_function = 0;
 
+  $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
+
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
       $postcall, $precall ) =
     ( '', '', '', '', '', '', '', '' );
@@ -347,6 +349,8 @@ EOT
   $this->_munge_code(\$body) if $this->has_argument_with_length;
 
   $out .= $head . $body;
+  $out .= '#endif // ' . $this->emit_condition . "\n" if $this->emit_condition;
+
   return $out;
 }
 

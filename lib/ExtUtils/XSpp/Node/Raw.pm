@@ -43,6 +43,16 @@ Returns an array reference holding the rows to be output in the final file.
 
 sub rows { $_[0]->{ROWS} }
 
-sub print { join( "\n", @{$_[0]->rows} ) . "\n" }
+sub print {
+  my $this  = shift;
+  my $state = shift;
+  my $out = '';
+
+  $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
+  $out .= join( "\n", @{$this->rows} ) . "\n";
+  $out .= '#endif // ' . $this->emit_condition . "\n" if $this->emit_condition;
+
+  return $out;
+}
 
 1;
