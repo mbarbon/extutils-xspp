@@ -1,5 +1,6 @@
 *~
 Build
+Build.bat
 ExtUtils-XSpp-*.*.tar.gz
 META.yml
 MYMETA.yml
@@ -13,3 +14,4 @@ t/files/foo.h
 padre.yml
 MANIFEST.bak
 XSP.output
+pod2htm?.tmp
