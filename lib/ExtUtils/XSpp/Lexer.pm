@@ -275,6 +275,7 @@ sub add_top_level_directive {
     ( $args{any},
       any_named_arguments      => $args{any_named_arguments},
       any_positional_arguments => $args{any_positional_arguments},
+      condition                => $parser->get_conditional,
       );
 }
 
