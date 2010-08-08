@@ -29,6 +29,7 @@ sub init {
   my %args = @_;
 
   $this->{ROWS} = $args{rows};
+  $this->{EMIT_CONDITION} = $args{emit_condition};
   push @{$this->{ROWS}}, "\n";
 }
 

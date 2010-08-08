@@ -52,6 +52,7 @@ sub init {
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
+  $this->{EMIT_CONDITION} = $args{emit_condition};
 
   if (ref($this->{CATCH})
       and @{$this->{CATCH}} > 1

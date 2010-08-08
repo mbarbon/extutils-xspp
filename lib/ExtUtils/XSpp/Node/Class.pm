@@ -50,6 +50,7 @@ sub init {
   $this->add_methods( @{$args{methods}} ) if $args{methods};
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
+  $this->{EMIT_CONDITION} = $args{emit_condition};
 
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 

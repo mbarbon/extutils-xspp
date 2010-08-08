@@ -57,4 +57,6 @@ sub print {
 
 sub condition { $_[0]->{CONDITION} }
 
+sub emit_condition { $_[0]->{EMIT_CONDITION} }
+
 1;
