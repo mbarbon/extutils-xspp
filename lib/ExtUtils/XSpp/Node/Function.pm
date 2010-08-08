@@ -160,20 +160,6 @@ sub add_exception_handlers {
 }
 
 
-=head2 argument_style
-
-Returns either C<ansi> or C<kr>. C<kr> is the default.
-C<ansi> is returned if any one of the arguments uses the XS
-C<length> feature.
-
-=cut
-
-sub argument_style {
-  my $this = shift;
-  return 'ansi' if $this->has_argument_with_length;
-  return 'kr';
-}
-
 # Depending on argument style, this produces either: (style=kr)
 #
 # return_type
@@ -215,8 +201,8 @@ sub print {
       $postcall, $precall ) =
     ( '', '', '', '', '', '', '', '' );
 
-  my $use_ansi_style = $this->argument_style() eq 'ansi';
-
+  # compute the precall code, XS argument list and C++ argument list using
+  # the typemap information
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
     my( @arg_list, @call_arg_list );
@@ -228,12 +214,8 @@ sub print {
 
       $need_call_function ||=    defined $t->call_parameter_code( '' )
                               || defined $pc;
-      my $type = $use_ansi_style ? $t->cpp_type . ' ' : '';
-      push @arg_list, $type . $arg->name .
+      push @arg_list, $t->cpp_type . ' ' . $arg->name .
                       ( $arg->has_default ? ' = ' . $arg->default : '' );
-      if (!$use_ansi_style) {
-        $init .= '    ' . $t->cpp_type . ' ' . $arg->name . "\n";
-      }
 
       my $call_code = $t->call_parameter_code( $arg->name );
       push @call_arg_list, defined( $call_code ) ? $call_code : $arg->name;

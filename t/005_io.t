@@ -45,10 +45,7 @@ MODULE=Foo::Bar::Baz PACKAGE=Foo::Bar::Baz::Buz
 
 
 int
-foo( a, b, c )
-    int a
-    int b
-    int c
+foo( int a, int b, int c )
   CODE:
     try {
       RETVAL = foo( a, b, c );

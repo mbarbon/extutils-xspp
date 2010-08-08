@@ -34,10 +34,7 @@ MODULE=Foo PACKAGE=Foo
 
 
 int
-foo( a, b, c )
-    int a
-    int b
-    int c
+foo( int a, int b, int c )
   CODE:
     try {
       RETVAL = foo( a, b, c );
@@ -86,8 +83,7 @@ int foo( int a, int b, int c );
 
 
 int
-bar( x )
-    int x
+bar( int x )
   CODE:
     try {
       RETVAL = bar( x );

@@ -24,8 +24,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
-boo( a )
-    int a
+boo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -41,8 +40,7 @@ boo( a )
 MODULE=Foo PACKAGE=moo
 
 int
-boo( a )
-    int a
+boo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -72,8 +70,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
@@ -103,8 +100,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 static Foo*
-Foo::newFoo( a )
-    int a
+Foo::newFoo( int a )
   CODE:
     try {
       RETVAL = new Foo( a );
@@ -148,8 +144,7 @@ Foo::foo()
     }
 
 int
-Foo::foo_int( a )
-    int a
+Foo::foo_int( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );

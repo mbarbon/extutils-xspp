@@ -51,8 +51,7 @@ Straight to XS, no checks...
 
 
 int
-X::foo( a )
-    int a
+X::foo( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );

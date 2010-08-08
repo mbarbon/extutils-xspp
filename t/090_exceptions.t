@@ -22,8 +22,7 @@ int foo(int a);
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -50,8 +49,7 @@ int foo(int a)
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -94,8 +92,7 @@ class Foo {
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -112,8 +109,7 @@ foo( a )
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->bar( a );
@@ -130,8 +126,7 @@ Foo::bar( a )
   OUTPUT: RETVAL
 
 int
-Foo::baz( a )
-    int a
+Foo::baz( int a )
   CODE:
     try {
       RETVAL = THIS->baz( a );
@@ -151,8 +146,7 @@ Foo::baz( a )
   OUTPUT: RETVAL
 
 int
-Foo::buz( a )
-    int a
+Foo::buz( int a )
   CODE:
     try {
       RETVAL = THIS->buz( a );
@@ -180,8 +174,7 @@ int foo(int a)
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -209,8 +202,7 @@ int foo(int a)
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -245,8 +237,7 @@ int foo(int a)
 
 MODULE=Foo
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -291,8 +282,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
@@ -333,8 +323,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
@@ -351,8 +340,7 @@ Foo::foo( a )
   OUTPUT: RETVAL
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->bar( a );
@@ -385,8 +373,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
@@ -400,8 +387,7 @@ Foo::foo( a )
   OUTPUT: RETVAL
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->bar( a );
@@ -412,8 +398,7 @@ Foo::bar( a )
   OUTPUT: RETVAL
 
 int
-Foo::buz( a )
-    int a
+Foo::buz( int a )
   CODE:
     try {
       RETVAL = THIS->buz( a );

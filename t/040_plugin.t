@@ -30,8 +30,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-foo_perl( y )
-    int y
+foo_perl( int y )
   CODE:
     try {
       RETVAL = foo( y );
@@ -81,8 +80,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-foo_perl2( y )
-    int y
+foo_perl2( int y )
   CODE:
     try {
       RETVAL = foo( y );

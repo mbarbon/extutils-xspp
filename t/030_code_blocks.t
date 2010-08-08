@@ -24,8 +24,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-boo( a )
-    int a
+boo( int a )
   CODE:
      RETVAL = a + 12; 
   OUTPUT: RETVAL
@@ -46,8 +45,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-boo( a )
-    int a
+boo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -78,8 +76,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -110,8 +107,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-boo( a )
-    int a
+boo( int a )
   CODE:
      blub( a ); 
 
@@ -132,8 +128,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-boo( a )
-    int a
+boo( int a )
   CODE:
      blub( a ); 
   CLEANUP:
@@ -155,8 +150,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       foo( a );

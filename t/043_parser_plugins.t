@@ -33,8 +33,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo( y )
-    int y
+Foo( int y )
   CODE:
     try {
       RETVAL = foo( y );

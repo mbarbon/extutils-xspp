@@ -41,8 +41,7 @@ foo()
   OUTPUT: RETVAL
 
 int*
-boo( a )
-    const int* a
+boo( const int* a )
   CODE:
     try {
       RETVAL = boo( a );
@@ -74,8 +73,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-foo( a )
-    const std::string a
+foo( const std::string a )
   CODE:
     try {
       foo( a );
@@ -88,8 +86,7 @@ foo( a )
     }
 
 void
-boo( a )
-    std::string* a
+boo( std::string* a )
   CODE:
     try {
       boo( *( a ) );
@@ -121,8 +118,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-foo( a )
-    const std::string a
+foo( const std::string a )
   CODE:
     try {
       foo( a );
@@ -135,8 +131,7 @@ foo( a )
     }
 
 void
-boo( a )
-    std::string* a
+boo( std::string* a )
   CODE:
     try {
       boo( *( a ) );
@@ -149,9 +144,7 @@ boo( a )
     }
 
 void
-foo2( a, b )
-    std::vector< double > a
-    std::vector< double >* b
+foo2( std::vector< double > a, std::vector< double >* b )
   CODE:
     try {
       foo2( a, *( b ) );
@@ -185,8 +178,7 @@ MODULE=Foo PACKAGE=Foo
 
 
 void
-foo( a )
-    const std::vector< int >& a
+foo( const std::vector< int >& a )
   CODE:
     try {
       foo( a );
@@ -199,8 +191,7 @@ foo( a )
     }
 
 void
-boo( a )
-    const std::map< int, std::string > a
+boo( const std::map< int, std::string > a )
   CODE:
     try {
       boo( a );
@@ -229,8 +220,7 @@ MODULE=Foo PACKAGE=Foo
 
 
 void
-foo( a )
-    std::vector< double >* a
+foo( std::vector< double >* a )
   CODE:
     try {
       foo( *( a ) );

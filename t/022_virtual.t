@@ -28,15 +28,13 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     dummy
   OUTPUT: RETVAL
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     dummy
   OUTPUT: RETVAL
@@ -61,15 +59,13 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     dummy
   OUTPUT: RETVAL
 
 int
-Foo::bar( a )
-    int a
+Foo::bar( int a )
   CODE:
     dummy
   OUTPUT: RETVAL

@@ -25,10 +25,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b, c )
-    int a
-    int b
-    int c
+Foo::foo( int a, int b, int c )
   CODE:
     try {
       RETVAL = THIS->foo( a, b, c );
@@ -71,8 +68,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
-foo( a )
-    int a
+foo( int a )
   CODE:
     try {
       RETVAL = foo( a );
@@ -102,10 +98,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a = 1, b = 0x1, c = 1 | 2 )
-    int a
-    int b
-    int c
+Foo::foo( int a = 1, int b = 0x1, int c = 1 | 2 )
   CODE:
     try {
       RETVAL = THIS->foo( a, b, c );
@@ -135,8 +128,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 Foo*
-Foo::new( a = 1 )
-    int a
+Foo::new( int a = 1 )
   CODE:
     try {
       RETVAL = new Foo( a );
@@ -195,8 +187,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-Foo::foo( a )
-    int a
+Foo::foo( int a )
   CODE:
     try {
       THIS->foo( a );
@@ -297,10 +288,7 @@ MODULE=Foo PACKAGE=Foo
 
 
 int
-Foo::foo( a, b, c )
-    int a
-    int b
-    int c
+Foo::foo( int a, int b, int c )
   CODE:
     try {
       RETVAL = THIS->foo( a, b, c );
@@ -421,15 +409,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Bar
 
 short
-bar( a, b, c, d, e, f, g, h )
-    short a
-    unsigned short b
-    unsigned int c
-    unsigned int d
-    int e
-    unsigned short f
-    long g
-    unsigned long h
+bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned short f, long g, unsigned long h )
   CODE:
     try {
       RETVAL = bar( a, b, c, d, e, f, g, h );

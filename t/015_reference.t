@@ -25,8 +25,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 void
-Foo::foo( a )
-    Foo* a
+Foo::foo( Foo* a )
   CODE:
     try {
       THIS->foo( *( a ) );

@@ -33,9 +33,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 foobar
-Foo::foo( a, b )
-    foobar a
-    void* b
+Foo::foo( foobar a, void* b )
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
@@ -69,9 +67,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b )
-    int a
-    int b
+Foo::foo( int a, int b )
   CODE:
     try {
        RETVAL = fancy_conversion( THIS->foo( a, b ) ) ;
@@ -105,9 +101,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b )
-    int a
-    int b
+Foo::foo( int a, int b )
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
@@ -142,9 +136,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b )
-    int a
-    int b
+Foo::foo( int a, int b )
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
@@ -180,9 +172,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b )
-    int a
-    int b
+Foo::foo( int a, int b )
   CODE:
     try {
        custom_code( ST(1), a ) ;
@@ -218,9 +208,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( a, b )
-    int a
-    int b
+Foo::foo( int a, int b )
   PPCODE:
     try {
       RETVAL = THIS->foo( a, b );
