@@ -57,6 +57,14 @@ sub print {
 
 sub condition { $_[0]->{CONDITION} }
 
+sub condition_expression {
+    my $this = shift;
+
+    return $this->emit_condition if $this->emit_condition;
+    return 'defined( ' . $this->condition . ' )' if $this->condition;
+    return undef;
+}
+
 sub emit_condition { $_[0]->{EMIT_CONDITION} }
 
 1;
