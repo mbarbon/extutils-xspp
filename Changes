@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.15     Sat Aug 14 11:36:39 CEST 2010
+	- Improved support for conditional code (via #ifdef) in plugins.
+
 0.14     Wed Jul 21 17:00:00 CEST 2010
 	- This release demonstrates why it is a good idea
 	  to do developer releases.
