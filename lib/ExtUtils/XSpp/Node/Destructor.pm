@@ -44,7 +44,15 @@ Returns the name of the class with C<::DESTROY> appended.
 
 =cut
 
-sub perl_function_name { $_[0]->class->cpp_name . '::' . 'DESTROY' }
+sub perl_function_name {
+  my $this = shift;
+
+  if( $this->perl_name ne $this->cpp_name ) {
+    return $this->class->cpp_name . '::' . $this->perl_name;
+  } else {
+    return $this->class->cpp_name . '::' . 'DESTROY';
+  }
+}
 
 sub ret_type { undef }
 

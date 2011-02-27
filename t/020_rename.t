@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 4;
+use t::lib::XSP::Test tests => 5;
 
 run_diff xsp_stdout => 'expected';
 
@@ -112,6 +112,35 @@ Foo::newFoo( int a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+=== Renamed destructor
+--- xsp_stdout
+%module{Foo};
+
+class Foo
+{
+    %name{destroy} ~Foo();
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+void
+Foo::destroy()
+  CODE:
+    try {
+      delete THIS;
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
 
 === Renamed class
 --- xsp_stdout
