@@ -242,7 +242,8 @@ dtor:           TILDE ID OPPAR CLPAR function_metadata
                                             condition => $_[0]->get_conditional,
                                             @{ $_[5] },
                                       ) }
-              | perc_name dtor { $_[2]->set_perl_name( $_[1] ); $_[2] };
+              | perc_name dtor { $_[2]->set_perl_name( $_[1] ); $_[2] }
+              | virtual dtor { $_[2]->set_virtual( 1 ); $_[2] };
 
 function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]} ] }
                    |                                      { [] }

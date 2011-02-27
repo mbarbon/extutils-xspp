@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 2;
+use t::lib::XSP::Test tests => 3;
 
 run_diff xsp_stdout => 'expected';
 
@@ -38,6 +38,28 @@ Foo::bar( int a )
   CODE:
     dummy
   OUTPUT: RETVAL
+
+=== Virtual destructor
+--- xsp_stdout
+%module{Foo};
+
+class Foo
+{
+    virtual ~Foo()
+        %code{%dummy%};
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+void
+Foo::DESTROY()
+  CODE:
+    dummy
 
 === Pure-virtual method
 --- xsp_stdout
