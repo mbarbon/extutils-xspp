@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.16
+	- Allow renaming destructors and fixed parsing of virtual ones.
+
 0.15     Sat Aug 14 11:36:39 CEST 2010
 	- Improved support for conditional code (via #ifdef) in plugins.
 
