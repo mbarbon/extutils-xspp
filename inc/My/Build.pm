@@ -8,9 +8,11 @@ use File::Spec ();
 sub ACTION_code {
     my( $self ) = @_;
 
-    # Generate the parser using yapp
+    # Generate the parser using yapp, unless Grammar.pm is read-only
+    # (as it happens during a CPAN installation)
     my $grammar_module = File::Spec->catfile(qw(lib ExtUtils XSpp Grammar.pm));
-    if( !$self->up_to_date( [ 'XSP.yp' ],
+    if( ( !-e $grammar_module || -w $grammar_module ) &&
+        !$self->up_to_date( [ 'XSP.yp' ],
                             [ $grammar_module ] ) ) {
         $self->do_system( 'yapp', '-v', '-m', 'ExtUtils::XSpp::Grammar', '-s',
                           '-o', $grammar_module, 'XSP.yp' );
