@@ -62,7 +62,7 @@ sub condition_expression {
 
     return $this->emit_condition if $this->emit_condition;
     return 'defined( ' . $this->condition . ' )' if $this->condition;
-    return undef;
+    return '1';
 }
 
 sub emit_condition { $_[0]->{EMIT_CONDITION} }
