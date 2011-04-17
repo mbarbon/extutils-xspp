@@ -2,6 +2,8 @@ package ExtUtils::XSpp::Typemap;
 use strict;
 use warnings;
 
+use ExtUtils::Typemaps;
+
 require ExtUtils::XSpp::Typemap::parsed;
 require ExtUtils::XSpp::Typemap::simple;
 require ExtUtils::XSpp::Typemap::reference;
@@ -110,6 +112,25 @@ sub get_typemap_for_type {
   $errmsg .= "Did you forget to declare your type in an XS++ typemap?";
 
   Carp::confess( $errmsg );
+}
+
+sub get_xs_typemap_code_for_all_typemaps {
+  my $typemaps = ExtUtils::Typemaps->new;
+
+  foreach my $typemap (@Typemaps) {
+    my $xstype = $typemap->[1]->xs_type();
+    if (defined $xstype) {
+      $typemaps->add_typemap(ctype => $typemap->[1]->cpp_type, xstype => $xstype);
+    }
+  }
+
+  return '' if $typemaps->is_empty;
+  my $code = $typemaps->as_string;
+  my $end_marker = 'END';
+  while ($code =~ /^\Q$end_marker\E\s*$/m) {
+    $end_marker .= '_';
+  }
+  return "TYPEMAP: <<$end_marker\n$code\n$end_marker\n";
 }
 
 # adds default typemaps for C* and C&
