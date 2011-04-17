@@ -59,7 +59,7 @@ sub call_parameter_code { undef }
 sub call_function_code { undef }
 sub output_list { undef }
 
-my @typemaps;
+my @Typemaps;
 
 # add typemaps for basic C types
 add_default_typemaps();
@@ -67,7 +67,7 @@ add_default_typemaps();
 sub add_typemap_for_type {
   my( $type, $typemap ) = @_;
 
-  unshift @typemaps, [ $type, $typemap ];
+  unshift @Typemaps, [ $type, $typemap ];
 }
 
 # a weak typemap does not override an already existing typemap for the
@@ -75,16 +75,16 @@ sub add_typemap_for_type {
 sub add_weak_typemap_for_type {
   my( $type, $typemap ) = @_;
 
-  foreach my $t ( @typemaps ) {
+  foreach my $t ( @Typemaps ) {
     return if $t->[0]->equals( $type );
   }
-  unshift @typemaps, [ $type, $typemap ];
+  unshift @Typemaps, [ $type, $typemap ];
 }
 
 sub get_typemap_for_type {
   my $type = shift;
 
-  foreach my $t ( @typemaps ) {
+  foreach my $t ( @Typemaps ) {
     return ${$t}[1] if $t->[0]->equals( $type );
   }
 
@@ -92,7 +92,7 @@ sub get_typemap_for_type {
   my $errmsg = "No typemap for type " . $type->print
                . "\nThere are typemaps for the following types:\n";
   my @types;
-  foreach my $t (@typemaps) {
+  foreach my $t (@Typemaps) {
     push @types, "  - " . $t->[0]->print . "\n";
   }
 
