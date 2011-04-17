@@ -15,9 +15,11 @@ sub init {
   $this->{CLEANUP_CODE} = _dl( $args{cleanup_code} || $args{arg4} );
   $this->{PRECALL_CODE} = _dl( $args{precall_code} || $args{arg5} );
   $this->{OUTPUT_LIST} = _dl( $args{output_list} );
+  $this->{XS_TYPE} = $args{xs_type};
 }
 
 sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }
+sub xs_type { $_[0]->{XS_TYPE} }
 
 sub output_code {
   my( $this, $pvar, $cvar ) = @_;

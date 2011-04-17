@@ -29,6 +29,10 @@ Returns the ExtUtils::XSpp::Node::Type that is used for this typemap.
 
 sub type { $_[0]->{TYPE} }
 
+=head2 ExtUtils::XSpp::Typemap::xs_type()
+
+(Optional) XS typemap identifier (ig. T_IV) for this C++ type.
+
 =head2 ExtUtils::XSpp::Typemap::cpp_type()
 
 Returns the C++ type to be used for the local variable declaration.
@@ -50,6 +54,7 @@ the C++ variable(s).
 
 sub init { }
 
+sub xs_type { undef }
 sub cpp_type { die; }
 sub input_code { die; }
 sub precall_code { undef }
