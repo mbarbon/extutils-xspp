@@ -66,6 +66,7 @@ lib/ExtUtils/XSpp/Typemap/parsed.pm
 lib/ExtUtils/XSpp/Typemap/reference.pm
 lib/ExtUtils/XSpp/Typemap/simple.pm
 MANIFEST
+META.json
 META.yml
 README
 scripts/xspp
