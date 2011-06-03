@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.1602   Fri Jun  3 22:08:53 CEST 2011
+	- Fixed code generation for package_static methods.
+
 0.1601   Sat Mar 12 10:21:15 CET 2011
 	- Do not try to rebuld the grammar during CPAN installation.
 
