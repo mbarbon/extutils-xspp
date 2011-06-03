@@ -52,8 +52,16 @@ class's name and the C<perl_name> attribute.
 
 =cut
 
-sub perl_function_name { $_[0]->class->cpp_name . '::' .
-                         $_[0]->perl_name }
+sub perl_function_name {
+    my( $self ) = @_;
+
+    if( $self->package_static ) {
+        return $self->perl_name;
+    } else {
+        return $self->class->cpp_name . '::' . $self->perl_name;
+    }
+}
+
 sub _call_code {
     my( $self ) = @_;
 

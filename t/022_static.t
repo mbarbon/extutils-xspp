@@ -25,7 +25,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-Foo::foo( int a )
+foo( int a )
   CODE:
     try {
       RETVAL = Foo::foo( a );
