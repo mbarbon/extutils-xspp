@@ -11,7 +11,7 @@ my $build = My::Build->new
     license     => 'perl',
     requires    =>
       { 'perl'                => '5.6.1',
-        'ExtUtils::ParseXS'   => '3',
+        'ExtUtils::ParseXS'   => '3.07',
         'ExtUtils::Typemaps'  => '1',
         'Digest::MD5'         => '2.0',
         },
