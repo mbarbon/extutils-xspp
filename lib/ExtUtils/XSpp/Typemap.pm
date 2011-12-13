@@ -125,6 +125,8 @@ sub get_xs_typemap_code_for_all_typemaps {
   foreach my $typemap (@Typemaps) {
     my $xstype = $typemap->[1]->xs_type();
     if (defined $xstype) {
+      # TODO check whether xstype is the same if replacing?
+      #      I doubt this matters in practice.
       $typemaps->add_typemap(
         ctype => $typemap->[1]->cpp_type,
         xstype => $xstype,
@@ -182,7 +184,7 @@ sub add_class_default_typemaps {
   add_weak_typemap_for_type
       ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr, xs_type => 'O_OBJECT' ) );
   add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => 'O_OBJECT' ) ); # FIXME implement XSD typemap generation for this
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => 'O_OBJECT' ) );
 }
 
 sub add_default_typemaps {
