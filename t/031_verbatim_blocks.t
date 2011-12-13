@@ -39,6 +39,11 @@ Straight to XS, no checks...
     int foo(int a);
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+X*	O_OBJECT
+
+END
 #include <exception>
 
 

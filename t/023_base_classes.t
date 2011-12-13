@@ -17,6 +17,12 @@ class Foo : public Moo
     void foo();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+Moo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -52,6 +58,13 @@ class Foo : public %name{PlMoo} Moo, public Boo
     void foo();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+Boo*	O_OBJECT
+Moo*	O_OBJECT
+
+END
 #include <exception>
 
 

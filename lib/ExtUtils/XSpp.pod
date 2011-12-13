@@ -26,7 +26,8 @@ XS++ is just a thin layer over plain XS, hence to use it you
 are supposed to know, at the very least, C++ and XS.
 
 This means that you will need typemaps for B<both> the normal XS
-pre-processor I<xsubpp> and the XS++ pre-processor I<xspp>.
+pre-processor I<xsubpp> and the XS++ pre-processor I<xspp>. More on
+that in the I<TYPEMAPS> section below.
 
 =head1 COMMAND LINE
 
@@ -48,7 +49,36 @@ Can be used to pass additional command line arguments to F<xsubpp>.
 
 =head1 TYPEMAPS
 
-There is nothing special about typemap files (i.e. you can put typemaps
+=head2 Ordinary XS typemaps
+
+To recap, I<ordinary> XS typemaps do the following three things:
+
+=over 2
+
+=item *
+
+Associate a C type with an identifier such as T_FOO or O_FOO
+(which we'll call I<XS type> here).
+
+=item *
+
+Define an INPUT mapping for converting a Perl data structure to the
+aforementioned C type.
+
+=item *
+
+Define an OUTPUT mapping for converting the C data structure back
+into a Perl data structure.
+
+=back
+
+These are still required in the context of XS++. There are some helpers
+to take away the tedium, but I'll get to that later. For XS++, there's
+another layer of typemaps. The following section will discuss those.
+
+=head2 XS++ typemaps
+
+There is nothing special about XS++ typemap files (i.e. you can put typemaps
 directly in your .xsp file), but it is handy to have common typemaps in a
 separate file, to avoid duplication.
 
@@ -153,6 +183,32 @@ name of the output variable.
 The code must use PUTBACK/SPAGAIN if appropriate.
 
 =back
+
+=head2 Putting all the typemaps together
+
+In summary, the XS++ typemaps (optionally) give you much more control
+over the type conversion code that's generated for your XSUBs. But
+you still need to let the XS compiler know how to map the C types
+to Perl and back using the XS typemaps.
+
+Most of the time, you just need to convert basic C(++) types or the types
+that you define with your C++ classes. For the former, XS++ comes with
+a few default mappings for integers, floating point numbers, and strings.
+For the classes, XS++ will automatically create a mapping of type C<O_OBJECT>
+which uses the de-facto standard way of storing a pointer to the C(++)
+object in the IV slot of a referenced/blessed scalar. If you deal with any
+other types as arguments or return types, you still need to write both
+XS and XS++ typemaps for these so that the systems know how to deal with them.
+
+In newer versions of the XS compiler, (C<ExtUtils::ParseXS> version 3 or better),
+you can embed your XS typemaps into XS code. See a recent copy of L<perlxs>
+for details.
+
+Beware that right now, if you need to return an instance of one of your classes
+from a method that is not a constructor, the default C<O_OBJECT> typemap will
+fail because it expects a (C) variable C<CLASS> to contain the name of the
+Perl class to bless into. Workaround demonstrated in F<examples/XSpp-Example>.
+Proper solution pending.
 
 =head1 DESCRIPTION
 

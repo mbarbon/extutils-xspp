@@ -17,6 +17,11 @@ class Foo
     package_static int foo(int a);
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 

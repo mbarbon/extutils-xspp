@@ -17,6 +17,11 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -46,6 +51,11 @@ class Foo
 {
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -90,6 +100,11 @@ class Foo
     int foo( int a = 1, int b = 0x1, int c = 1|2 );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -120,6 +135,11 @@ class Foo
     Foo( int a = 1 );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -150,6 +170,11 @@ class Foo
     ~Foo();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -179,6 +204,11 @@ class Foo
     void foo( int a );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -209,6 +239,11 @@ class Foo
     void bar(void);
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -272,6 +307,11 @@ class Foo
  * class
  */
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -448,6 +488,11 @@ bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned 
              %};
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+wxRichTextCtrl*	O_OBJECT
+
+END
 #include <exception>
 
 

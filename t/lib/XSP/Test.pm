@@ -6,6 +6,7 @@ use if -d 'blib' => 'blib';
 
 use Test::Base -Base;
 use Test::Differences;
+use ExtUtils::XSpp::Typemap;
 
 our @EXPORT = qw(run_diff);
 
@@ -29,8 +30,15 @@ sub run_diff(@) {
 
     run {
         my $block = shift;
+        ExtUtils::XSpp::Typemap::reset_typemaps();
         my( $b_got, $b_expected ) = map { s/^\n+//s; s/\n+$//s; $_ }
                                         $block->$got, $block->$expected;
+
+        # This removes the default typemap entry that is added for O_OBJECT
+        # I admit that it doesn't make me feel all warm and fuzzy inside, but
+        # the alternative of having even more code duplicated a lot of times in
+        # all test files isn't any better.
+        $b_got =~ s/^INPUT\s*\n.*^OUTPUT\s*\n.*^END\s*\n/END\n/sm;
         eq_or_diff( $b_got, $b_expected, $block->name);
     };
 }

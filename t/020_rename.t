@@ -164,6 +164,11 @@ class Foo
     %name{bar} int foo( int a );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -233,6 +238,11 @@ class Foo
     %name{newFoo} Foo( int a );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -263,6 +273,11 @@ class Foo
     %name{destroy} ~Foo();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -293,6 +308,11 @@ Foo::destroy()
     %name{foo_int} int foo( int a );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 

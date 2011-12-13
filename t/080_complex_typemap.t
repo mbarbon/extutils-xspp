@@ -25,6 +25,11 @@ class Foo
     int foo( int a, funnyvoid b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -59,6 +64,11 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -93,6 +103,11 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -128,6 +143,11 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -164,6 +184,11 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -200,6 +225,11 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 

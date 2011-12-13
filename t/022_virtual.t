@@ -20,6 +20,11 @@ class Foo
         %code{%dummy%};
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -49,6 +54,11 @@ class Foo
         %code{%dummy%};
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -73,6 +83,11 @@ class Foo
         %code{%dummy%};
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 

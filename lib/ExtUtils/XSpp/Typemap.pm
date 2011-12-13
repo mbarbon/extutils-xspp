@@ -4,6 +4,7 @@ use warnings;
 
 use ExtUtils::Typemaps;
 
+require ExtUtils::XSpp::Node::Type;
 require ExtUtils::XSpp::Typemap::parsed;
 require ExtUtils::XSpp::Typemap::simple;
 require ExtUtils::XSpp::Typemap::simplexs;
@@ -78,6 +79,11 @@ sub add_typemap_for_type {
   unshift @Typemaps, [ $type, $typemap ];
 }
 
+sub reset_typemaps {
+  @Typemaps = ();
+  add_default_typemaps();
+}
+
 # a weak typemap does not override an already existing typemap for the
 # same type
 sub add_weak_typemap_for_type {
@@ -121,6 +127,30 @@ sub get_xs_typemap_code_for_all_typemaps {
     my $xstype = $typemap->[1]->xs_type();
     if (defined $xstype) {
       $typemaps->add_typemap(ctype => $typemap->[1]->cpp_type, xstype => $xstype);
+    }
+  }
+
+  # Add a default typemap for O_OBJECT if it's not customized
+
+  # FIXME add better API to ExtUtils::Typemaps and use that!
+  my $tm_hash = $typemaps->_get_typemap_hash;
+  my $has_oobject = grep $_ eq 'O_OBJECT', values %{$tm_hash||{}};
+  if ($has_oobject) {
+    if (not $typemaps->get_inputmap(xstype => 'O_OBJECT')) {
+      $typemaps->add_inputmap(xstype => 'O_OBJECT', code => <<'INPUTCODE');
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+		$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+		warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+		XSRETURN_UNDEF;
+	}
+INPUTCODE
+    }
+    if (not $typemaps->get_outputmap(xstype => 'O_OBJECT')) {
+      $typemaps->add_outputmap(
+        xstype => 'O_OBJECT',
+        code => 'sv_setref_pv( $arg, CLASS, (void*)$var );'
+      );
     }
   }
 

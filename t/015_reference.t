@@ -17,6 +17,11 @@ class Foo
     void foo( Foo& a );
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -46,6 +51,11 @@ class Foo
     Foo& foo();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 

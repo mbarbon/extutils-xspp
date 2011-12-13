@@ -22,6 +22,11 @@ class Y
     void bar();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Y*	O_OBJECT
+
+END
 #include <exception>
 
 
@@ -72,6 +77,11 @@ class Y
     void bar();
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Y*	O_OBJECT
+
+END
 #include <exception>
 
 

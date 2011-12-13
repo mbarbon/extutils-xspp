@@ -27,8 +27,22 @@ sub generate {
                                               );
     my $success = $parser->parse;
     return() if not $success;
+    my $generated = $self->_emit( $parser );
 
-    return $self->_emit( $parser );
+    my $typemap_code = ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps();
+    if (defined $typemap_code && $typemap_code =~ /\S/) {
+        if (exists $generated->{'-'} and $generated->{'-'} ne '') {
+            $generated->{'-'} = $typemap_code . $generated->{'-'};
+        }
+        elsif (my @files = grep !/^-$/, keys %$generated) {
+            $generated->{$files[0]} = $typemap_code . ($generated->{$files[0]}||'');
+        }
+        else {
+            $generated->{'-'} = $typemap_code . ($generated->{'-'}||'');
+        }
+    }
+
+    return $generated;
 }
 
 sub process {
