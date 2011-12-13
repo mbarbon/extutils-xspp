@@ -6,6 +6,7 @@ use ExtUtils::Typemaps;
 
 require ExtUtils::XSpp::Typemap::parsed;
 require ExtUtils::XSpp::Typemap::simple;
+require ExtUtils::XSpp::Typemap::simplexs;
 require ExtUtils::XSpp::Typemap::reference;
 
 =head1 NAME
@@ -81,7 +82,6 @@ sub add_typemap_for_type {
 # same type
 sub add_weak_typemap_for_type {
   my( $type, $typemap ) = @_;
-
   foreach my $t ( @Typemaps ) {
     return if $t->[0]->equals( $type );
   }
@@ -147,9 +147,9 @@ sub add_class_default_typemaps {
                   );
 
   add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr ) );
+      ( $ptr, ExtUtils::XSpp::Typemap::simplexs->new( type => $ptr, xs_type => 'O_OBJECT' ) );
   add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref ) );
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => 'O_OBJECT' ) ); # FIXME implement XSD typemap generation for this
 }
 
 sub add_default_typemaps {
