@@ -19,7 +19,7 @@ WriteMakefile(
     INC               => '-I.', # e.g., '-I. -I/usr/include/other'
     OBJECT            => '$(O_FILES)', # link all the C files too
     XSOPT             => '-C++ -hiertype',
-    TYPEMAPS          => ['perlobject.map'],
+    #TYPEMAPS          => ['other_xs_typemap_files_here'],
     CC                => $CC,
     LD                => '$(CC)',
 );

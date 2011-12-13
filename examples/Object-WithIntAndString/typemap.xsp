@@ -1,3 +1,0 @@
-
-// Map the type of our custom class
-%typemap{IntAndString*}{simple};
