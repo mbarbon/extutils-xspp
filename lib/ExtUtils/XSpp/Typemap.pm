@@ -7,7 +7,6 @@ use ExtUtils::Typemaps;
 require ExtUtils::XSpp::Node::Type;
 require ExtUtils::XSpp::Typemap::parsed;
 require ExtUtils::XSpp::Typemap::simple;
-require ExtUtils::XSpp::Typemap::simplexs;
 require ExtUtils::XSpp::Typemap::reference;
 
 =head1 NAME
@@ -58,7 +57,7 @@ the C++ variable(s).
 
 sub init { }
 
-sub xs_type { undef }
+sub xs_type { $_[0]->{XS_TYPE} }
 sub cpp_type { die; }
 sub input_code { die; }
 sub precall_code { undef }
@@ -181,7 +180,7 @@ sub add_class_default_typemaps {
                   );
 
   add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simplexs->new( type => $ptr, xs_type => 'O_OBJECT' ) );
+      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr, xs_type => 'O_OBJECT' ) );
   add_weak_typemap_for_type
       ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => 'O_OBJECT' ) ); # FIXME implement XSD typemap generation for this
 }

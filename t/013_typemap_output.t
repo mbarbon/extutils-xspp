@@ -5,7 +5,7 @@ use warnings;
 use t::lib::XSP::Test tests => 4;
 
 use ExtUtils::XSpp;
-use ExtUtils::XSpp::Typemap::simplexs;
+use ExtUtils::XSpp::Typemap::simple;
 use Test::Differences;
 
 # First, add a manual typemap and see if that ends up in the generated
@@ -15,7 +15,7 @@ my $type = ExtUtils::XSpp::Node::Type->new(
   base => 'bar',
   pointer => 1,
 );
-my $tm = ExtUtils::XSpp::Typemap::simplexs->new(
+my $tm = ExtUtils::XSpp::Typemap::simple->new(
   type => $type,
   xs_type => 'T_BAR',
 );

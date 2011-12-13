@@ -7,6 +7,7 @@ sub init {
   my %args = @_;
 
   $this->{TYPE} = $args{type};
+  $this->{XS_TYPE} = $args{xs_type};
 }
 
 sub cpp_type { $_[0]->{TYPE}->print }

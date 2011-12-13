@@ -6,6 +6,7 @@ sub init {
   my $this = shift;
   my %args = @_;
 
+  $this->{XS_TYPE} = $args{xs_type};
   $this->{TYPE} = $args{type};
 }
 
