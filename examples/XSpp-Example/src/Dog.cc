@@ -22,3 +22,9 @@ Dog::MakeSound()
   Bark();
 }
 
+Dog*
+Dog::Clone()
+  const
+{
+  return new Dog(GetName());
+}

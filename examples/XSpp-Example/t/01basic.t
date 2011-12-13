@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 18;
 use XSpp::Example;
 
 my $dog = Dog->new("Skip");
@@ -31,3 +31,7 @@ eval { $animal->MakeSound() };
 my $exception = $@;
 ok($exception && $exception =~ /does not make sound/);
 
+my $clone = $dog->Clone();
+isa_ok($clone, 'Dog');
+isa_ok($clone, 'Animal');
+is($clone->GetName(), $dog->GetName());
