@@ -28,3 +28,10 @@ Dog::Clone()
 {
   return new Dog(GetName());
 }
+
+void
+Dog::MakeDogBark(const Dog& d)
+{
+  d.Bark();
+}
+

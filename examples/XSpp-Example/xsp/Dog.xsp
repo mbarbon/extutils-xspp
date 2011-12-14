@@ -13,6 +13,8 @@ class Dog : public Animal
   // Using Dog_Factory* instead of Dog* (see myinit.h)
   // to work around typemapping problem.
   Dog_Factory* Clone();
+
+  static void MakeDogBark(Dog& d);
 };
 
 

@@ -12,6 +12,8 @@ public:
   void MakeSound() const;
 
   Dog* Clone() const;
+
+  static void MakeDogBark(const Dog& d);
 };
 
 

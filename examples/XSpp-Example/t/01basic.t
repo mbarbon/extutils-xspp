@@ -4,6 +4,8 @@ use warnings;
 use Test::More tests => 18;
 use XSpp::Example;
 
+$| = 1; # autoflush
+
 my $dog = Dog->new("Skip");
 isa_ok($dog, 'Dog');
 isa_ok($dog, 'Animal');
@@ -35,3 +37,7 @@ my $clone = $dog->Clone();
 isa_ok($clone, 'Dog');
 isa_ok($clone, 'Animal');
 is($clone->GetName(), $dog->GetName());
+
+print "# "; # comment the bark output
+Dog::MakeDogBark($clone);
+
