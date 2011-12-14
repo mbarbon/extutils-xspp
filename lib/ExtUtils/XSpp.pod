@@ -231,19 +231,22 @@ then you can refer to the length of the string
       MyClass( int arg );
       // My::Class->newMyClass( ... );
       %name{newMyClass} MyClass( const char* str, int arg );
-
+  
       // standard DESTROY method
       ~MyClass();
-
+  
       int GetInt();
       void SetValue( int arg = -1 );
-
+  
       %name{SetString} void SetValue( const char* string = NULL );
-
+  
       // Supply a C<CODE:> or C<CLEANUP:> block for the XS
       int MyMethod( int a, int b )
           %code{% RETVAL = a + b; %}
           %cleanup{% /* do something */ %};
+  
+      // Expose class method as My::ClassMethod::ClassMethod($foo)
+      static void ClassMethod( double foo );
   };
 
 =head2 Comments
