@@ -128,7 +128,7 @@ sub load_plugin {
   }
   elsif (!eval "require $package;") {
     die "Could not load XS++ plugin '$package' (neither via the namespace "
-       ."'ExtUtils::XS++::Plugin::$package' nor via '$package'). Reason: $@";
+       ."'ExtUtils::XSpp::Plugin::$package' nor via '$package'). Reason: $@";
   }
 
   # only call register_plugin once
