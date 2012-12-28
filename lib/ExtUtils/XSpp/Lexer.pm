@@ -198,7 +198,7 @@ sub yylex {
         return ( $tokens{$1}, $1 ) if exists $tokens{$1};
         return ( 'p_any', substr $1, 1 );
       } elsif( $$buf =~ s/^( \%}
-                      | \%{ | {\%
+                      | \%\{ | \{\%
                       | [{}();%~*&,=\/\.\-<>|]
                       | :: | :
                        )//x ) {
