@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.1603   Fri Dec 28 12:03:09 CEST 2012
+	- Fix blead-perl warning about unescaped { in regexps.
+        - Use ExtUtils::Typemaps instead of ExtUtils::Typemap (which
+          had to be renamed).
+        - Somewhat improved examples.
+
 0.1602   Fri Jun  3 22:08:53 CEST 2011
 	- Fixed code generation for package_static methods.
 
