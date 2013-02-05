@@ -308,19 +308,21 @@ _function_metadata:    perc_code
                      | perc_cleanup
                      | perc_postcall
                      | perc_catch
+                     | perc_alias
                      | perc_any
                      ;
 
-perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
-perc_package:    p_package OPCURLY class_name CLCURLY    { $_[3] };
-perc_module:     p_module OPCURLY class_name CLCURLY     { $_[3] };
-perc_file:       p_file OPCURLY file_name CLCURLY        { $_[3] };
-perc_loadplugin: p_loadplugin OPCURLY class_name CLCURLY { $_[3] };
-perc_include:    p_include OPCURLY file_name CLCURLY     { $_[3] };
-perc_code:       p_code special_block                    { [ code => $_[2] ] };
-perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
-perc_postcall:   p_postcall special_block                { [ postcall => $_[2] ] };
-perc_catch:      p_catch OPCURLY class_name_list CLCURLY { [ map {(catch => $_)} @{$_[3]} ] };
+perc_name:       p_name OPCURLY class_name CLCURLY        { $_[3] };
+perc_alias:      p_alias OPCURLY ID EQUAL INTEGER CLCURLY { [ alias => [$_[3], $_[5]] ] };
+perc_package:    p_package OPCURLY class_name CLCURLY     { $_[3] };
+perc_module:     p_module OPCURLY class_name CLCURLY      { $_[3] };
+perc_file:       p_file OPCURLY file_name CLCURLY         { $_[3] };
+perc_loadplugin: p_loadplugin OPCURLY class_name CLCURLY  { $_[3] };
+perc_include:    p_include OPCURLY file_name CLCURLY      { $_[3] };
+perc_code:       p_code special_block                     { [ code => $_[2] ] };
+perc_cleanup:    p_cleanup special_block                  { [ cleanup => $_[2] ] };
+perc_postcall:   p_postcall special_block                 { [ postcall => $_[2] ] };
+perc_catch:      p_catch OPCURLY class_name_list CLCURLY  { [ map {(catch => $_)} @{$_[3]} ] };
 
 # this expands mixed_blocks to avoid ambiguity in the OPCURLY case
 perc_any:

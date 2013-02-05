@@ -67,6 +67,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%length'     => 'p_length',
                '%loadplugin' => 'p_loadplugin',
                '%include'    => 'p_include',
+               '%alias'      => 'p_alias',
              );
 
 my %keywords = ( const           => 1,
@@ -330,7 +331,7 @@ sub _merge_keys {
       push @occurrances, $paramlist->[$i+1];
     }
   }
-  @occurrances = map {ref($_) eq 'ARRAY' ? @$_ : $_}  @occurrances;
+  @occurrances = map {ref($_) eq 'ARRAY' ? @$_ : $_} @occurrances;
   $argshash->{$key} = \@occurrances;
 }
 
@@ -338,6 +339,8 @@ sub add_data_function {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
+  _merge_keys( 'alias', \%args, \@args );
+  $args{alias} = +{@{$args{alias}}} if exists $args{alias};
 
   my $f = ExtUtils::XSpp::Node::Function->new
               ( cpp_name  => $args{name},
@@ -350,6 +353,7 @@ sub add_data_function {
                 postcall  => $args{postcall},
                 catch     => $args{catch},
                 condition => $args{condition},
+                alias     => $args{alias},
                 );
 
   if( $args{any} ) {

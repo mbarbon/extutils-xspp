@@ -223,6 +223,27 @@ special code block such as C<%code>, C<%postcall>, etc.,
 then you can refer to the length of the string
 (here: C<line>) I<efficiently> as C<length(line)> in the code.
 
+=head2 %alias
+
+Decorator for function/method declarations such as
+
+  double add(double a, double b)
+    %alias{subtract = 1} %alias{multiply = 2};
+
+Which will cause the generation of just a single XSUB using the
+XS "ALIAS" feature (see L<perlxs>). It will be installed as all of
+C<add>, C<subtract>, and C<multiply> on the Perl side and call either
+the C++ C<add>, C<subtract>, or C<multiply> functions depending on
+which way it was called.
+
+Notes: If used in conjunction with C<%name{foo}> to rename the function,
+then the C<%name> will only affect the main function name
+(in the above example, C<add> but not C<subtract> or C<multiply>).
+When used with the C<%code> feature, the custom code will have to
+use the C<ix> integer variable to decide which function to call.
+C<ix> is set to 0 for the main function. Make sure to read up
+on the ALIAS feature of plain XS.
+
 =head2 Classes
 
   %name{My::Class} class MyClass : public %name{My::Base} MyBase

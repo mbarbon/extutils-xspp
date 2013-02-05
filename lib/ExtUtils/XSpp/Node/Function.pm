@@ -52,6 +52,7 @@ sub init {
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
+  $this->{ALIAS}     = $args{alias};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
   if (ref($this->{CATCH})
@@ -159,7 +160,6 @@ sub add_exception_handlers {
   return();
 }
 
-
 # Depending on argument style, this produces either: (style=kr)
 #
 # return_type
@@ -168,6 +168,8 @@ sub add_exception_handlers {
 #     type arg
 #   PREINIT:
 #     aux vars
+#   [ALIAS:
+#     ID = INTEGER...]
 #   [PP]CODE:
 #     RETVAL = new Foo( THIS->method( arg1, *arg2 ) );
 #   POSTCALL:
@@ -193,12 +195,14 @@ sub print {
   my $args               = $this->arguments;
   my $ret_type           = $this->ret_type;
   my $ret_typemap        = $this->{TYPEMAPS}{RET_TYPE};
+  my $aliases            = $this->{ALIAS} || {};
+
+  my $has_aliases = scalar(keys %$aliases);
 
   $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
 
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
-      $postcall, $precall ) =
-    ( '', '', '', '', '', '', '', '' );
+      $postcall, $precall, $alias ) = ( ('') x 9 );
 
   # compute the precall code, XS argument list and C++ argument list using
   # the typemap information
@@ -223,6 +227,15 @@ sub print {
     $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
   }
 
+  # If there's %alias{foo = 123} definitions, generate ALIAS section
+  if ($has_aliases) {
+    # order by ordinal for consistent hash-order-independent output
+    my @alias_list = map "    $_ = $aliases->{$_}\n",
+                     sort {$aliases->{$a} <=> $aliases->{$b}}
+                     keys %$aliases;
+    $alias = "  ALIAS:\n" . join("", @alias_list);
+  }
+
   my $retstr = $ret_typemap ? $ret_typemap->cpp_type : 'void';
 
   # special case: constructors with name different from 'new'
@@ -243,7 +256,13 @@ sub print {
   } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
     $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
   } elsif( $has_ret ) {
-    $ccode = "RETVAL = $ccode";
+    if ($has_aliases) {
+      $ccode = $this->_generate_alias_conditionals($call_arg_list, 1); # 1 == use RETVAL
+    } else {
+      $ccode = "RETVAL = $ccode";
+    }
+  } elsif( $has_aliases ) { # aliases but no RETVAL
+    $ccode = $this->_generate_alias_conditionals($call_arg_list, 0); # 0 == no RETVAL
   }
 
   $code .= "  $code_type:\n";
@@ -306,7 +325,7 @@ EOT
 
   my $head = "$retstr\n"
              . "$fname($arg_list)\n";
-  my $body = $init . $code . $postcall . $output . $cleanup . "\n";
+  my $body = $alias . $init . $code . $postcall . $output . $cleanup . "\n";
   $this->_munge_code(\$body) if $this->has_argument_with_length;
 
   $out .= $head . $body;
@@ -380,7 +399,7 @@ sub has_argument_with_length {
 
 =begin documentation
 
-ExtUtils::XSpp::Node::_call_code( argument_string )
+ExtUtils::XSpp::Function::_call_code( argument_string )
 
 Return something like "foo( $argument_string )".
 
@@ -389,6 +408,56 @@ Return something like "foo( $argument_string )".
 =cut
 
 sub _call_code { return $_[0]->cpp_name . '(' . $_[1] . ')'; }
+
+=begin documentation
+
+ExtUtils::XSpp::Function::_call_code_aliased( function_alias_name, argument_string )
+
+Return something like "$function_alias_name( $argument_string )".
+
+=end documentation
+
+=cut
+
+sub _call_code_aliased { return $_[1] . '(' . $_[2] . ')'; }
+
+=begin documentation
+
+ExtUtils::XSpp::Function::_generate_alias_conditionals( argument_string, use_retval_bool )
+
+Generates if()else if()else block for XS function name aliasing (cf. the XS manual and the ix
+variable). If use_retval_bool is true, each included function call will contain an
+assignment to RETVAL.
+
+Returns the generated code.
+
+=end documentation
+
+=cut
+sub _generate_alias_conditionals {
+  my ($this, $call_arg_list, $use_retval) = @_;
+  my $aliases = $this->{ALIAS};
+
+  my $retval_code = $use_retval ? "RETVAL = " : "";
+  my $buf = "if (ix == 0) {\n  $retval_code"
+            . $this->_call_code($call_arg_list)
+            . ";\n}\n";
+  # order by ordinal for consistent hash-order-independent output
+  foreach my $alias (sort {$aliases->{$a} <=> $aliases->{$b}} keys %$aliases)
+  {
+    $buf .= "else if (ix == $aliases->{$alias}) {\n  "
+            . $retval_code . $this->_call_code_aliased($alias, $call_arg_list)
+            . ";\n}\n";
+  }
+  $buf .= "else\n  croak(\"Panic: Invalid invocation of function alias number %i!\", (int)ix))";
+
+  # indent
+  $buf =~ s/^/      /gm;
+  $buf =~ s/^\s+//; # first line will get special treatment...
+
+  return $buf;
+}
+
 
 =head1 ACCESSORS
 
@@ -435,6 +504,12 @@ Returns the C<%postcall> decorator if any.
 Returns the set of exception types that were associated
 with the function via C<%catch>. (array reference)
 
+=head2 aliases
+
+Returns a hashref of C<name =E<gt> position>
+function name aliases (see %alias and L<perlxs> ALIAS keyword).
+Does not include the main function name.
+
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
@@ -448,6 +523,7 @@ sub set_code { $_[0]->{CODE} = $_[1] }
 sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
+sub aliases { $_[0]->{ALIAS} ? $_[0]->{ALIAS} : {} }
 
 =head2 set_static
 
