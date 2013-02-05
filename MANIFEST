@@ -21,6 +21,7 @@ examples/XSpp-Example/src/Animal.cc
 examples/XSpp-Example/src/Animal.h
 examples/XSpp-Example/src/Dog.cc
 examples/XSpp-Example/src/Dog.h
+examples/XSpp-Example/src/myinit.h
 examples/XSpp-Example/src/ppport.h
 examples/XSpp-Example/t/01basic.t
 examples/XSpp-Example/xsp/Animal.xsp
