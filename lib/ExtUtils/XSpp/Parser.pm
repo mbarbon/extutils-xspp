@@ -251,7 +251,7 @@ sub _handle_plugin {
     last if $handled;
   }
 
-  die "Unhandled $plugin_type annotation $tag" unless $handled;
+  die "Unhandled $plugin_type annotation '$tag'" unless $handled;
 }
 
 sub current_file { $_[0]->{PARSER}->YYData->{LEX}{FILE} }
