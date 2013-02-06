@@ -242,7 +242,8 @@ then the C<%name> will only affect the main function name
 When used with the C<%code> feature, the custom code will have to
 use the C<ix> integer variable to decide which function to call.
 C<ix> is set to 0 for the main function. Make sure to read up
-on the ALIAS feature of plain XS.
+on the ALIAS feature of plain XS. Aliasing is not supported for
+constructors and destructors.
 
 =head2 Classes
 
