@@ -63,14 +63,20 @@ sub perl_function_name {
 }
 
 sub _call_code {
-    my( $self ) = @_;
+    my( $self, $arg_string ) = @_;
+
+    return $self->_call_code_aliased($self->cpp_name, $arg_string);
+}
+
+sub _call_code_aliased {
+    my( $self, $alias_name, $arg_string ) = @_;
 
     if( $self->package_static ) {
-        return $_[0]->class->cpp_name . '::' .
-               $_[0]->cpp_name . '(' . $_[1] . ')';
+        return $self->class->cpp_name . '::' .
+               $alias_name . '(' . $arg_string . ')';
     } else {
         return "THIS->" .
-               $_[0]->cpp_name . '(' . $_[1] . ')';
+               $alias_name . '(' . $arg_string . ')';
     }
 }
 

@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 8;
+use t::lib::XSP::Test tests => 9;
 
 run_diff xsp_stdout => 'expected';
 
@@ -176,6 +176,45 @@ Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Renamed method with alias
+--- xsp_stdout
+%module{Foo};
+
+class Foo
+{
+    %name{bar} int foo( int a ) %alias{baz = 1};
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::bar( int a )
+  ALIAS:
+    baz = 1
+  CODE:
+    try {
+      if (ix == 0) {
+        RETVAL = THIS->foo( a );
+      }
+      else if (ix == 1) {
+        RETVAL = THIS->baz( a );
+      }
+      else
+        croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());

@@ -371,6 +371,8 @@ sub add_data_method {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
+  _merge_keys( 'alias', \%args, \@args );
+  $args{alias} = +{@{$args{alias}}} if exists $args{alias};
 
   my $m = ExtUtils::XSpp::Node::Method->new
             ( cpp_name  => $args{name},
@@ -383,6 +385,7 @@ sub add_data_method {
               perl_name => $args{perl_name},
               catch     => $args{catch},
               condition => $args{condition},
+              alias     => $args{alias},
               );
 
   if( $args{any} ) {
@@ -400,6 +403,8 @@ sub add_data_ctor {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
+  _merge_keys( 'alias', \%args, \@args );
+  $args{alias} = +{@{$args{alias}}} if exists $args{alias};
 
   my $m = ExtUtils::XSpp::Node::Constructor->new
             ( cpp_name  => $args{name},
@@ -409,6 +414,7 @@ sub add_data_ctor {
               postcall  => $args{postcall},
               catch     => $args{catch},
               condition => $args{condition},
+              alias     => $args{alias},
               );
 
   if( $args{any} ) {
