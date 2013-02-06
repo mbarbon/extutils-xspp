@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 7;
+use t::lib::XSP::Test tests => 8;
 
 run_diff xsp_stdout => 'expected';
 
@@ -90,6 +90,28 @@ boo( int a )
     catch (...) {
       croak("Caught C++ exception of unknown type");
     }
+  OUTPUT: RETVAL
+
+=== Function with alias and code
+--- xsp_stdout
+%module{Foo};
+%package{Foo::Bar};
+
+%name{boo} int foo2(int a) %alias{baz2 = 3} %code{%RETVAL = a;%};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo::Bar
+
+int
+boo( int a )
+  ALIAS:
+    baz2 = 3
+  CODE:
+    RETVAL = a;
   OUTPUT: RETVAL
 
 === Function with multiple aliases
