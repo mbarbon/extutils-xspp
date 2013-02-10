@@ -57,6 +57,19 @@ TYPEMAPS
     used in the return value, the function will create copy of the returned
     value using a copy constructor.
 
+    As a shortcut for the common case of declaring both of the above for a
+    given type, you may use
+
+      %typemap{<C++ type>};
+
+    Which has the same effect as:
+
+      %typemap{<C++ type>}{simple};
+      %typemap{<C++ type>&}{reference};
+
+    For more control over the type mapping, you can use the "parsed" variant
+    as follows.
+
       %typemap{<C++ type 1>}{parsed}{%<C++ type 2>%};
 
     When "C++ type 1" is used, replace it with "C++ type 2" in the generated
@@ -149,16 +162,19 @@ DESCRIPTION
     %file directive; use "-" for standard output.
 
   %module
-      %module{Module__Name};
+      %module{Module::Name};
 
-    Will be used to generate the "MODULE=Module__Name" XS directives.
+    Will be used to generate the "MODULE=Module::Name" XS directives. It
+    indirectly sets the name of the shared library that is generated as well
+    as the name of the module via which XSLoader will be able to find/load
+    it.
 
   %name
       %name{Perl::Class} class MyClass { ... };
       %name{Perl::Func} int foo();
 
-    Specifies the perl name under which the C++ class/function will be
-    accessible.
+    Specifies the Perl name under which the C++ class/function will be
+    accessible. By default, constructor names are mapped to "new" in Perl.
 
   %typemap
     See TYPEMAPS above.
@@ -182,6 +198,26 @@ DESCRIPTION
     of the string (here: "line") *efficiently* as "length(line)" in the
     code.
 
+  %alias
+    Decorator for function/method declarations such as
+
+      double add(double a, double b)
+        %alias{subtract = 1} %alias{multiply = 2};
+
+    Which will cause the generation of just a single XSUB using the XS
+    "ALIAS" feature (see perlxs). It will be installed as all of "add",
+    "subtract", and "multiply" on the Perl side and call either the C++
+    "add", "subtract", or "multiply" functions depending on which way it was
+    called.
+
+    Notes: If used in conjunction with %name{foo} to rename the function,
+    then the %name will only affect the main function name (in the above
+    example, "add" but not "subtract" or "multiply"). When used with the
+    %code feature, the custom code will have to use the "ix" integer
+    variable to decide which function to call. "ix" is set to 0 for the main
+    function. Make sure to read up on the ALIAS feature of plain XS.
+    Aliasing is not supported for constructors and destructors.
+
   Classes
       %name{My::Class} class MyClass : public %name{My::Base} MyBase
       {
@@ -189,19 +225,22 @@ DESCRIPTION
           MyClass( int arg );
           // My::Class->newMyClass( ... );
           %name{newMyClass} MyClass( const char* str, int arg );
-
+  
           // standard DESTROY method
           ~MyClass();
-
+  
           int GetInt();
           void SetValue( int arg = -1 );
-
+  
           %name{SetString} void SetValue( const char* string = NULL );
-
+  
           // Supply a C<CODE:> or C<CLEANUP:> block for the XS
           int MyMethod( int a, int b )
               %code{% RETVAL = a + b; %}
               %cleanup{% /* do something */ %};
+  
+          // Expose class method as My::ClassMethod::ClassMethod($foo)
+          static void ClassMethod( double foo );
       };
 
   Comments
