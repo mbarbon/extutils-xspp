@@ -39,6 +39,7 @@
 \#$
 \.#
 \.rej$
+\..*\.sw[po]$
 
 # Avoid OS-specific files/dirs
 #   Mac OSX metadata
@@ -52,5 +53,6 @@
 ^t/files/foo.h
 ^XSP.output
 
-^MYMETA.json$
-^MYMETA.yml$
+\bMYMETA\.\w+$
+\.o$
+\bWithIntAndString\.c$
