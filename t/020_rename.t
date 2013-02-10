@@ -199,6 +199,11 @@ class Foo
     %name{bar} int foo( int a ) %alias{baz = 1};
 };
 --- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
 #include <exception>
 
 
