@@ -360,6 +360,7 @@ nconsttype:
 type_name:
     class_name
   | basic_type
+  | 'void'
   | 'unsigned'                  { 'unsigned int' }
   | 'unsigned' basic_type       { 'unsigned' . ' ' . $_[2] }
   ;
