@@ -206,6 +206,7 @@ Foo::foo( int a )
 class Foo
 {
     void foo();
+    void bar(void);
 };
 --- expected
 #include <exception>
@@ -220,6 +221,19 @@ Foo::foo()
   CODE:
     try {
       THIS->foo();
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+
+void
+Foo::bar()
+  CODE:
+    try {
+      THIS->bar();
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
