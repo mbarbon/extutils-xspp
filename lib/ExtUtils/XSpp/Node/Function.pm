@@ -78,14 +78,15 @@ and stores a reference to those objects.
 
 sub resolve_typemaps {
   my $this = shift;
+  my $index = 0;
 
   if( $this->ret_type ) {
-    $this->{TYPEMAPS}{RET_TYPE} =
+    $this->{TYPEMAPS}{RET_TYPE} ||=
       ExtUtils::XSpp::Typemap::get_typemap_for_type( $this->ret_type );
   }
   foreach my $a ( @{$this->arguments} ) {
-    my $t = ExtUtils::XSpp::Typemap::get_typemap_for_type( $a->type );
-    push @{$this->{TYPEMAPS}{ARGUMENTS}}, $t;
+    $this->{TYPEMAPS}{ARGUMENTS}[$index++] ||=
+      ExtUtils::XSpp::Typemap::get_typemap_for_type( $a->type );
   }
 }
 
@@ -552,5 +553,51 @@ can be invoked as:
 sub set_static { $_[0]->{STATIC} = $_[1] }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
+
+=head2 ret_typemap
+
+Returns the typemap for the return value of the function.
+
+=head2 set_ret_typemap( typemap )
+
+Sets the typemap for the return value of the function.
+
+=head2 arg_typemap( index )
+
+Returns the typemap for one function arguments.
+
+=head2 set_arg_typemap( index, typemap )
+
+Sets the typemap for one function argument.
+
+=cut
+
+sub ret_typemap {
+  my ($this) = @_;
+
+  die "Typemap not available yet" unless $this->{TYPEMAPS}{RET_TYPE};
+  return $this->{TYPEMAPS}{RET_TYPE};
+}
+
+sub set_ret_typemap {
+  my ($this, $typemap) = @_;
+
+  $this->{TYPEMAPS}{RET_TYPE} = $typemap;
+}
+
+sub arg_typemap {
+  my ($this, $index) = @_;
+
+  die "Invalid index" unless $index < @{$this->{ARGUMENTS}};
+  die "Typemap not available yet" unless $this->{TYPEMAPS}{ARGUMENTS};
+  return $this->{TYPEMAPS}{ARGUMENTS}[$index];
+}
+
+sub set_arg_typemap {
+  my ($this, $index, $typemap) = @_;
+
+  die "Invalid index" unless $index < @{$this->{ARGUMENTS}};
+  $this->{TYPEMAPS}{ARGUMENTS}[$index] = $typemap;
+}
 
 1;
