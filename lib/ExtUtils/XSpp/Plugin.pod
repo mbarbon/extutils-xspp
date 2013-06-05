@@ -139,6 +139,12 @@ tag.
 
 If the method handles the tag, it must return C<1> to the caller.
 
+If the return value is a list, the first element is the
+handled/not-handled flag, remaining elements are a list of nodes to
+add to the node list returned by the parser.
+
+The method is called after parsing of the function completes.
+
 =head2 handle_class_tag
 
     sub handle_class_tag {
@@ -153,6 +159,13 @@ handler for the class is called after the handlers for its methods.
 
 If the method handles the tag, it must return C<1> to the caller.
 
+If the return value is a list, the first element is the
+handled/not-handled flag, remaining elements are a list of nodes to
+add to the node list in the class.
+
+The method is called after parsing of the class completes, and after the
+handlers for methods contained in the class.
+
 =head2 handle_method_tag
 
     sub handle_method_tag {
@@ -165,6 +178,13 @@ C<$method> is a C<Method> node.  C<$tag> is the tag string, without
 the C<%> prefix.  C<%args> are the arguments passed to the tag.
 
 If the method handles the tag, it must return C<1> to the caller.
+
+If the return value is a list, the first element is the
+handled/not-handled flag, remaining elements are a list of nodes to
+add to the node list in the containing class.
+
+The method is called after the method has been added to the class and
+before the handler for class tags.
 
 =head2 handle_toplevel_tag
 
@@ -179,6 +199,12 @@ arguments passed to the tag.  The C<undef> value is for uniformity
 with other tag handlers.
 
 If the method handles the tag, it must return C<1> to the caller.
+
+If the return value is a list, the first element is the
+handled/not-handled flag, remaining elements are a list of nodes to
+add to the node list returned by the parser.
+
+The method is called after the parsing of the tag completes.
 
 =end internal
 

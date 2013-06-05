@@ -53,6 +53,7 @@ sub init {
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
   $this->{ALIAS}     = $args{alias};
+  $this->{TAGS}      = $args{tags};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
   if (ref($this->{CATCH})
@@ -524,6 +525,7 @@ sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 sub aliases { $_[0]->{ALIAS} ? $_[0]->{ALIAS} : {} }
+sub tags { $_[0]->{TAGS} }
 
 =head2 set_static
 

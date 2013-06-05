@@ -13,16 +13,18 @@ __DATA__
 %module{Foo};
 %package{Foo};
 %loadplugin{TestParserPlugin};
+%loadplugin{TestNewNodesPlugin};
 
-int foo(int y) %MyFuncRename{Foo};
+int foo(int y) %MyFuncRename{Foo} %MyComment;
 
 class klass
 {
     %MyClassRename{Klass};
+    %MyComment;
 
-    klass() %MyMethodRename{newKlass};
+    klass() %MyMethodRename{newKlass} %MyComment;
 
-    void bar() %MyMethodRename{Bar};
+    void bar() %MyMethodRename{Bar} %MyComment;
 };
 --- expected
 #include <exception>
@@ -45,6 +47,9 @@ Foo( int y )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+// function foo
+
 
 
 MODULE=Foo PACKAGE=Klass
@@ -76,13 +81,23 @@ klass::Bar()
       croak("Caught C++ exception of unknown type");
     }
 
+// method klass::klass
+
+
+// method klass::bar
+
+
+// class klass
+
 === Handle top level directives
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
 %loadplugin{TestParserPlugin};
+%loadplugin{TestNewNodesPlugin};
 
 %MyDirective{Foo};
+%MyComment;
 
 --- expected
 #include <exception>
@@ -91,5 +106,8 @@ klass::Bar()
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
+
+// directive MyComment
+
 
 // Foo
