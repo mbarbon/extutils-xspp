@@ -188,11 +188,11 @@ sub add_function_tag_plugin {
   push @{$this->{PLUGINS}{FUNCTION_TAG}{$tag}}, $args{plugin};
 }
 
-sub handle_function_tag_plugins {
-  my( $this, $function, @args ) = @_;
+sub handle_function_tags_plugins {
+  my( $this, $function, $tags ) = @_;
 
-  _handle_plugin( $this, $this->{PLUGINS}{FUNCTION_TAG}, 'function',
-                  'handle_function_tag', [ $function, @args ] );
+  _handle_plugins( $this, $this->{PLUGINS}{FUNCTION_TAG}, 'function',
+                   'handle_function_tag', $tags, $function )
 }
 
 =head2 ExtUtils::XSpp::Parser::add_method_tag_plugin
@@ -209,11 +209,11 @@ sub add_method_tag_plugin {
   push @{$this->{PLUGINS}{METHOD_TAG}{$tag}}, $args{plugin};
 }
 
-sub handle_method_tag_plugins {
-  my( $this, $method, @args ) = @_;
+sub handle_method_tags_plugins {
+  my( $this, $method, $tags ) = @_;
 
-  _handle_plugin( $this, $this->{PLUGINS}{METHOD_TAG}, 'method',
-                  'handle_method_tag', [ $method, @args ] );
+  _handle_plugins( $this, $this->{PLUGINS}{METHOD_TAG}, 'method',
+                   'handle_method_tag', $tags, $method );
 }
 
 =head2 ExtUtils::XSpp::Parser::add_toplevel_tag_plugin
@@ -237,17 +237,33 @@ sub handle_toplevel_tag_plugins {
                   'handle_toplevel_tag', [ undef, @args ] );
 }
 
+sub _handle_plugins {
+  my( $this, $plugins, $plugin_type, $plugin_method, $tags, $arg ) = @_;
+  my @nodes;
+
+  foreach my $tag ( @{$tags || []} ) {
+    my $nodes = _handle_plugin( $this, $plugins, $plugin_type, $plugin_method,
+                  [ $arg, $tag->{any},
+                    any_named_arguments      => $tag->{any_named_arguments},
+                    any_positional_arguments => $tag->{any_positional_arguments},
+                    ] );
+
+    push @nodes, @$nodes;
+  }
+
+  return \@nodes;
+}
+
 sub _handle_plugin {
   my( $this, $plugins, $plugin_type, $plugin_method, $plugin_args ) = @_;
   my $tag = $plugin_args->[1];
 
-  my $handled;
   foreach my $plugin ( @{$plugins->{$tag} || []}, @{$plugins->{_any_} || []} ) {
-    $handled ||= $plugin->$plugin_method( @$plugin_args );
-    last if $handled;
+    my( $handled, @nodes ) = $plugin->$plugin_method( @$plugin_args );
+    return \@nodes if $handled;
   }
 
-  die "Unhandled $plugin_type annotation '$tag'" unless $handled;
+  die "Unhandled $plugin_type annotation '$tag'";
 }
 
 sub current_file { $_[0]->{PARSER}->YYData->{LEX}{FILE} }

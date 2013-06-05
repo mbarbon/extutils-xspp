@@ -18,12 +18,16 @@
 %%
 
 top_list:
-      top               { $_[1] ? [ $_[1] ] : [] }
-    | top_list top      { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+      top
+    | top_list top      { push @{$_[1]}, @{$_[2]}; $_[1] }
     ;
 
-top: raw | class | directive | enum
-   | function { $_[1]->resolve_typemaps; $_[1]->resolve_exceptions; $_[1] };
+top: _top               { !$_[1]               ? [] :
+                          ref $_[1] eq 'ARRAY' ? $_[1] :
+                                                 [ $_[1] ] };
+
+_top: raw | class | directive | enum
+    | function { process_function( $_[0], $_[1] ) };
 
 directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
@@ -36,7 +40,7 @@ directive:      perc_module SEMICOLON
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
               | perc_any SEMICOLON
-                    { add_top_level_directive( $_[0], @{$_[1]} ); undef }
+                    { add_top_level_directive( $_[0], %{$_[1][1]} ) }
               | typemap { }
               | exceptionmap { }
               ;
@@ -176,7 +180,7 @@ class_body_list:
 class_body_element:
     method | raw | typemap | exceptionmap | access_specifier
   | perc_any SEMICOLON
-        { ExtUtils::XSpp::Node::PercAny->new( @{$_[1]} ) }
+        { ExtUtils::XSpp::Node::PercAny->new( %{$_[1][1]} ) }
   ;
 
 access_specifier:
@@ -318,13 +322,13 @@ perc_catch:      p_catch OPCURLY class_name_list CLCURLY  { [ map {(catch => $_)
 # this expands mixed_blocks to avoid ambiguity in the OPCURLY case
 perc_any:
     p_any OPCURLY perc_any_args CLCURLY
-        { [ any => $_[1], any_named_arguments => $_[3] ] }
+        { [ tag => { any => $_[1], any_named_arguments => $_[3] } ] }
   | p_any OPCURLY ID CLCURLY mixed_blocks
-        { [ any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] ] }
+        { [ tag => { any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] } ] }
   | p_any special_block mixed_blocks
-        { [ any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] ] }
+        { [ tag => { any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] } ] }
   | p_any
-        { [ any => $_[1] ] }
+        { [ tag => { any => $_[1] } ] }
   ;
 
 perc_any_args:
