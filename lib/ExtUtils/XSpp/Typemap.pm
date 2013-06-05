@@ -128,7 +128,7 @@ sub add_class_default_typemaps {
 
 sub add_default_typemaps {
   # void, integral and floating point types
-  foreach my $t ( 'char', 'short', 'int', 'long',
+  foreach my $t ( 'char', 'short', 'int', 'long', 'bool',
                   'unsigned char', 'unsigned short', 'unsigned int',
                   'unsigned long', 'void',
                   'float', 'double', 'long double' ) {
