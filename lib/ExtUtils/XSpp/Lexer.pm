@@ -282,11 +282,17 @@ sub add_top_level_directive {
 }
 
 sub make_argument {
-  my( $p, $type, $name, $default ) = @_;
+  my( $p, $type, $name, $default, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'tag', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Argument->new( type    => $type,
-                              name    => $name,
-                              default => $default );
+  my $arg = ExtUtils::XSpp::Node::Argument->new
+                ( type    => $type,
+                  name    => $name,
+                  default => $default,
+                  tags    => $args{tag} );
+
+  return $arg;
 }
 
 sub create_class {
@@ -310,6 +316,8 @@ sub create_class {
   $class->add_methods( @rest );
 
   foreach my $meth ( grep $_->isa( 'ExtUtils::XSpp::Node::Method' ), @rest ) {
+    call_argument_tags( $parser, $meth );
+
     my $nodes = $parser->YYData->{PARSER}->handle_method_tags_plugins( $meth, $meth->tags );
 
     $class->add_methods( @$nodes );
@@ -438,10 +446,19 @@ sub process_function {
 
   $function->resolve_typemaps;
   $function->resolve_exceptions;
+  call_argument_tags( $parser, $function );
 
   my $nodes = $parser->YYData->{PARSER}->handle_function_tags_plugins( $function, $function->tags );
 
   return [ $function, @$nodes ];
+}
+
+sub call_argument_tags {
+  my( $parser, $function ) = @_;
+
+  foreach my $arg ( @{$function->arguments} ) {
+    $parser->YYData->{PARSER}->handle_argument_tags_plugins( $arg, $arg->tags );
+  }
 }
 
 sub is_directive {

@@ -220,6 +220,27 @@ sub handle_method_tags_plugins {
                    'handle_method_tag', $tags, $method );
 }
 
+=head2 ExtUtils::XSpp::Parser::add_argument_tag_plugin
+
+Adds the specified plugin to the list of plugins that can handle custom
+%foo annotations for an arguments.
+
+=cut
+
+sub add_argument_tag_plugin {
+  my( $this, %args ) = @_;
+  my $tag = $args{tag} || '_any_';
+
+  push @{$this->{PLUGINS}{ARGUMENT_TAG}{$tag}}, $args{plugin};
+}
+
+sub handle_argument_tags_plugins {
+  my( $this, $argument, $tags ) = @_;
+
+  _handle_plugins( $this, $this->{PLUGINS}{ARGUMENT_TAG}, 'argument',
+                   'handle_argument_tag', $tags, $argument );
+}
+
 =head2 ExtUtils::XSpp::Parser::add_toplevel_tag_plugin
 
 Adds the specified plugin to the list of plugins that can handle custom

@@ -94,6 +94,7 @@ t/090_exceptions.t
 t/files/include.xsp
 t/files/test1.xsp
 t/files/typemap.xsp
+t/lib/ExtUtils/XSpp/Plugin/TestArgumentPlugin.pm
 t/lib/ExtUtils/XSpp/Plugin/TestNewNodesPlugin.pm
 t/lib/ExtUtils/XSpp/Plugin/TestParserPlugin.pm
 t/lib/ExtUtils/XSpp/Plugin/TestPlugin.pm
