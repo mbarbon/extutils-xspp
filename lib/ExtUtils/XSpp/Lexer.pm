@@ -16,6 +16,7 @@ use ExtUtils::XSpp::Node::Constructor;
 use ExtUtils::XSpp::Node::Destructor;
 use ExtUtils::XSpp::Node::File;
 use ExtUtils::XSpp::Node::Function;
+use ExtUtils::XSpp::Node::Member;
 use ExtUtils::XSpp::Node::Method;
 use ExtUtils::XSpp::Node::Module;
 use ExtUtils::XSpp::Node::Package;
@@ -362,6 +363,22 @@ sub _merge_keys {
   }
   @occurrances = map {ref($_) eq 'ARRAY' ? @$_ : $_} @occurrances;
   $argshash->{$key} = \@occurrances;
+}
+
+
+sub create_member {
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'tag', \%args, \@args );
+
+  return ExtUtils::XSpp::Node::Member->new
+              ( cpp_name  => $args{name},
+                perl_name => $args{perl_name},
+                class     => $args{class},
+                type      => $args{type},
+                condition => $args{condition},
+                tags      => $args{tag},
+                );
 }
 
 sub add_data_function {
