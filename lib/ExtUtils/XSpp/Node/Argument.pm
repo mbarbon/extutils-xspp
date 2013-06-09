@@ -60,6 +60,7 @@ sub init {
   $this->{TYPE} = $args{type};
   $this->{NAME} = $args{name};
   $this->{DEFAULT} = $args{default};
+  $this->{TAGS} = $args{tags};
 }
 
 sub print {
@@ -127,6 +128,7 @@ Returns the 0-based index of the argument in the argument list.
 
 sub type { $_[0]->{TYPE} }
 sub name { $_[0]->{NAME} }
+sub tags { $_[0]->{TAGS} }
 
 sub default { $_[0]->{DEFAULT} }
 sub has_default { defined $_[0]->{DEFAULT} }

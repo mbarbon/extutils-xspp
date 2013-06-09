@@ -395,11 +395,18 @@ nonvoid_arg_list:
   | nonvoid_arg_list COMMA argument     { push @{$_[1]}, $_[3]; $_[1] }
   | ;
 
+argument_metadata: argument_metadata _argument_metadata { [ @{$_[1]}, @{$_[2]} ] }
+                 |                                      { [] }
+                 ;
+
+_argument_metadata:    perc_any;
+
 argument:       type p_length OPCURLY ID CLCURLY
                     { make_argument( @_[0, 1], "length($_[4])" ) }
-              | type ID EQUAL expression
-                    { make_argument( @_[0, 1, 2, 4] ) }
-              | type ID                 { make_argument( @_ ) };
+              | type ID argument_metadata EQUAL expression
+                    { make_argument( @_[0, 1, 2, 5], @{$_[3]} ) }
+              | type ID argument_metadata
+                    { make_argument( @_[0, 1, 2], undef, @{$_[3]} ) };
 
 value:          INTEGER
               | DASH INTEGER    { '-' . $_[2] }

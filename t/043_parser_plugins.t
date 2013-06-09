@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 2;
+use t::lib::XSP::Test tests => 3;
 
 run_diff xsp_stdout => 'expected';
 
@@ -117,3 +117,38 @@ MODULE=Foo PACKAGE=Foo
 
 
 // Foo
+
+=== Handle argument annotations
+--- xsp_stdout
+%module{Foo};
+
+%loadplugin{TestArgumentPlugin};
+
+class klass
+{
+    int bar(int bar, int foo %MyWrap) %MyWrap;
+};
+--- expected
+# XSP preamble
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=klass
+
+int
+klass::bar( int bar, int foo )
+  CODE:
+    try {
+      // wrapped typemap 1;
+      RETVAL = THIS->bar( bar, foo );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+  CLEANUP:
+    // wrapped typemap ret;
