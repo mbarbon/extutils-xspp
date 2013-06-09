@@ -115,6 +115,14 @@ Returns the default for the function parameter if any.
 
 Returns whether there is a default for the function parameter.
 
+=head2 function
+
+Returns a reference to the containing function/method.
+
+=head2 index
+
+Returns the 0-based index of the argument in the argument list.
+
 =cut
 
 sub type { $_[0]->{TYPE} }
@@ -122,5 +130,8 @@ sub name { $_[0]->{NAME} }
 
 sub default { $_[0]->{DEFAULT} }
 sub has_default { defined $_[0]->{DEFAULT} }
+
+sub function { $_[0]->{FUNCTION} }
+sub index { $_[0]->{INDEX} }
 
 1;

@@ -56,6 +56,13 @@ sub init {
   $this->{TAGS}      = $args{tags};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
+  my $index = 0;
+  foreach my $arg ( @{$this->{ARGUMENTS}} ) {
+      $arg->{FUNCTION} = $this;
+      $arg->{INDEX} = $index;
+      ++$index;
+  }
+
   if (ref($this->{CATCH})
       and @{$this->{CATCH}} > 1
       and grep {$_ eq 'nothing'} @{$this->{CATCH}})
