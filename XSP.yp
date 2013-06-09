@@ -150,6 +150,7 @@ enum_element:
 class:    class_decl SEMICOLON | decorate_class SEMICOLON;
 function: function_decl SEMICOLON;
 method:   method_decl SEMICOLON;
+member:   member_decl SEMICOLON;
 
 decorate_class:
     perc_name class_decl { $_[2]->set_perl_name( $_[1] ); $_[2] };
@@ -189,7 +190,7 @@ class_body_list:
     ;
 
 class_body_element:
-    method | raw | typemap | exceptionmap | access_specifier
+    method | raw | typemap | exceptionmap | access_specifier | member
   | perc_any SEMICOLON
         { ExtUtils::XSpp::Node::PercAny->new( %{$_[1][1]} ) }
   ;
@@ -199,6 +200,25 @@ access_specifier:
     | 'protected' COLON { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
     | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
     ;
+
+member_metadata: member_metadata _member_metadata { [ @{$_[1]}, @{$_[2]} ] }
+               |                                  { [] }
+               ;
+
+_member_metadata:    perc_any;
+
+member_decl:
+    | looks_like_member
+    | perc_name looks_like_member
+         { $_[2]->set_perl_name( $_[1] ); $_[2] };
+
+looks_like_member:
+      type ID member_metadata
+          { create_member( $_[0],
+                           name      => $_[2],
+                           type      => $_[1],
+                           condition => $_[0]->get_conditional,
+                           @{$_[3]} ) };
 
 method_decl: nmethod | vmethod | ctor | dtor;
 

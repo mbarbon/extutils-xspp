@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 3;
+use t::lib::XSP::Test tests => 4;
 
 run_diff xsp_stdout => 'expected';
 
@@ -146,3 +146,20 @@ klass::bar( int bar, int foo )
   OUTPUT: RETVAL
   CLEANUP:
     // wrapped typemap ret;
+
+=== Handle member annotations
+--- xsp_stdout
+%module{Foo};
+
+class klass
+{
+    int foo;
+    %name{baz} int bar;
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=klass

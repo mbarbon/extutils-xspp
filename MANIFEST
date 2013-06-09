@@ -53,6 +53,7 @@ lib/ExtUtils/XSpp/Node/Enum.pm
 lib/ExtUtils/XSpp/Node/EnumValue.pm
 lib/ExtUtils/XSpp/Node/File.pm
 lib/ExtUtils/XSpp/Node/Function.pm
+lib/ExtUtils/XSpp/Node/Member.pm
 lib/ExtUtils/XSpp/Node/Method.pm
 lib/ExtUtils/XSpp/Node/Module.pm
 lib/ExtUtils/XSpp/Node/Package.pm
