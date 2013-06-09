@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Handle multiple function/method annotations (used by plugins).
+	- Updated plugin interface (should be backwards-compatible).
+
 0.1700   Sun Feb 10 12:00:00 CET 2013
 	- %alias feature for aliasing XS++ wrappers.
 
