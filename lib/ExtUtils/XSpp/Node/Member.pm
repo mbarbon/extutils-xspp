@@ -17,6 +17,8 @@ variable in a class such as
     int foo; // <-- this one
   }
 
+Member declarations do not produce any XS code unless they are
+decorated by either C<%get> or C<%set>.
 
 =head1 METHODS
 
@@ -46,9 +48,110 @@ sub init {
 
 sub print {
   my( $this, $state ) = @_;
+  my $str = '';
 
-  # no standard way of emitting a member
-  ''
+  $str .= $this->_getter->print( $state ) if $this->_getter;
+  $str .= $this->_setter->print( $state ) if $this->_setter;
+
+  return $str;
+}
+
+sub _getter {
+  my( $this ) = @_;
+
+  die 'Tried to create getter before adding member to a class'
+    unless $this->class;
+  return $this->{_getter} if $this->{_getter};
+
+  # TODO use plugin infrastructure
+  my $getter;
+  for my $tag ( @{$this->tags} ) {
+    if( $tag->{any} eq 'get' ) {
+      $getter = $tag->{positional}[0] || '';
+      last;
+    }
+  }
+  return unless defined $getter;
+
+  my $f = $this->{_getter} =
+    ExtUtils::XSpp::Node::Method->new
+      ( class          => $this->class,
+        cpp_name       => $this->_getter_name( $getter ),
+        ret_type       => $this->type,
+        code           => $this->_getter_code,
+        condition      => $this->condition,
+        emit_condition => $this->emit_condition,
+        const          => 1,
+        );
+  $f->set_ret_typemap( $this->typemap );
+  $f->resolve_typemaps;
+  $f->resolve_exceptions;
+
+  return $this->{_getter};
+}
+
+sub _setter {
+  my( $this ) = @_;
+
+  die 'Tried to create getter before adding member to a class'
+    unless $this->class;
+  return $this->{_setter} if $this->{_setter};
+
+  # TODO use plugin infrastructure
+  my $setter;
+  for my $tag ( @{$this->tags} ) {
+    if( $tag->{any} eq 'set' ) {
+      $setter = $tag->{positional}[0] || '';
+      last;
+    }
+  }
+  return unless defined $setter;
+
+  my $f = $this->{_setter} =
+    ExtUtils::XSpp::Node::Method->new
+      ( class          => $this->class,
+        cpp_name       => $this->_setter_name( $setter ),
+        arguments      => [ ExtUtils::XSpp::Node::Argument->new
+                              ( type => $this->type,
+                                name => 'value'
+                                )
+                            ],
+        ret_type       => ExtUtils::XSpp::Node::Type->new( base => 'void' ),
+        code           => $this->_setter_code,
+        condition      => $this->condition,
+        emit_condition => $this->emit_condition,
+        );
+  $f->set_arg_typemap( 0, $this->typemap );
+  $f->resolve_typemaps;
+  $f->resolve_exceptions;
+
+  return $this->{_setter};
+}
+
+sub _getter_code {
+  my( $this ) = @_;
+
+  return [ sprintf 'RETVAL = THIS->%s;', $this->cpp_name ];
+}
+
+sub _getter_name {
+  my( $this, $name ) = @_;
+
+  return $name if $name;
+  return $this->class->_getter_name( $this->perl_name );
+}
+
+sub _setter_code {
+  my( $this ) = @_;
+
+  return [ sprintf 'THIS->%s = value;', $this->cpp_name ];
+}
+
+sub _setter_name {
+  my( $this, $name ) = @_;
+
+  return $name if $name;
+  return $this->class->_setter_name( $this->perl_name );
 }
 
 =head2 resolve_typemaps

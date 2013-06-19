@@ -84,6 +84,7 @@ t/022_static.t
 t/022_virtual.t
 t/023_base_classes.t
 t/024_enum.t
+t/025_member.t
 t/030_code_blocks.t
 t/031_verbatim_blocks.t
 t/035_include.t

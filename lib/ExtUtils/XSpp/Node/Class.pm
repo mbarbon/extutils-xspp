@@ -51,6 +51,7 @@ sub init {
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
   $this->{EMIT_CONDITION} = $args{emit_condition};
+  $this->{GETTER_STYLE} = $this->{SETTER_STYLE} = 'underscore';
 
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 
@@ -155,6 +156,46 @@ EOT
   $out .= '#endif // ' . $this->emit_condition . "\n" if $this->emit_condition;
 
   return $out;
+}
+
+my %getter_maker =
+  ( no_prefix   => sub { $_[0] },
+    underscore  => sub { 'get_' . $_[0] },
+    camelcase   => sub { 'get'  . ucfirst $_[0] },
+    uppercase   => sub { 'Get'  . ucfirst $_[0] },
+    );
+
+my %setter_maker =
+  ( no_prefix   => sub { $_[0] },
+    underscore  => sub { 'set_' . $_[0] },
+    camelcase   => sub { 'set'  . ucfirst $_[0] },
+    uppercase   => sub { 'Set'  . ucfirst $_[0] },
+    );
+
+sub _getter_name {
+    my( $this, $base ) = @_;
+
+    return $getter_maker{$this->{GETTER_STYLE}}->( $base );
+}
+
+sub _setter_name {
+    my( $this, $base ) = @_;
+
+    return $setter_maker{$this->{SETTER_STYLE}}->( $base );
+}
+
+sub set_getter_style {
+    my( $this, $style ) = @_;
+
+    die "Invalid accessor style '$style'" unless exists $getter_maker{$style};
+    $this->{GETTER_STYLE} = $style;
+}
+
+sub set_setter_style {
+    my( $this, $style ) = @_;
+
+    die "Invalid accessor style '$style'" unless exists $setter_maker{$style};
+    $this->{SETTER_STYLE} = $style;
 }
 
 =head1 ACCESSORS

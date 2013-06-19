@@ -269,6 +269,9 @@ constructors and destructors.
   
       // Expose class method as My::ClassMethod::ClassMethod($foo)
       static void ClassMethod( double foo );
+
+      // Expose member variable as a pair of set_boolean/get_boolean accessors
+      bool boolean %get %set;
   };
 
 =head2 Comments
@@ -286,6 +289,39 @@ C<"Caught unhandled C++ exception of unknown type">.
 
 Note that if you supply a custom C<%code> block for a function or method,
 the automatic exception handling is turned off.
+
+=head2 Member variables
+
+By default, member variable declarations are ignored; the C<%get> and
+C<%set> decorators syntehsize a getter/setter named after the member
+variable (can be renamed using C<%name>).
+
+XS++ defaults to get_/set_ prefix for getters/setters.  This can be
+overridden on an individual basis by using e.g.
+
+    int foo %get{readFoo} %set{writeFoo};
+
+As an alternative, the class-level C<%accessors> decorator sets the the
+accessor style for the whole class:
+
+    %accessors{
+        %get_style{no_prefix};
+        %set_style{camelcase};
+    };
+
+The available styles are
+
+=over 4
+
+=item no_prefix   => foo
+
+=item underscore  => get_foo, set_foo
+
+=item camelcase   => getFoo, setFoo
+
+=item uppercase   => GetFoo, SetFoo
+
+=back
 
 =head1 EXAMPLES
 

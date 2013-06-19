@@ -328,6 +328,26 @@ sub create_class {
   }
 
   foreach my $any ( @any ) {
+    if( $any->{NAME} eq 'accessors' ) {
+      # TODO use plugin infrastructure, add decent validation
+      my %args = @{$any->{NAMED_ARGUMENTS}};
+      if( $args{get_style} ) {
+          if( @{$args{get_style}} ) {
+              $class->set_getter_style( $args{get_style}[0][0] );
+          } else {
+              die "Invalid accessor style declaration";
+          }
+      }
+      if( $args{set_style} ) {
+          if( @{$args{set_style}} ) {
+              $class->set_setter_style( $args{set_style}[0][0] );
+          } else {
+              die "Invalid accessor style declaration";
+          }
+      }
+      next;
+    }
+
     my $nodes = $parser->YYData->{PARSER}->handle_class_tag_plugins
       ( $class, $any->{NAME},
         named                    => $any->{NAMED_ARGUMENTS},
