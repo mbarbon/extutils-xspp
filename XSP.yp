@@ -333,11 +333,11 @@ perc_catch:      p_catch OPCURLY class_name_list CLCURLY  { [ map {(catch => $_)
 # this expands mixed_blocks to avoid ambiguity in the OPCURLY case
 perc_any:
     p_any OPCURLY perc_any_args CLCURLY
-        { [ tag => { any => $_[1], any_named_arguments => $_[3] } ] }
+        { [ tag => { any => $_[1], named => $_[3] } ] }
   | p_any OPCURLY ID CLCURLY mixed_blocks
-        { [ tag => { any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] } ] }
+        { [ tag => { any => $_[1], positional  => [ $_[3], @{$_[5]} ] } ] }
   | p_any special_block mixed_blocks
-        { [ tag => { any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] } ] }
+        { [ tag => { any => $_[1], positional  => [ $_[2], @{$_[3]} ] } ] }
   | p_any
         { [ tag => { any => $_[1] } ] }
   ;
