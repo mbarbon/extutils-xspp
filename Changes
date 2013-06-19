@@ -1,5 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Generate accessors for member variables.
 	- Handle multiple function/method annotations (used by plugins).
 	- Updated plugin interface (should be backwards-compatible).
 
