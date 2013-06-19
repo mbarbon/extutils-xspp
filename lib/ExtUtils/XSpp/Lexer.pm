@@ -283,8 +283,10 @@ sub add_top_level_directive {
 
   $parser->YYData->{PARSER}->handle_toplevel_tag_plugins
     ( $args{any},
-      any_named_arguments      => $args{any_named_arguments},
-      any_positional_arguments => $args{any_positional_arguments},
+      named                    => $args{named},
+      positional               => $args{positional},
+      any_named_arguments      => $args{named},
+      any_positional_arguments => $args{positional},
       condition                => $parser->get_conditional,
       );
 }
@@ -334,6 +336,8 @@ sub create_class {
   foreach my $any ( @any ) {
     my $nodes = $parser->YYData->{PARSER}->handle_class_tag_plugins
       ( $class, $any->{NAME},
+        named                    => $any->{NAMED_ARGUMENTS},
+        positional               => $any->{POSITIONAL_ARGUMENTS},
         any_named_arguments      => $any->{NAMED_ARGUMENTS},
         any_positional_arguments => $any->{POSITIONAL_ARGUMENTS},
         );

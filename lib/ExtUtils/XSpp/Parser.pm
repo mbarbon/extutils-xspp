@@ -287,8 +287,10 @@ sub _handle_plugins {
   foreach my $tag ( @{$tags || []} ) {
     my $nodes = _handle_plugin( $this, $plugins, $plugin_type,
                   [ $arg, $tag->{any},
-                    any_named_arguments      => $tag->{any_named_arguments},
-                    any_positional_arguments => $tag->{any_positional_arguments},
+                    named                    => $tag->{named},
+                    positional               => $tag->{positional},
+                    any_named_arguments      => $tag->{named},
+                    any_positional_arguments => $tag->{positional},
                     ] );
 
     push @nodes, @$nodes;

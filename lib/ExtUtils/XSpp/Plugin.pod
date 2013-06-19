@@ -45,8 +45,8 @@ No check is performed on parameter names/types/count.  The parser only
 gives an error if the annotation is not handled by any plugin.
 
 Positional parameters are passed to tag handlers as an array reference
-in the C<any_positional_arguments> parameter; named handlers are passed as
-an hash reference in the C<any_named_arguments> parameter.
+in the C<positional> parameter; named handlers are passed as
+an hash reference in the C<named> parameter.
 
 The value of a special block parameter is an array reference with an
 element for each line in the special block.  For consistency, the
