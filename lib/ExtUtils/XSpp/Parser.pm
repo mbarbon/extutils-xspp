@@ -161,7 +161,7 @@ modify the parse tree before it is emitted.
 sub add_post_process_plugin {
   my( $this, %args ) = @_;
 
-  push @{$this->{PLUGINS}{POST_PROCESS}}, $args{plugin};
+  _add_plugin( $this, 'POST_PROCESS', \%args, 'post_process' );
 }
 
 sub post_process_plugins { $_[0]->{PLUGINS}{POST_PROCESS} || [] }
@@ -177,14 +177,14 @@ sub add_class_tag_plugin {
   my( $this, %args ) = @_;
   my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{CLASS_TAG}{$tag}}, $args{plugin};
+  _add_plugin( $this, 'CLASS_TAG', \%args, 'handle_class_tag' );
 }
 
 sub handle_class_tag_plugins {
   my( $this, $class, @args ) = @_;
 
   _handle_plugin( $this, $this->{PLUGINS}{CLASS_TAG}, 'class',
-                  'handle_class_tag', [ $class, @args ] );
+                  [ $class, @args ] );
 }
 
 =head2 ExtUtils::XSpp::Parser::add_function_tag_plugin
@@ -198,14 +198,14 @@ sub add_function_tag_plugin {
   my( $this, %args ) = @_;
   my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{FUNCTION_TAG}{$tag}}, $args{plugin};
+  _add_plugin( $this, 'FUNCTION_TAG', \%args, 'handle_function_tag' );
 }
 
 sub handle_function_tags_plugins {
   my( $this, $function, $tags ) = @_;
 
   _handle_plugins( $this, $this->{PLUGINS}{FUNCTION_TAG}, 'function',
-                   'handle_function_tag', $tags, $function )
+                   $tags, $function )
 }
 
 =head2 ExtUtils::XSpp::Parser::add_method_tag_plugin
@@ -219,14 +219,14 @@ sub add_method_tag_plugin {
   my( $this, %args ) = @_;
   my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{METHOD_TAG}{$tag}}, $args{plugin};
+  _add_plugin( $this, 'METHOD_TAG', \%args, 'handle_method_tag' );
 }
 
 sub handle_method_tags_plugins {
   my( $this, $method, $tags ) = @_;
 
   _handle_plugins( $this, $this->{PLUGINS}{METHOD_TAG}, 'method',
-                   'handle_method_tag', $tags, $method );
+                   $tags, $method );
 }
 
 =head2 ExtUtils::XSpp::Parser::add_argument_tag_plugin
@@ -240,14 +240,14 @@ sub add_argument_tag_plugin {
   my( $this, %args ) = @_;
   my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{ARGUMENT_TAG}{$tag}}, $args{plugin};
+  _add_plugin( $this, 'ARGUMENT_TAG', \%args, 'handle_argument_tag' );
 }
 
 sub handle_argument_tags_plugins {
   my( $this, $argument, $tags ) = @_;
 
   _handle_plugins( $this, $this->{PLUGINS}{ARGUMENT_TAG}, 'argument',
-                   'handle_argument_tag', $tags, $argument );
+                   $tags, $argument );
 }
 
 =head2 ExtUtils::XSpp::Parser::add_toplevel_tag_plugin
@@ -261,22 +261,35 @@ sub add_toplevel_tag_plugin {
   my( $this, %args ) = @_;
   my $tag = $args{tag} || '_any_';
 
-  push @{$this->{PLUGINS}{TOPLEVEL_TAG}{$tag}}, $args{plugin};
+  _add_plugin( $this, 'TOPLEVEL_TAG', \%args, 'handle_toplevel_tag' );
 }
 
 sub handle_toplevel_tag_plugins {
   my( $this, @args ) = @_;
 
   _handle_plugin( $this, $this->{PLUGINS}{TOPLEVEL_TAG}, 'top-level',
-                  'handle_toplevel_tag', [ undef, @args ] );
+                  [ undef, @args ] );
+}
+
+sub _add_plugin {
+  my( $this, $kind, $args, $default_method ) = @_;
+  my $entry = { plugin => $args->{plugin},
+                method => $args->{method} || $default_method,
+                };
+
+  if( $kind eq 'POST_PROCESS' ) {
+    push @{$this->{PLUGINS}{$kind}}, $entry;
+  } else {
+    push @{$this->{PLUGINS}{$kind}{$args->{tag} || '_any_'}}, $entry;
+  }
 }
 
 sub _handle_plugins {
-  my( $this, $plugins, $plugin_type, $plugin_method, $tags, $arg ) = @_;
+  my( $this, $plugins, $plugin_type, $tags, $arg ) = @_;
   my @nodes;
 
   foreach my $tag ( @{$tags || []} ) {
-    my $nodes = _handle_plugin( $this, $plugins, $plugin_type, $plugin_method,
+    my $nodes = _handle_plugin( $this, $plugins, $plugin_type,
                   [ $arg, $tag->{any},
                     any_named_arguments      => $tag->{any_named_arguments},
                     any_positional_arguments => $tag->{any_positional_arguments},
@@ -289,11 +302,13 @@ sub _handle_plugins {
 }
 
 sub _handle_plugin {
-  my( $this, $plugins, $plugin_type, $plugin_method, $plugin_args ) = @_;
+  my( $this, $plugins, $plugin_type, $plugin_args ) = @_;
   my $tag = $plugin_args->[1];
 
   foreach my $plugin ( @{$plugins->{$tag} || []}, @{$plugins->{_any_} || []} ) {
-    my( $handled, @nodes ) = $plugin->$plugin_method( @$plugin_args );
+    my $method = $plugin->{method};
+
+    my( $handled, @nodes ) = $plugin->{plugin}->$method( @$plugin_args );
     return \@nodes if $handled;
   }
 

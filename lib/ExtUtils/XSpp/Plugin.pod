@@ -58,7 +58,9 @@ These methods are defined in the parser object.
 
 =head2 add_post_process_plugin
 
-    $parser->add_post_process_plugin( plugin => $instance );
+    $parser->add_post_process_plugin( plugin => $instance,
+                                      method => 'post_process',
+                                      );
 
 Registers a post-processing plugin to be called after the parsing
 finishes.
@@ -68,6 +70,7 @@ finishes.
     $parser->add_function_tag_plugin( plugin => $instance,
                                       # optional
                                       tag    => $tag,
+                                      method => 'handle_function_tag',
                                       );
 
 Add a plugin to handle functions annotated with tags.
@@ -77,6 +80,7 @@ Add a plugin to handle functions annotated with tags.
     $parser->add_class_tag_plugin( plugin => $instance,
                                    # optional
                                    tag    => $tag,
+                                   method => 'handle_class_tag',
                                    );
 
 Add a plugin to handle classes annotated with tags.
@@ -86,6 +90,7 @@ Add a plugin to handle classes annotated with tags.
     $parser->add_method_tag_plugin( plugin => $instance,
                                     # optional
                                     tag    => $tag,
+                                    method => 'handle_method_tag',
                                     );
 
 Add a plugin to handle methods annotated with tags.
@@ -95,6 +100,7 @@ Add a plugin to handle methods annotated with tags.
     $parser->add_toplevel_tag_plugin( plugin => $instance,
                                       # optional
                                       tag    => $tag,
+                                      method => 'handle_toplevel_tag',
                                       );
 
 Add a plugin to handle top-level directives.
