@@ -68,10 +68,19 @@ sub parse {
                                     yyerror => \&ExtUtils::XSpp::Grammar::yyerror,
                                     yydebug => 0x00,
                                    );
-  if (ref($this->{DATA})) {
+  if (ref($this->{DATA}) eq 'ARRAY') {
     unshift @{$this->{DATA}},
       ExtUtils::XSpp::Node::Raw->new(rows =>['#include <exception>']);
   }
+}
+
+sub parse_type {
+    my( $class, $type ) = @_;
+    my $this = $class->new( string => "%_type{$type}" );
+
+    $this->parse;
+
+    return $this->{DATA};
 }
 
 sub include_file {

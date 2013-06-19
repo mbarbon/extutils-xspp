@@ -81,7 +81,9 @@ sub _emit {
     my %state = ( current_module => undef );
 
     foreach my $plugin ( @{$parser->post_process_plugins} ) {
-        $plugin->post_process( $data );
+        my $method = $plugin->{method};
+
+        $plugin->{plugin}->$method( $data );
     }
 
     foreach my $e ( @$data ) {
