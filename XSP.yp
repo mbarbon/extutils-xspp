@@ -20,6 +20,8 @@
 top_list:
       top
     | top_list top      { push @{$_[1]}, @{$_[2]}; $_[1] }
+    | p__type OPCURLY type CLCURLY
+          { $_[3] }
     ;
 
 top: _top               { !$_[1]               ? [] :

@@ -68,6 +68,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%loadplugin' => 'p_loadplugin',
                '%include'    => 'p_include',
                '%alias'      => 'p_alias',
+               '%_type'      => 'p__type',
              );
 
 my %keywords = ( const           => 1,

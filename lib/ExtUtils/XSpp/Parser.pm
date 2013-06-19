@@ -70,6 +70,15 @@ sub parse {
                                    );
 }
 
+sub parse_type {
+    my( $class, $type ) = @_;
+    my $this = $class->new( string => "%_type{$type}" );
+
+    $this->parse;
+
+    return $this->{DATA};
+}
+
 sub include_file {
   my $this = shift;
   my( $file ) = @_;
