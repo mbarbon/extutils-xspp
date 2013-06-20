@@ -63,8 +63,7 @@ sub init {
       ++$index;
   }
 
-  if (ref($this->{CATCH})
-      and @{$this->{CATCH}} > 1
+  if (@{$this->catch} > 1
       and grep {$_ eq 'nothing'} @{$this->{CATCH}})
   {
     Carp::croak( ref($this) . " '" . $this->{CPP_NAME}
@@ -108,7 +107,7 @@ the C<%catch> directives associated with this function.
 sub resolve_exceptions {
   my $this = shift;
 
-  my @catch = @{$this->{CATCH} || []};
+  my @catch = @{$this->catch};
 
   my @exceptions;
 
@@ -153,13 +152,12 @@ sub add_exception_handlers {
   my $this = shift;
 
   # ignore class %catch'es if overridden with "nothing" in the method
-  if ($this->{CATCH} and @{$this->{CATCH}} == 1
-      and $this->{CATCH} eq 'nothing') {
+  if (@{$this->catch} == 1 and $this->{CATCH}[0] eq 'nothing') {
     return();
   }
 
   # ignore class %catch{nothing} if overridden in the method
-  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->{CATCH}}) {
+  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->catch}) {
     return();
   }
 
