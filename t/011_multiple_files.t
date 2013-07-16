@@ -29,10 +29,6 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
-
-#include <exception>
-
-
 int
 foo( int a, int b, int c )
   CODE:

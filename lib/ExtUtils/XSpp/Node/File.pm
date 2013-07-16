@@ -47,8 +47,6 @@ Returns the path of the file to write to (or C<-> for STDOUT).
 =cut
 
 sub file { $_[0]->{FILE} }
-sub print {
-  "\n#include <exception>\n\n\n"
-}
+sub print { return '' }
 
 1;

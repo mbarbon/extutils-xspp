@@ -40,10 +40,6 @@ MODULE=Foo::Bar::Baz
 
 MODULE=Foo::Bar::Baz PACKAGE=Foo::Bar::Baz::Buz
 
-
-#include <exception>
-
-
 int
 foo( int a, int b, int c )
   CODE:
@@ -61,7 +57,6 @@ foo( int a, int b, int c )
 EOT
 
 eq_or_diff( slurp 't/files/foo.h', <<EOT, 'Output on external file' );
-
 #include <exception>
 
 

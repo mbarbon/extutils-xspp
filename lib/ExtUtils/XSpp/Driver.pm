@@ -98,17 +98,27 @@ sub _emit {
         $plugin->post_process( $data );
     }
 
+    $out{'-'} = preamble();
     foreach my $e ( @$data ) {
         if( $e->isa( 'ExtUtils::XSpp::Node::Module' ) ) {
             $state{current_module} = $e;
         }
         if( $e->isa( 'ExtUtils::XSpp::Node::File' ) ) {
             $out_file = $e->file;
+            $out{$out_file} ||= preamble();
         }
         $out{$out_file} .= $e->print( \%state );
     }
 
     return \%out;
+}
+
+sub preamble {
+  return <<EOT
+#include <exception>
+
+
+EOT
 }
 
 sub typemaps { @{$_[0]->{typemaps} || []} }
