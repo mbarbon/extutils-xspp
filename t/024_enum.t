@@ -31,7 +31,7 @@ enum Values
     THREE,
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -51,7 +51,7 @@ enum
     THREE
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

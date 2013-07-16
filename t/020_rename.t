@@ -18,7 +18,7 @@ __DATA__
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -62,7 +62,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -99,7 +99,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %code{%RETVAL = a;%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -121,7 +121,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %alias{buz2 = 1};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -169,7 +169,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -204,7 +204,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -248,7 +248,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -283,7 +283,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -318,7 +318,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

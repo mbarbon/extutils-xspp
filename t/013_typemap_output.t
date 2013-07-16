@@ -54,7 +54,9 @@ TYPEMAP
 bar*	T_BAR
 
 END
+# XSP preamble
 #include <exception>
+# XSP preamble
 
 
 MODULE=Foo2
@@ -94,7 +96,7 @@ Foo*	O_OBJECT
 bar*	T_BAR
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

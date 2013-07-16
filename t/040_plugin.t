@@ -27,7 +27,7 @@ TYPEMAP
 Y*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -82,7 +82,7 @@ TYPEMAP
 Y*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

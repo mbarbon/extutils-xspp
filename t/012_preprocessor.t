@@ -43,7 +43,7 @@ __DATA__
 #error 2
 #endif
 --- expected
-#include <exception>
+# XSP preamble
 
 
 #include "foo.h"
@@ -73,7 +73,7 @@ __DATA__
 #error 2
 #endif
 --- expected
-#include <exception>
+# XSP preamble
 
 
 #include "foo.h"
@@ -105,7 +105,7 @@ __DATA__
 #error 2
 #endif
 --- expected
-#include <exception>
+# XSP preamble
 
 
 #include "foo.h"
@@ -140,7 +140,7 @@ int bar();
 
 #endif
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -172,7 +172,7 @@ enum Foo
 
 #endif
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -210,7 +210,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

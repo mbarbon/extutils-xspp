@@ -17,7 +17,7 @@ __DATA__
 int foo(int a);
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -44,7 +44,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -92,7 +92,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -174,7 +174,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -202,7 +202,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -237,7 +237,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -284,7 +284,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -330,7 +330,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -385,7 +385,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

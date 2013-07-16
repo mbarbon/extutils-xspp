@@ -16,7 +16,7 @@ __DATA__
 %name{boo} int foo(int a)
     %code{% RETVAL = a + 12; %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -37,7 +37,7 @@ boo( int a )
 %name{boo} int foo(int a)
     %cleanup{% free( it ); %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -68,7 +68,7 @@ boo( int a )
 int foo(int a)
     %postcall{% blub( a ); %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -99,7 +99,7 @@ foo( int a )
 %name{boo} void foo(int a)
     %code{% blub( a ); %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -120,7 +120,7 @@ boo( int a )
     %code{% blub( a ); %}
     %cleanup{% free( it ); %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -142,7 +142,7 @@ boo( int a )
 void foo(int a)
     %postcall{% blub( a ); %};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

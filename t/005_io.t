@@ -30,7 +30,9 @@ sub slurp($) {
 }
 
 eq_or_diff( $out, <<EOT, 'Output on stdout' );
+# XSP preamble
 #include <exception>
+# XSP preamble
 
 
 MODULE=Foo::Bar::Baz
@@ -57,7 +59,9 @@ foo( int a, int b, int c )
 EOT
 
 eq_or_diff( slurp 't/files/foo.h', <<EOT, 'Output on external file' );
+# XSP preamble
 #include <exception>
+# XSP preamble
 
 
 

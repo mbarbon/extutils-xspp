@@ -17,7 +17,7 @@ __DATA__
 %include{t/files/include.xsp};
 int bar(int y);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

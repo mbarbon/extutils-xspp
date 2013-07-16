@@ -23,7 +23,7 @@ Foo*	O_OBJECT
 Moo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -65,7 +65,7 @@ Boo*	O_OBJECT
 Moo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

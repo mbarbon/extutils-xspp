@@ -115,7 +115,9 @@ sub _emit {
 
 sub preamble {
   return <<EOT
+# XSP preamble
 #include <exception>
+# XSP preamble
 
 
 EOT

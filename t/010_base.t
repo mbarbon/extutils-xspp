@@ -22,7 +22,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -56,7 +56,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -70,7 +70,7 @@ MODULE=Foo PACKAGE=Foo
 
 int foo( int a );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -105,7 +105,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -140,7 +140,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -175,7 +175,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -209,7 +209,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -244,7 +244,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -312,7 +312,7 @@ TYPEMAP
 Foo*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 
@@ -366,7 +366,7 @@ Foo::foo( int a, int b, int c )
 unsigned int
 bar( char* line, unsigned long %length{line} );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -397,7 +397,7 @@ unsigned int
 bar( char* line, unsigned long %length{line} )
   %code{%RETVAL = bar(length(line)*2);%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -421,7 +421,7 @@ bar( char* line, unsigned long %length{line} )
   %postcall{% cout << length(line) << endl;%}
   %cleanup{% cout << 2*length(line) << endl;%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -455,7 +455,7 @@ bar( char* line, unsigned long length(line) )
 short int
 bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f, long int g, unsigned long int h );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -493,7 +493,7 @@ TYPEMAP
 wxRichTextCtrl*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Wx

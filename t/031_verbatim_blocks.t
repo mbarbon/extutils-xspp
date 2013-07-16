@@ -17,7 +17,7 @@ __DATA__
 Straight to XS, no checks...
 %}
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -44,7 +44,7 @@ TYPEMAP
 X*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

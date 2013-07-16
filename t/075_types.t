@@ -19,7 +19,7 @@ __DATA__
 int* foo();
 int* boo(const int* a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -65,7 +65,7 @@ boo( const int* a )
 void foo(const std::string a);
 void boo(const std::string& a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -110,7 +110,7 @@ void foo(const std::string a);
 void boo(const std::string& a);
 void foo2(std::vector<double> a, std::vector<double>& b);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -169,7 +169,7 @@ foo2( std::vector< double > a, std::vector< double >* b )
 void foo(const std::vector<int>& a);
 void boo(const std::map<int, std::string> a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -211,7 +211,7 @@ boo( const std::map< int, std::string > a )
 
 void foo(const std::vector<double>& a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

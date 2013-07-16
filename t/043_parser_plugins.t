@@ -30,7 +30,7 @@ TYPEMAP
 klass*	O_OBJECT
 
 END
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -90,7 +90,7 @@ klass::Bar()
 %MyDirective{Foo};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
