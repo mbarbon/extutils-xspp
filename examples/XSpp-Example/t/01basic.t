@@ -1,8 +1,14 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 24;
 use XSpp::Example;
+
+{
+    package Azawakh;
+
+    our @ISA = qw(Dog);
+}
 
 $| = 1; # autoflush
 
@@ -19,6 +25,11 @@ is($dog->GetName(), "Skip");
 
 $dog->SetName("Brutus");
 is($dog->GetName(), "Brutus");
+
+my $azawakh = Azawakh->new('Spot');
+isa_ok($azawakh, 'Azawakh');
+isa_ok($azawakh, 'Dog');
+isa_ok($azawakh, 'Animal');
 
 my $animal = Animal->new("Tweety");
 isa_ok($animal, 'Animal');
@@ -37,6 +48,11 @@ my $clone = $dog->Clone();
 isa_ok($clone, 'Dog');
 isa_ok($clone, 'Animal');
 is($clone->GetName(), $dog->GetName());
+
+my $clone2 = $azawakh->Clone();
+isa_ok($clone2, 'Dog');
+isa_ok($clone2, 'Animal');
+is($clone2->GetName(), $azawakh->GetName());
 
 print "# "; # comment the bark output
 Dog::MakeDogBark($clone);

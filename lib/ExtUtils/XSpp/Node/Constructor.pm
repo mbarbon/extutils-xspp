@@ -38,6 +38,20 @@ sub init {
   die "Can't specify return value in constructor" if $this->{RET_TYPE};
 }
 
+sub print {
+    my $this  = shift;
+    my $state = shift;
+    my $out = $this->SUPER::print( $state );
+
+    return sprintf <<EOT, $out;
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
+
+%s#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
+
+EOT
+}
 
 =head2 ret_type
 

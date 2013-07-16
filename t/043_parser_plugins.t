@@ -54,6 +54,9 @@ Foo( int y )
 
 MODULE=Foo PACKAGE=Klass
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
+
 static klass*
 klass::newKlass()
   CODE:
@@ -67,6 +70,9 @@ klass::newKlass()
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
 
 void
 klass::Bar()

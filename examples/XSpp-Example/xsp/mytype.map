@@ -1,6 +1,5 @@
 std::string*	T_STRINGPTR
 std::string	T_STRING
-Dog_Factory *		O_OBJECT_dog
 
 
 INPUT
@@ -11,14 +10,6 @@ T_STRING
 T_STRINGPTR
 	$var = new std::string(SvPV_nolen($arg))
 
-O_OBJECT_dog
-        if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
-                $var = ($type)SvIV((SV*)SvRV( $arg ));
-        else{
-                warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
-                XSRETURN_UNDEF;
-        }
-
 OUTPUT
 
 T_STRING
@@ -26,7 +17,4 @@ T_STRING
 
 T_STRINGPTR
 	$arg = newSVpvn($var->c_str(), $var->length());
-
-O_OBJECT_dog
-        sv_setref_pv( $arg, "Dog", (void*)$var );
 

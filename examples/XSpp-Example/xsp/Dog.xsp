@@ -1,4 +1,3 @@
-#include "myinit.h"
 #include "Dog.h"
 
 %module{XSpp::Example};
@@ -10,9 +9,7 @@ class Dog : public Animal
 
   void MakeSound();
   void Bark();
-  // Using Dog_Factory* instead of Dog* (see myinit.h)
-  // to work around typemapping problem.
-  Dog_Factory* Clone();
+  Dog* Clone();
 
   static void MakeDogBark(Dog& d);
 };

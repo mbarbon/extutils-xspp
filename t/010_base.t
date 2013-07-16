@@ -147,6 +147,9 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
+
 Foo*
 Foo::new( int a = 1 )
   CODE:
@@ -160,6 +163,9 @@ Foo::new( int a = 1 )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
 
 === Destructor
 --- xsp_stdout
@@ -500,9 +506,15 @@ MODULE=Wx
 
 MODULE=Wx PACKAGE=Wx::RichTextCtrl
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
+
 static wxRichTextCtrl*
 wxRichTextCtrl::newDefault()
   CODE:
      RETVAL = new wxRichTextCtrl();
                 wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
   OUTPUT: RETVAL
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)

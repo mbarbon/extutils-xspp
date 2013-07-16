@@ -154,7 +154,7 @@ INPUTCODE
     if (not $typemaps->get_outputmap(xstype => 'O_OBJECT')) {
       $typemaps->add_outputmap(
         xstype => 'O_OBJECT',
-        code => 'sv_setref_pv( $arg, CLASS, (void*)$var );'
+        code => 'sv_setref_pv( $arg, xsp_constructor_class("${my $ntt = $type; $ntt =~ s{^const\s+|[ \t*]+$}{}g; \\$ntt}"), (void*)$var );'
       );
     }
   }

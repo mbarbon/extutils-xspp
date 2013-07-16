@@ -32,6 +32,8 @@ sub slurp($) {
 eq_or_diff( $out, <<EOT, 'Output on stdout' );
 # XSP preamble
 #include <exception>
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
 # XSP preamble
 
 
@@ -61,6 +63,8 @@ EOT
 eq_or_diff( slurp 't/files/foo.h', <<EOT, 'Output on external file' );
 # XSP preamble
 #include <exception>
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
 # XSP preamble
 
 

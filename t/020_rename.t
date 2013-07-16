@@ -255,6 +255,9 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
+
 static Foo*
 Foo::newFoo( int a )
   CODE:
@@ -268,6 +271,9 @@ Foo::newFoo( int a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
 
 === Renamed destructor
 --- xsp_stdout
