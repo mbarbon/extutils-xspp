@@ -43,35 +43,26 @@ directive:      perc_module SEMICOLON
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
-                    { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
-                      my $type = $_[3]; my $c = 0;
+                    { my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
                                  map { join( '', @$_ ) }
                                      @{$_[8] || []};
-                      my $tm = $package->new( type => $type, %args );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      add_typemap( $_[6], $_[3], %args );
                       undef }
               | p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   OPCURLY perc_any_args CLCURLY SEMICOLON
-                    { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
-                      my $type = $_[3];
-                      # this assumes that there will be at most one named
+                    { # this assumes that there will be at most one named
                       # block for each directive inside the typemap
                       for( my $i = 1; $i <= $#{$_[9]}; $i += 2 ) {
                           $_[9][$i] = join "\n", @{$_[9][$i][0]}
                               if    ref( $_[9][$i] ) eq 'ARRAY'
                                  && ref( $_[9][$i][0] ) eq 'ARRAY';
                       }
-                      my $tm = $package->new( type => $type, @{$_[9]} );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      add_typemap( $_[6], $_[3], @{$_[9]} );
                       undef }
               | p_typemap OPCURLY type CLCURLY SEMICOLON
-                    { my $type = $_[3]; # add simple and reference typemaps for this type
-                      my $tm = ExtUtils::XSpp::Typemap::simple->new( type => $type );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
-                      my $reftype = make_ref($type->clone);
-                      $tm = ExtUtils::XSpp::Typemap::reference->new( type => $reftype );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $reftype, $tm );
+                    { add_typemap( 'simple', $_[3] );
+                      add_typemap( 'reference', make_ref($_[3]->clone) );
                       undef }
               ;
 

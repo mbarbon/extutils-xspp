@@ -256,6 +256,14 @@ sub make_template {
                                      )
 }
 
+sub add_typemap {
+  my( $name, $type, @args ) = @_;
+  my $package = "ExtUtils::XSpp::Typemap::" . $name;
+  my $tm = $package->new( type => $type, @args );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+}
+
 sub add_data_raw {
   my $p = shift;
   my $rows = shift;
@@ -450,19 +458,5 @@ sub add_data_dtor {
 
   return $m;
 }
-
-sub is_directive {
-  my( $p, $d, $name ) = @_;
-
-  return $d->[0] eq $name;
-}
-
-#sub assert_directive {
-#  my( $p, $d, $name ) = @_;
-#
-#  if( $d->[0] ne $name )
-#    { $p->YYError }
-#  1;
-#}
 
 1;
