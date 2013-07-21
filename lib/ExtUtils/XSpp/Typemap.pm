@@ -68,6 +68,16 @@ sub call_function_code { undef }
 sub output_list { undef }
 
 my @Typemaps;
+my $Default_output_code = 'sv_setref_pv( $arg, xsp_constructor_class("${my $ntt = $type; $ntt =~ s{^const\s+|[ \t*]+$}{}g; \\$ntt}"), (void*)$var );';
+my $Default_input_code = <<'INPUTCODE';
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+		$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+		warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+		XSRETURN_UNDEF;
+	}
+INPUTCODE
+
 
 # add typemaps for basic C types
 add_default_typemaps();
@@ -139,19 +149,15 @@ sub get_xs_typemap_code_for_all_typemaps {
   my $has_oobject = grep $_ eq 'O_OBJECT', values %{$tm_hash||{}};
   if ($has_oobject) {
     if (not $typemaps->get_inputmap(xstype => 'O_OBJECT')) {
-      $typemaps->add_inputmap(xstype => 'O_OBJECT', code => <<'INPUTCODE');
-	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
-		$var = ($type)SvIV((SV*)SvRV( $arg ));
-	else{
-		warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
-		XSRETURN_UNDEF;
-	}
-INPUTCODE
+      $typemaps->add_inputmap(
+        xstype => 'O_OBJECT',
+        code => $Default_input_code,
+      );
     }
     if (not $typemaps->get_outputmap(xstype => 'O_OBJECT')) {
       $typemaps->add_outputmap(
         xstype => 'O_OBJECT',
-        code => 'sv_setref_pv( $arg, xsp_constructor_class("${my $ntt = $type; $ntt =~ s{^const\s+|[ \t*]+$}{}g; \\$ntt}"), (void*)$var );'
+        code => $Default_output_code,
       );
     }
   }
