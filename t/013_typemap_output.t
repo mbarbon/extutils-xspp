@@ -31,12 +31,6 @@ bar*	T_BAR
 END
 EXPECTED
 
-# Now parse a normal class, which will auto-add a typemap entry
-run_diff xsp_stdout => 'expected';
-
-# re-add typemap since the test code clears them
-ExtUtils::XSpp::Typemap::add_typemap_for_type($type => $tm);
-
 # Now check whether adding a class may overwrite existing typemaps.
 # Process class of same name as manual typemap
 my $d = ExtUtils::XSpp::Driver->new( string => <<'HERE' );
@@ -81,11 +75,18 @@ bar::foo2( int a, int b, int c )
 
 HERE
 
+# Now parse a normal class, which will auto-add a typemap entry
+run_diff xsp_stdout => 'expected';
+
 __DATA__
 
 === Basic class
 --- xsp_stdout
 %module{Foo};
+
+%typemap{bar *}{simple}{
+    %xs_type{T_BAR};
+};
 
 class Foo
 {

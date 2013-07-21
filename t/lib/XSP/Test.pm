@@ -30,7 +30,6 @@ sub run_diff(@) {
 
     run {
         my $block = shift;
-        ExtUtils::XSpp::Typemap::reset_typemaps();
         my( $b_got, $b_expected ) = map { s/^\n+//s; s/\n+$//s; $_ }
                                         $block->$got, $block->$expected;
 
@@ -69,18 +68,22 @@ sub _munge_output($) {
 }
 
 sub xsp_stdout {
+    ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
+    ExtUtils::XSpp::Typemap::reset_typemaps();
 
     return _munge_output( $out->{'-'} );
 }
 
 sub xsp_file {
+    ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
     my $name = Test::Base::filter_arguments();
     my $d = ExtUtils::XSpp::Driver->new( string => shift );
     my $out = $d->generate;
+    ExtUtils::XSpp::Typemap::reset_typemaps();
 
     return _munge_output( $out->{$name} );
 }
