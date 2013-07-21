@@ -16,10 +16,14 @@ sub init {
   $this->{PRECALL_CODE} = _dl( $args{precall_code} || $args{arg5} );
   $this->{OUTPUT_LIST} = _dl( $args{output_list} );
   $this->{XS_TYPE} = $args{xs_type};
+  $this->{XS_INPUT_CODE} = $args{xs_input_code};
+  $this->{XS_OUTPUT_CODE} = $args{xs_output_code};
 }
 
 sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }
 sub xs_type { $_[0]->{XS_TYPE} }
+sub xs_input_code { $_[0]->{XS_INPUT_CODE} }
+sub xs_output_code { $_[0]->{XS_OUTPUT_CODE} }
 
 sub output_code {
   my( $this, $pvar, $cvar ) = @_;

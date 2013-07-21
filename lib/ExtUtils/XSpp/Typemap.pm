@@ -58,6 +58,8 @@ the C++ variable(s).
 sub init { }
 
 sub xs_type { $_[0]->{XS_TYPE} }
+sub xs_input_code { $_[0]->{XS_INPUT_CODE} }
+sub xs_output_code { $_[0]->{XS_OUTPUT_CODE} }
 sub cpp_type { die; }
 sub input_code { die; }
 sub precall_code { undef }
@@ -129,37 +131,38 @@ sub get_typemap_for_type {
 sub get_xs_typemap_code_for_all_typemaps {
   my $typemaps = ExtUtils::Typemaps->new;
 
-  foreach my $typemap (reverse @Typemaps) {
-    my $xstype = $typemap->[1]->xs_type();
-    if (defined $xstype) {
-      # TODO check whether xstype is the same if replacing?
-      #      I doubt this matters in practice.
-      $typemaps->add_typemap(
-        ctype => $typemap->[1]->cpp_type,
-        xstype => $xstype,
-        replace => 1,
-      );
-    }
+  # process typemaps in reverse order, so newer ones take precedence
+  my @xs_typemaps = grep $_->[1]->xs_type, reverse @Typemaps;
+  return unless @xs_typemaps;
+
+  my %xs_types;
+  foreach my $typemap (grep $_->[1]->cpp_type, @xs_typemaps) {
+    my $xstype = $typemap->[1]->xs_type;
+
+    $xs_types{$typemap->[1]->cpp_type} = $xstype;
+    $typemaps->add_typemap(
+      ctype => $typemap->[1]->cpp_type,
+      xstype => $xstype,
+      replace => 1,
+    );
   }
 
-  # Add a default typemap for O_OBJECT if it's not customized
+  # avoid adding INPUT/OUTPUT sections for unused mappings
+  %xs_types = reverse %xs_types;
+  foreach my $typemap (grep $xs_types{$_->[1]->xs_type || ''}, @xs_typemaps) {
+    my $xstype = $typemap->[1]->xs_type;
 
-  # FIXME add better API to ExtUtils::Typemaps and use that!
-  my $tm_hash = $typemaps->_get_typemap_hash;
-  my $has_oobject = grep $_ eq 'O_OBJECT', values %{$tm_hash||{}};
-  if ($has_oobject) {
-    if (not $typemaps->get_inputmap(xstype => 'O_OBJECT')) {
-      $typemaps->add_inputmap(
-        xstype => 'O_OBJECT',
-        code => $Default_input_code,
-      );
-    }
-    if (not $typemaps->get_outputmap(xstype => 'O_OBJECT')) {
-      $typemaps->add_outputmap(
-        xstype => 'O_OBJECT',
-        code => $Default_output_code,
-      );
-    }
+    $typemaps->add_inputmap(
+      xstype => $xstype,
+      code => $typemap->[1]->xs_input_code,
+      replace => 1,
+    ) if $typemap->[1]->xs_input_code;
+
+    $typemaps->add_outputmap(
+      xstype => $xstype,
+      code => $typemap->[1]->xs_output_code,
+      replace => 1,
+    ) if $typemap->[1]->xs_output_code;
   }
 
   return '' if $typemaps->is_empty;
@@ -219,6 +222,18 @@ sub add_default_typemaps {
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type
       ( $const_char_p, ExtUtils::XSpp::Typemap::simple->new( type => $const_char_p ) );
+
+  # objects
+  my $dummy_type = ExtUtils::XSpp::Node::Type->new( base => '' );
+  my $obj_typemap = ExtUtils::XSpp::Typemap::parsed->new(
+    name             => 'object',
+    type             => $dummy_type,
+    xs_type          => 'O_OBJECT',
+    xs_input_code    => $Default_input_code,
+    xs_output_code   => $Default_output_code,
+  );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type( $dummy_type, $obj_typemap )
 }
 
 1;

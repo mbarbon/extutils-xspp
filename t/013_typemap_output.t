@@ -18,6 +18,8 @@ my $type = ExtUtils::XSpp::Node::Type->new(
 my $tm = ExtUtils::XSpp::Typemap::simple->new(
   type => $type,
   xs_type => 'T_BAR',
+  xs_input_code => 'MY_IN($arg, $var, $type, $Package, $func_name, Bar)',
+  xs_output_code => 'MY_OUT($arg, $var, Bar)',
 );
 ExtUtils::XSpp::Typemap::add_typemap_for_type($type => $tm);
 
@@ -27,6 +29,14 @@ eq_or_diff($typemap_code, <<'EXPECTED');
 TYPEMAP: <<END
 TYPEMAP
 bar*	T_BAR
+
+INPUT
+T_BAR
+	MY_IN($arg, $var, $type, $Package, $func_name, Bar)
+
+OUTPUT
+T_BAR
+	MY_OUT($arg, $var, Bar)
 
 END
 EXPECTED
@@ -46,6 +56,14 @@ eq_or_diff($d->generate->{'-'}, <<'HERE');
 TYPEMAP: <<END
 TYPEMAP
 bar*	T_BAR
+
+INPUT
+T_BAR
+	MY_IN($arg, $var, $type, $Package, $func_name, Bar)
+
+OUTPUT
+T_BAR
+	MY_OUT($arg, $var, Bar)
 
 END
 # XSP preamble

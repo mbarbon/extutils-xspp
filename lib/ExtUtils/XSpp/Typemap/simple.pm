@@ -8,6 +8,8 @@ sub init {
 
   $this->{TYPE} = $args{type};
   $this->{XS_TYPE} = $args{xs_type};
+  $this->{XS_INPUT_CODE} = $args{xs_input_code};
+  $this->{XS_OUTPUT_CODE} = $args{xs_output_code};
 }
 
 sub cpp_type { $_[0]->{TYPE}->print }
