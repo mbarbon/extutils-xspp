@@ -87,10 +87,7 @@ sub reset_typemaps {
 # same type
 sub add_weak_typemap_for_type {
   my( $type, $typemap ) = @_;
-  foreach my $t ( @Typemaps ) {
-    return if $t->[0]->equals( $type );
-  }
-  unshift @Typemaps, [ $type, $typemap ];
+  push @Typemaps, [ $type, $typemap ];
 }
 
 sub get_typemap_for_type {
@@ -122,7 +119,7 @@ sub get_typemap_for_type {
 sub get_xs_typemap_code_for_all_typemaps {
   my $typemaps = ExtUtils::Typemaps->new;
 
-  foreach my $typemap (@Typemaps) {
+  foreach my $typemap (reverse @Typemaps) {
     my $xstype = $typemap->[1]->xs_type();
     if (defined $xstype) {
       # TODO check whether xstype is the same if replacing?
