@@ -9,7 +9,6 @@ sub init {
   my %args = @_;
 
   $this->{TYPE} = $args{type};
-  $this->{XS_TYPE} = $args{xs_type};
   $this->{CPP_TYPE} = $args{cpp_type} || $args{arg1};
   $this->{CALL_FUNCTION_CODE} = _dl( $args{call_function_code} || $args{arg2} );
   $this->{OUTPUT_CODE} = _dl( $args{output_code} || $args{arg3} );
