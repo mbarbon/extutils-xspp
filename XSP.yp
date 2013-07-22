@@ -334,6 +334,7 @@ perc_any_args:
 
 perc_any_arg:
     p_any mixed_blocks SEMICOLON { [ $_[1] => $_[2] ] }
+  | perc_name          SEMICOLON { [ name  => $_[1] ] }
   ;
 
 type:
