@@ -8,7 +8,19 @@ sub init {
   my $this = shift;
   my %args = @_;
 
+  if( my $base = $args{base} ) {
+    %args = ( cpp_type => $base->{CPP_TYPE},
+              call_function_code => $base->{CALL_FUNCTION_CODE},
+              output_code => $base->{OUTPUT_CODE},
+              cleanup_code => $base->{CLEANUP_CODE},
+              precall_code => $base->{PRECALL_CODE},
+              output_list => $base->{OUTPUT_LIST},
+              xs_type => $base->{XS_TYPE},
+              %args );
+  }
+
   $this->{TYPE} = $args{type};
+  $this->{NAME} = $args{name};
   $this->{CPP_TYPE} = $args{cpp_type} || $args{arg1};
   $this->{CALL_FUNCTION_CODE} = _dl( $args{call_function_code} || $args{arg2} );
   $this->{OUTPUT_CODE} = _dl( $args{output_code} || $args{arg3} );
@@ -21,9 +33,6 @@ sub init {
 }
 
 sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }
-sub xs_type { $_[0]->{XS_TYPE} }
-sub xs_input_code { $_[0]->{XS_INPUT_CODE} }
-sub xs_output_code { $_[0]->{XS_OUTPUT_CODE} }
 
 sub output_code {
   my( $this, $pvar, $cvar ) = @_;

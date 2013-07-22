@@ -9,6 +9,8 @@ require ExtUtils::XSpp::Typemap::parsed;
 require ExtUtils::XSpp::Typemap::simple;
 require ExtUtils::XSpp::Typemap::reference;
 
+my %TypemapsByName;
+
 =head1 NAME
 
 ExtUtils::XSpp::Typemap - map types
@@ -22,6 +24,20 @@ sub new {
   $this->init( @_ );
 
   return $this;
+}
+
+sub create {
+  my( $name, @args ) = @_;
+
+  if( my $template = $TypemapsByName{$name} ) {
+    my $package = ref $template;
+
+    return $package->new( base => $template, @args );
+  } else {
+    my $package = "ExtUtils::XSpp::Typemap::" . $name;
+
+    return $package->new( @args );
+  }
 }
 
 =head2 ExtUtils::XSpp::Typemap::type
@@ -60,6 +76,7 @@ sub init { }
 sub xs_type { $_[0]->{XS_TYPE} }
 sub xs_input_code { $_[0]->{XS_INPUT_CODE} }
 sub xs_output_code { $_[0]->{XS_OUTPUT_CODE} }
+sub name { $_[0]->{NAME} }
 sub cpp_type { die; }
 sub input_code { die; }
 sub precall_code { undef }
@@ -88,6 +105,7 @@ sub add_typemap_for_type {
   my( $type, $typemap ) = @_;
 
   unshift @Typemaps, [ $type, $typemap ];
+  $TypemapsByName{$typemap->name} = $typemap if $typemap->name;
 }
 
 sub reset_typemaps {
@@ -100,6 +118,7 @@ sub reset_typemaps {
 sub add_weak_typemap_for_type {
   my( $type, $typemap ) = @_;
   push @Typemaps, [ $type, $typemap ];
+  $TypemapsByName{$typemap->name} ||= $typemap if $typemap->name;
 }
 
 sub get_typemap_for_type {

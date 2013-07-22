@@ -6,7 +6,12 @@ sub init {
   my $this = shift;
   my %args = @_;
 
+  if( my $base = $args{base} ) {
+    %args = ( xs_type => $base->{XS_TYPE}, %args );
+  }
+
   $this->{TYPE} = $args{type};
+  $this->{NAME} = $args{name};
   $this->{XS_TYPE} = $args{xs_type};
   $this->{XS_INPUT_CODE} = $args{xs_input_code};
   $this->{XS_OUTPUT_CODE} = $args{xs_output_code};

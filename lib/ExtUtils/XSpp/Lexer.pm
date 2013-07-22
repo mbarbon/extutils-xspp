@@ -258,8 +258,7 @@ sub make_template {
 
 sub add_typemap {
   my( $name, $type, @args ) = @_;
-  my $package = "ExtUtils::XSpp::Typemap::" . $name;
-  my $tm = $package->new( type => $type, @args );
+  my $tm = ExtUtils::XSpp::Typemap::create( $name, type => $type, @args );
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
 }
