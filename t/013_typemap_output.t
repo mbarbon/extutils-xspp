@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 4;
+use t::lib::XSP::Test tests => 5;
 
 use ExtUtils::XSpp;
 use ExtUtils::XSpp::Typemap::simple;
@@ -138,4 +138,44 @@ Foo::foo( int a, int b, int c )
     }
   OUTPUT: RETVAL
 
+=== Override default
+--- xsp_stdout
+%module{Foo};
 
+%typemap{_}{simple}{
+    %name{object};
+    %xs_type{T_BAR};
+    %xs_input_code{% MY_IN($arg, $var, $type, $Package, $func_name, Bar) %};
+    %xs_output_code{% MY_OUT($arg, $var, Bar) %};
+};
+
+class Foo
+{
+    int foo( int a, int b, int c );
+};
+--- expected
+TYPEMAP: <<END
+TYPEMAP
+Foo*	T_BAR
+
+END
+# XSP preamble
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::foo( int a, int b, int c )
+  CODE:
+    try {
+      RETVAL = THIS->foo( a, b, c );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL

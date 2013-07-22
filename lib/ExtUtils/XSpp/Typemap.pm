@@ -155,7 +155,7 @@ sub get_xs_typemap_code_for_all_typemaps {
   return unless @xs_typemaps;
 
   my %xs_types;
-  foreach my $typemap (grep $_->[1]->cpp_type, @xs_typemaps) {
+  foreach my $typemap (grep $_->[1]->cpp_type && $_->[1]->cpp_type ne '_', @xs_typemaps) {
     my $xstype = $typemap->[1]->xs_type;
 
     $xs_types{$typemap->[1]->cpp_type} = $xstype;
@@ -206,10 +206,12 @@ sub add_class_default_typemaps {
                   reference => 1,
                   );
 
+  my $xs_type = $TypemapsByName{object}->xs_type;
+
   add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr, xs_type => 'O_OBJECT' ) );
+      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr, xs_type => $xs_type ) );
   add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => 'O_OBJECT' ) );
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => $xs_type ) );
 }
 
 sub add_default_typemaps {
