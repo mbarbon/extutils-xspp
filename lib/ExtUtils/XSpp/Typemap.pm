@@ -40,6 +40,8 @@ sub create {
   }
 }
 
+=head1 METHODS
+
 =head2 ExtUtils::XSpp::Typemap::type
 
 Returns the ExtUtils::XSpp::Node::Type that is used for this typemap.
@@ -50,7 +52,15 @@ sub type { $_[0]->{TYPE} }
 
 =head2 ExtUtils::XSpp::Typemap::xs_type()
 
-(Optional) XS typemap identifier (ig. T_IV) for this C++ type.
+(Optional) XS typemap identifier (e.g. T_IV) for this C++ type.
+
+=head2 ExtUtils::XSpp::Typemap::xs_input_code()
+
+(Optional) XS input code for the associated XS typemap.
+
+=head2 ExtUtils::XSpp::Typemap::xs_output_code()
+
+(Optional) XS output code for the associated XS typemap.
 
 =head2 ExtUtils::XSpp::Typemap::cpp_type()
 
@@ -61,13 +71,17 @@ Returns the C++ type to be used for the local variable declaration.
 Code to put the contents of the perl_argument (typically ST(x)) into
 the C++ variable(s).
 
-=head2 ExtUtils::XSpp::Typemap::output_code()
+=head2 ExtUtils::XSpp::Typemap::output_code( perl_variable, c_variable )
 
-=head2 ExtUtils::XSpp::Typemap::cleanup_code()
+=head2 ExtUtils::XSpp::Typemap::cleanup_code( perl_variable, c_variable )
 
 =head2 ExtUtils::XSpp::Typemap::call_parameter_code( parameter_name )
 
 =head2 ExtUtils::XSpp::Typemap::call_function_code( function_call_code, return_variable )
+
+Allows modifying the code used in the function/method call.  The first
+parameter has the form C<THIS->method( <args> )>, the second
+parameter is a variable to hold the return value.
 
 =cut
 
@@ -256,5 +270,35 @@ sub add_default_typemaps {
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type( $dummy_type, $obj_typemap )
 }
+
+=head1 XS TYPEMAPS
+
+XS++ provides a default mapping for object types to an C<O_OBJECT> typemap
+with standard inputand output glue code, which should be adequate for most
+uses.
+
+There are multiple ways to override this default when needed.
+
+    %typemap{Foo *}{simple}{
+        %xs_type{O_MYMAP};
+        %xs_input_code{% ... %}; // optional
+        %xs_output_code{% ... %}; // optional
+    };
+
+can be used to define a new type -> XS typemap mapping, with optinal
+input/output code.  Since XS typemap definitions are global, XS
+input/output code applies to all types with the same %xs_type, hence
+there is no need to repeat it.
+
+    %typemap{_}{simple}{
+        %name{object};
+        %xs_type{O_MYMAP};
+        %xs_input_code{% ... %}; // optional
+        %xs_output_code{% ... %}; // optional
+    };
+
+can be used to change the default typemap used for all classes.
+
+=cut
 
 1;

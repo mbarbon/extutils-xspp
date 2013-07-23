@@ -200,15 +200,8 @@ object in the IV slot of a referenced/blessed scalar. If you deal with any
 other types as arguments or return types, you still need to write both
 XS and XS++ typemaps for these so that the systems know how to deal with them.
 
-In newer versions of the XS compiler, (C<ExtUtils::ParseXS> version 3 or better),
-you can embed your XS typemaps into XS code. See a recent copy of L<perlxs>
-for details.
-
-Beware that right now, if you need to return an instance of one of your classes
-from a method that is not a constructor, the default C<O_OBJECT> typemap will
-fail because it expects a (C) variable C<CLASS> to contain the name of the
-Perl class to bless into. Workaround demonstrated in F<examples/XSpp-Example>.
-Proper solution pending.
+See either L<ExtUtils::XSpp::Typemap> for a way to specify XS typemaps from
+XS++ or L<perlxs> for a discussion of inline XS typemaps.
 
 =head1 DESCRIPTION
 
