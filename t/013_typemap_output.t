@@ -66,11 +66,9 @@ T_BAR
 	MY_OUT($arg, $var, Bar)
 
 END
-# XSP preamble
 #include <exception>
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
-# XSP preamble
 
 
 MODULE=Foo2

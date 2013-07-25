@@ -62,7 +62,7 @@ sub _munge_output($) {
     # all test files isn't any better.
     $b_got =~ s/^INPUT\s*\n.*^OUTPUT\s*\n.*^END\s*\n/END\n/sm;
     # remove some more repetitive preamble code
-    $b_got =~ s|^# XSP preamble\n.*^# XSP preamble\n|# XSP preamble\n|sm;
+    $b_got =~ s|^#include <exception>\n.*?^#define xsp_constructor_class.*?\n|# XSP preamble\n|sm;
 
     return $b_got;
 }

@@ -115,11 +115,9 @@ sub _emit {
 
 sub preamble {
   return <<EOT
-# XSP preamble
 #include <exception>
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
-# XSP preamble
 
 
 EOT
