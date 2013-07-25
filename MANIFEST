@@ -5,12 +5,9 @@ examples/Object-WithIntAndString/IntAndString.h
 examples/Object-WithIntAndString/lib/Object/WithIntAndString.pm
 examples/Object-WithIntAndString/Makefile.PL
 examples/Object-WithIntAndString/Object-WithIntAndString.xsp
-examples/Object-WithIntAndString/perlobject.map
 examples/Object-WithIntAndString/ppport.h
 examples/Object-WithIntAndString/t/01load.t
 examples/Object-WithIntAndString/t/02test.t
-examples/Object-WithIntAndString/typemap
-examples/Object-WithIntAndString/typemap.xsp
 examples/Object-WithIntAndString/WithIntAndString.xs
 examples/XSpp-Example/Build.PL
 examples/XSpp-Example/lib/XSpp/Example.pm
@@ -21,7 +18,6 @@ examples/XSpp-Example/src/Animal.cc
 examples/XSpp-Example/src/Animal.h
 examples/XSpp-Example/src/Dog.cc
 examples/XSpp-Example/src/Dog.h
-examples/XSpp-Example/src/myinit.h
 examples/XSpp-Example/src/ppport.h
 examples/XSpp-Example/t/01basic.t
 examples/XSpp-Example/xsp/Animal.xsp
@@ -76,6 +72,7 @@ t/005_io.t
 t/010_base.t
 t/011_multiple_files.t
 t/012_preprocessor.t
+t/013_typemap_output.t
 t/015_reference.t
 t/020_rename.t
 t/022_static.t
