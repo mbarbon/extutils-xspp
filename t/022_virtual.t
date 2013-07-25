@@ -20,11 +20,6 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -54,11 +49,6 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -83,11 +73,6 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 

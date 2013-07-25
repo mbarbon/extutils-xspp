@@ -194,9 +194,16 @@ to Perl and back using the XS typemaps.
 Most of the time, you just need to convert basic C(++) types or the types
 that you define with your C++ classes. For the former, XS++ comes with
 a few default mappings for integers, floating point numbers, and strings.
-For the classes, XS++ will automatically create a mapping of type C<O_OBJECT>
+For the classes, XS++ can automatically create a mapping of type C<O_OBJECT>
 which uses the de-facto standard way of storing a pointer to the C(++)
-object in the IV slot of a referenced/blessed scalar. If you deal with any
+object in the IV slot of a referenced/blessed scalar. Due to backwards
+compatibility, this must be explicitly enabled by adding
+
+    %loadplugin{feature::default_xs_typemap};
+
+in F<typemap.xsp> (or near the top of every F<.xsp> file).
+
+If you deal with any
 other types as arguments or return types, you still need to write both
 XS and XS++ typemaps for these so that the systems know how to deal with them.
 

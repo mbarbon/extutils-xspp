@@ -87,11 +87,6 @@ class Foo {
 };
 
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -279,11 +274,6 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -325,11 +315,6 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -380,11 +365,6 @@ class Foo %catch{nothing} {
 };
 
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 

@@ -17,11 +17,6 @@ class Foo
     void foo( Foo& a );
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -51,11 +46,6 @@ class Foo
     Foo& foo();
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 

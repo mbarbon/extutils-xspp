@@ -22,11 +22,6 @@ class Y
     void bar();
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Y*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -77,11 +72,6 @@ class Y
     void bar();
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Y*	O_OBJECT
-
-END
 # XSP preamble
 
 

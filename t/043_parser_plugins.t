@@ -25,11 +25,6 @@ class klass
     void bar() %MyMethodRename{Bar};
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-klass*	O_OBJECT
-
-END
 # XSP preamble
 
 

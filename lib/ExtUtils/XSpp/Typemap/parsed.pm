@@ -16,6 +16,8 @@ sub init {
               precall_code => $base->{PRECALL_CODE},
               output_list => $base->{OUTPUT_LIST},
               xs_type => $base->{XS_TYPE},
+              xs_input_code => $base->{XS_INPUT_CODE},
+              xs_output_code => $base->{XS_OUTPUT_CODE},
               %args );
   }
 

@@ -205,11 +205,6 @@ class Foo
 
 #endif
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 

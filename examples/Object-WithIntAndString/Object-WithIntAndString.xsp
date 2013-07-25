@@ -2,6 +2,9 @@
 // This will be used to generate the XS MODULE line
 %module{Object::WithIntAndString};
 
+// Enable default XS typemaps
+%loadplugin{feature::default_xs_typemap};
+
 // Associate a perl class with a C++ class
 %name{Object::WithIntAndString} class IntAndString
 {

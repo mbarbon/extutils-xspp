@@ -164,11 +164,6 @@ class Foo
     %name{bar} int foo( int a );
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -199,11 +194,6 @@ class Foo
     %name{bar} int foo( int a ) %alias{baz = 1};
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -243,11 +233,6 @@ class Foo
     %name{newFoo} Foo( int a );
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -284,11 +269,6 @@ class Foo
     %name{destroy} ~Foo();
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 
@@ -319,11 +299,6 @@ Foo::destroy()
     %name{foo_int} int foo( int a );
 };
 --- expected
-TYPEMAP: <<END
-TYPEMAP
-Foo*	O_OBJECT
-
-END
 # XSP preamble
 
 

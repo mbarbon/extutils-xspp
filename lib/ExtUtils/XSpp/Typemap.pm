@@ -263,12 +263,20 @@ sub add_default_typemaps {
   my $obj_typemap = ExtUtils::XSpp::Typemap::parsed->new(
     name             => 'object',
     type             => $dummy_type,
-    xs_type          => 'O_OBJECT',
     xs_input_code    => $Default_input_code,
     xs_output_code   => $Default_output_code,
   );
 
   ExtUtils::XSpp::Typemap::add_typemap_for_type( $dummy_type, $obj_typemap )
+}
+
+sub _enable_default_xs_typemaps {
+  foreach my $t ( reverse @Typemaps ) {
+    if( ($t->[1]->name || '') eq 'object' ) {
+      $t->[1]{XS_TYPE} ||= 'O_OBJECT';
+      last;
+    }
+  }
 }
 
 =head1 XS TYPEMAPS

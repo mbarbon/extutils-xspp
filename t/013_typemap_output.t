@@ -10,7 +10,7 @@ use Test::Differences;
 
 # First, add a manual typemap and see if that ends up in the generated
 # typemap block.
-is(ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps(), '');
+is(ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps(), undef);
 my $type = ExtUtils::XSpp::Node::Type->new(
   base => 'bar',
   pointer => 1,
@@ -99,6 +99,8 @@ __DATA__
 === Basic class
 --- xsp_stdout
 %module{Foo};
+
+%loadplugin{feature::default_xs_typemap};
 
 %typemap{bar *}{simple}{
     %xs_type{T_BAR};
