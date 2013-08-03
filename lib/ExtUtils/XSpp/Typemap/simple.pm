@@ -7,7 +7,10 @@ sub init {
   my %args = @_;
 
   if( my $base = $args{base} ) {
-    %args = ( xs_type => $base->{XS_TYPE}, %args );
+    %args = ( xs_type => $base->{XS_TYPE},
+              xs_input_code => $base->{XS_INPUT_CODE},
+              xs_output_code => $base->{XS_OUTPUT_CODE},
+              %args );
   }
 
   $this->{TYPE} = $args{type};
