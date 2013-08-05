@@ -25,7 +25,7 @@ be installed in the system PATH.
 XS++ is just a thin layer over plain XS, hence to use it you
 are supposed to know, at the very least, C++ and XS.
 
-This means that you will need typemaps for B<both> the normal XS
+This means that you may need typemaps for B<both> the normal XS
 pre-processor I<xsubpp> and the XS++ pre-processor I<xspp>. More on
 that in the I<TYPEMAPS> section below.
 
@@ -79,8 +79,8 @@ another layer of typemaps. The following section will discuss those.
 =head2 XS++ typemaps
 
 There is nothing special about XS++ typemap files (i.e. you can put typemaps
-directly in your .xsp file), but it is handy to have common typemaps in a
-separate file, to avoid duplication.
+directly in your F<.xsp> file), but it is handy to have common typemaps in a
+separate file, typically called F<typemap.xsp> to avoid duplication.
 
   %typemap{<C++ type>}{simple};
 
@@ -193,8 +193,9 @@ to Perl and back using the XS typemaps.
 
 Most of the time, you just need to convert basic C(++) types or the types
 that you define with your C++ classes. For the former, XS++ comes with
-a few default mappings for integers, floating point numbers, and strings.
-For the classes, XS++ can automatically create a mapping of type C<O_OBJECT>
+a few default mappings for booleans, integers, floating point numbers,
+and strings.
+For classes, XS++ can automatically create a mapping of type C<O_OBJECT>
 which uses the de-facto standard way of storing a pointer to the C(++)
 object in the IV slot of a referenced/blessed scalar. Due to backwards
 compatibility, this must be explicitly enabled by adding
@@ -208,7 +209,8 @@ other types as arguments or return types, you still need to write both
 XS and XS++ typemaps for these so that the systems know how to deal with them.
 
 See either L<ExtUtils::XSpp::Typemap> for a way to specify XS typemaps from
-XS++ or L<perlxs> for a discussion of inline XS typemaps.
+XS++ or L<perlxs> for a discussion of inline XS typemaps that don't require
+the traditional XS F<typemap> file.
 
 =head1 DESCRIPTION
 
@@ -257,7 +259,7 @@ accessible. By default, constructor names are mapped to C<new> in Perl.
 
 =head2 %typemap
 
-See B<TYPEMAPS> above.
+See L</TYPEMAPS> above.
 
 =head2 %length
 
