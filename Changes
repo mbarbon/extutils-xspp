@@ -1,5 +1,6 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+0.1701
 	- Added standard XS typemap for objects (disabled by default for
 	  backwards compatibility).x
 	- Allow specifying XS typemap code in the XS++ typemap declaration.
