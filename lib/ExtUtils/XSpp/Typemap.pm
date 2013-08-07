@@ -279,34 +279,4 @@ sub _enable_default_xs_typemaps {
   }
 }
 
-=head1 XS TYPEMAPS
-
-XS++ provides a default mapping for object types to an C<O_OBJECT> typemap
-with standard inputand output glue code, which should be adequate for most
-uses.
-
-There are multiple ways to override this default when needed.
-
-    %typemap{Foo *}{simple}{
-        %xs_type{O_MYMAP};
-        %xs_input_code{% ... %}; // optional
-        %xs_output_code{% ... %}; // optional
-    };
-
-can be used to define a new type -> XS typemap mapping, with optinal
-input/output code.  Since XS typemap definitions are global, XS
-input/output code applies to all types with the same %xs_type, hence
-there is no need to repeat it.
-
-    %typemap{_}{simple}{
-        %name{object};
-        %xs_type{O_MYMAP};
-        %xs_input_code{% ... %}; // optional
-        %xs_output_code{% ... %}; // optional
-    };
-
-can be used to change the default typemap used for all classes.
-
-=cut
-
 1;

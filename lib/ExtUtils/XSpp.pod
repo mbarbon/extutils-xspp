@@ -208,9 +208,37 @@ If you deal with any
 other types as arguments or return types, you still need to write both
 XS and XS++ typemaps for these so that the systems know how to deal with them.
 
-See either L<ExtUtils::XSpp::Typemap> for a way to specify XS typemaps from
+See either L</Custom XS typemaps> below for a way to specify XS typemaps from
 XS++ or L<perlxs> for a discussion of inline XS typemaps that don't require
 the traditional XS F<typemap> file.
+
+=head2 Custom XS typemaps
+
+XS++ provides a default mapping for object types to an C<O_OBJECT> typemap
+with standard input and output glue code, which should be adequate for most
+uses.
+
+There are multiple ways to override this default when needed.
+
+    %typemap{Foo *}{simple}{
+        %xs_type{O_MYMAP};
+        %xs_input_code{% ... %}; // optional
+        %xs_output_code{% ... %}; // optional
+    };
+
+can be used to define a new type -> XS typemap mapping, with optinal
+input/output code.  Since XS typemap definitions are global, XS
+input/output code applies to all types with the same %xs_type, hence
+there is no need to repeat it.
+
+    %typemap{_}{simple}{
+        %name{object};
+        %xs_type{O_MYMAP};
+        %xs_input_code{% ... %}; // optional
+        %xs_output_code{% ... %}; // optional
+    };
+
+can be used to change the default typemap used for all classes.
 
 =head1 DESCRIPTION
 
