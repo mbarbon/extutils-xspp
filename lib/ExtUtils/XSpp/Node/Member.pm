@@ -78,14 +78,14 @@ sub _getter {
       ( class          => $this->class,
         cpp_name       => $this->_getter_name( $getter ),
         ret_type       => $this->type,
-        code           => $this->_getter_code,
+        call_code      => $this->_getter_code,
         condition      => $this->condition,
         emit_condition => $this->emit_condition,
         const          => 1,
         );
   $f->set_ret_typemap( $this->typemap );
   $f->resolve_typemaps;
-  $f->resolve_exceptions;
+  $f->disable_exceptions;
 
   return $this->{_getter};
 }
@@ -117,13 +117,13 @@ sub _setter {
                                 )
                             ],
         ret_type       => ExtUtils::XSpp::Node::Type->new( base => 'void' ),
-        code           => $this->_setter_code,
+        call_code      => $this->_setter_code,
         condition      => $this->condition,
         emit_condition => $this->emit_condition,
         );
   $f->set_arg_typemap( 0, $this->typemap );
   $f->resolve_typemaps;
-  $f->resolve_exceptions;
+  $f->disable_exceptions;
 
   return $this->{_setter};
 }
@@ -131,7 +131,7 @@ sub _setter {
 sub _getter_code {
   my( $this ) = @_;
 
-  return [ sprintf 'RETVAL = THIS->%s;', $this->cpp_name ];
+  return [ sprintf 'RETVAL = THIS->%s', $this->cpp_name ];
 }
 
 sub _getter_name {
@@ -144,7 +144,7 @@ sub _getter_name {
 sub _setter_code {
   my( $this ) = @_;
 
-  return [ sprintf 'THIS->%s = value;', $this->cpp_name ];
+  return [ sprintf 'THIS->%s = value', $this->cpp_name ];
 }
 
 sub _setter_name {
