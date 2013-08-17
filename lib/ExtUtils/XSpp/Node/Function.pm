@@ -47,6 +47,7 @@ sub init {
   $this->{ARGUMENTS} = $args{arguments} || [];
   $this->{RET_TYPE}  = $args{ret_type};
   $this->{CODE}      = $args{code};
+  $this->{CALL_CODE} = $args{call_code};
   $this->{CLEANUP}   = $args{cleanup};
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
@@ -263,7 +264,9 @@ sub print {
   my $ppcode = $has_ret && $ret_typemap->output_list( '' ) ? 1 : 0;
   my $code_type = $ppcode ? "PPCODE" : "CODE";
   my $ccode = $this->_call_code( $call_arg_list );
-  if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
+  if ($this->{CALL_CODE}) {
+    $ccode = join( "\n", @{$this->{CALL_CODE}} );
+  } elsif ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
     $ccode = 'delete THIS';
     $has_ret = 0;
   } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
@@ -309,8 +312,6 @@ sub print {
 
   if( $this->code ) {
     $code = "  $code_type:\n    " . join( "\n", @{$this->code} ) . "\n";
-    # cleanup potential multiple newlines because they break XSUBs
-    $code =~ s/^\s*\z//m;
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
@@ -338,7 +339,12 @@ EOT
 
   my $head = "$retstr\n"
              . "$fname($arg_list)\n";
-  my $body = $alias . $init . $code . $postcall . $output . $cleanup . "\n";
+  my $body = $alias . $init . $code . $postcall . $output . $cleanup;
+
+  # cleanup potential multiple newlines because they break XSUBs
+  $body =~ s/^\s*\n//mg;
+  $body .= "\n";
+
   $this->_munge_code(\$body) if $this->has_argument_with_length;
 
   $out .= $head . $body;
