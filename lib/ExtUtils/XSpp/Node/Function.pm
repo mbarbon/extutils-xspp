@@ -138,6 +138,12 @@ sub resolve_exceptions {
   $this->{EXCEPTIONS} = \@exceptions;
 }
 
+sub disable_exceptions {
+  my $this = shift;
+
+  $this->{EXCEPTIONS} = [];
+}
+
 =head2 add_exception_handlers
 
 Adds a list of exception names to the list of exception handlers.
@@ -272,12 +278,13 @@ sub print {
     $ccode = $this->_generate_alias_conditionals($call_arg_list, 0); # 0 == no RETVAL
   }
 
+  my @catchers = @{$this->{EXCEPTIONS}};
   $code .= "  $code_type:\n";
-  $code .= "    try {\n";
+  $code .= "    try {\n" if @catchers;
   if ($precall) {
     $code .= '      ' . $precall;
   }
-  $code .= '      ' . $ccode . ";\n";
+  $code .= (@catchers ? '  ' : '') . '    ' . $ccode . ";\n";
   if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
     my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
     $code .= '      ' . $retcode . ";\n";
@@ -286,8 +293,7 @@ sub print {
     my $retcode = $ret_typemap->output_list( 'RETVAL' );
     $code .= '      ' . $retcode . ";\n";
   }
-  $code .= "    }\n";
-  my @catchers = @{$this->{EXCEPTIONS}};
+  $code .= "    }\n" if @catchers;
   foreach my $exception_handler (@catchers) {
     my $handler_code = $exception_handler->handler_code;
     $code .= $handler_code;
