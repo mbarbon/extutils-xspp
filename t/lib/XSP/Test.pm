@@ -70,7 +70,7 @@ sub _munge_output($) {
 sub xsp_stdout {
     ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
-    my $d = ExtUtils::XSpp::Driver->new( string => shift );
+    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => 1 );
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 
@@ -81,7 +81,7 @@ sub xsp_file {
     ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
     my $name = Test::Base::filter_arguments();
-    my $d = ExtUtils::XSpp::Driver->new( string => shift );
+    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => 1 );
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 

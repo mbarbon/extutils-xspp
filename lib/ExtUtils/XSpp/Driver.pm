@@ -92,7 +92,7 @@ sub _emit {
     my $data = $parser->get_data;
     my %out;
     my $out_file = '-';
-    my %state = ( current_module => undef );
+    my %state = ( current_module => undef, exceptions => $self->exceptions );
 
     foreach my $plugin ( @{$parser->post_process_plugins} ) {
         my $method = $plugin->{method};
@@ -100,14 +100,14 @@ sub _emit {
         $plugin->{plugin}->$method( $data );
     }
 
-    $out{'-'} = preamble();
+    $out{'-'} = $self->preamble();
     foreach my $e ( @$data ) {
         if( $e->isa( 'ExtUtils::XSpp::Node::Module' ) ) {
             $state{current_module} = $e;
         }
         if( $e->isa( 'ExtUtils::XSpp::Node::File' ) ) {
             $out_file = $e->file;
-            $out{$out_file} ||= preamble();
+            $out{$out_file} ||= $self->preamble();
         }
         $out{$out_file} .= $e->print( \%state );
     }
@@ -116,8 +116,9 @@ sub _emit {
 }
 
 sub preamble {
-  return <<EOT
-#include <exception>
+  my ( $self ) = @_;
+  my $exc = $self->exceptions ? "#include <exception>\n" : "";
+  return $exc . <<EOT
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
 
@@ -130,6 +131,7 @@ sub file     { $_[0]->{file} }
 sub string   { $_[0]->{string} }
 sub output   { $_[0]->{output} }
 sub xsubpp   { $_[0]->{xsubpp} }
+sub exceptions { $_[0]->{exceptions} }
 sub xsubpp_args { $_[0]->{xsubpp_args} }
 
 1;

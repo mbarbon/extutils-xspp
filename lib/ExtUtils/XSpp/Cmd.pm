@@ -32,8 +32,9 @@ use ExtUtils::XSpp::Driver;
 our @EXPORT = qw(xspp);
 
 sub xspp {
-    my( @typemap_files, $xsubpp, $xsubpp_args );
+    my( @typemap_files, $xsubpp, $xsubpp_args, $exceptions);
     GetOptions( 'typemap=s'       => \@typemap_files,
+                'exceptions!'     => \($exceptions = 1),
                 'xsubpp:s'        => \$xsubpp,
                 'xsubpp-args=s'   => \$xsubpp_args,
                 );
@@ -44,6 +45,7 @@ sub xspp {
         file        => shift @ARGV,
         xsubpp      => $xsubpp,
         xsubpp_args => $xsubpp_args,
+        exceptions  => $exceptions,
         );
     my $success = $driver->process ? 0 : 1;
 

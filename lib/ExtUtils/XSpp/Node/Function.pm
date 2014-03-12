@@ -281,7 +281,7 @@ sub print {
     $ccode = $this->_generate_alias_conditionals($call_arg_list, 0); # 0 == no RETVAL
   }
 
-  my @catchers = @{$this->{EXCEPTIONS}};
+  my @catchers = $state->{exceptions} ? @{$this->{EXCEPTIONS}} : ();
   $code .= "  $code_type:\n";
   $code .= "    try {\n" if @catchers;
   if ($precall) {

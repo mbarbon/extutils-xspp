@@ -43,7 +43,7 @@ EXPECTED
 
 # Now check whether adding a class may overwrite existing typemaps.
 # Process class of same name as manual typemap
-my $d = ExtUtils::XSpp::Driver->new( string => <<'HERE' );
+my $d = ExtUtils::XSpp::Driver->new( string => <<'HERE', exceptions => 1 );
 %module{Foo2};
 
 class bar

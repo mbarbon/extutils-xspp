@@ -6,6 +6,7 @@ ExtUtils::XSpp - XS for C++
 
   xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]]
        [--xsubpp[=/path/to/xsubpp] [--xsubpp-args="xsubpp args"]
+       [--no-exceptions]
        Foo.xsp
 
 or
@@ -36,6 +37,11 @@ that in the I<TYPEMAPS> section below.
 Can be specified multiple times to process additional typemap files
 before the main XS++ input files.  Typemap files are processed the
 same way as regular XS++ files, except that output code is discarded.
+
+=head2 C<--no-exceptions>
+
+Disables generation of exception handling code.  XS++ syntax related
+to exceptions is accepted and ignored.
 
 =head2 C<--xsubpp[=/path/to/xsubpp]>
 

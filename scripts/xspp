@@ -21,6 +21,7 @@ xspp - XS++ preprocessor
 
     xspp [--typemap=typemap.xsp [--typemap=typemap2.xsp]]
          [--xsubpp[=/path/to/xsubpp] [--xsubpp-args="xsubpp args"]
+         [--no-exceptions]
          Foo.xsp
 
 or

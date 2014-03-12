@@ -14,6 +14,7 @@ unlink $_ foreach 't/files/foo.h';
 my $driver = ExtUtils::XSpp::Driver->new
   ( typemaps   => [ 't/files/typemap.xsp' ],
     file       => 't/files/test1.xsp',
+    exceptions => 1,
     );
 
 open my $fh, '>', \my $out;

@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::XSpp.
 
+	- Added --no-exceptions command line option.
+
 0.18  Wed Sep 18 10:00:00 CEST 2013
 	- Upgrade to stable release.
 
