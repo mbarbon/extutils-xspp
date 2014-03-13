@@ -224,7 +224,7 @@ static: 'package_static'
       ;
 
 looks_like_function:
-      type ID OPPAR arg_list CLPAR const
+      type function_name OPPAR arg_list CLPAR const
           {
               return { ret_type  => $_[1],
                        name      => $_[2],
@@ -265,6 +265,9 @@ dtor:           TILDE ID OPPAR CLPAR function_metadata
 function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]} ] }
                    |                                      { [] }
                    ;
+
+function_name:  ID
+              | ID class_suffix { $_[1] . '::' . $_[2] };
 
 nmethod:
       looks_like_renamed_function function_metadata
