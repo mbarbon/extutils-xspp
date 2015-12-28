@@ -138,16 +138,28 @@ enum_element:
     | raw
     ;
 
-class:    class_decl SEMICOLON | decorate_class SEMICOLON;
+class:    class_decl SEMICOLON;
 function: function_decl SEMICOLON;
 method:   method_decl SEMICOLON;
 member:   member_decl SEMICOLON;
 
-decorate_class:
-    perc_name class_decl { $_[2]->set_perl_name( $_[1] ); $_[2] };
+perc_name_and_type:
+      type           { [undef, $_[1]] }
+    | perc_name type { [$_[1], $_[2]] }
+    ;
 
-class_decl: 'class' class_name base_classes class_metadata OPCURLY class_body_list CLCURLY
-                { create_class( $_[0], $_[2], $_[3], $_[4], $_[6],
+class_start:
+      'class'           { undef }
+    | perc_name 'class' { $_[1] }
+    ;
+
+virtual_start:
+      virtual           { undef }
+    | perc_name virtual { $_[1] }
+    ;
+
+class_decl: class_start class_name base_classes class_metadata OPCURLY class_body_list CLCURLY
+                { create_class( $_[0], $_[2], $_[1], $_[3], $_[4], $_[6],
                                 $_[0]->get_conditional ) };
 
 base_classes:
@@ -162,11 +174,8 @@ base_class:
     ;
 
 class_name_rename:
-      class_name           { create_class( $_[0], $_[1], [], [] ) }
-    | perc_name class_name { my $klass = create_class( $_[0], $_[2], [], [] );
-                             $klass->set_perl_name( $_[1] );
-                             $klass
-                             }
+      class_name           { create_class( $_[0], $_[1], undef, [], [] ) }
+    | perc_name class_name { create_class( $_[0], $_[2], $_[1], [], [] ) }
     ;
 
 class_metadata:   class_metadata perc_catch { [ @{$_[1]}, @{$_[2]} ] }
@@ -199,15 +208,11 @@ member_metadata: member_metadata _member_metadata { [ @{$_[1]}, @{$_[2]} ] }
 _member_metadata:    perc_any;
 
 member_decl:
-    | looks_like_member
-    | perc_name looks_like_member
-         { $_[2]->set_perl_name( $_[1] ); $_[2] };
-
-looks_like_member:
-      type ID member_metadata
+      perc_name_and_type ID member_metadata
           { create_member( $_[0],
                            name      => $_[2],
-                           type      => $_[1],
+                           perl_name => $_[1][0],
+                           type      => $_[1][1],
                            condition => $_[0]->get_conditional,
                            @{$_[3]} ) };
 
@@ -224,21 +229,17 @@ static: 'package_static'
       ;
 
 looks_like_function:
-      type function_name OPPAR arg_list CLPAR const
+      perc_name_and_type function_name OPPAR arg_list CLPAR const
           {
-              return { ret_type  => $_[1],
+              return { ret_type  => $_[1][1],
                        name      => $_[2],
+                       perl_name => $_[1][0],
                        arguments => $_[4],
                        const     => $_[6],
                        };
           };
 
-looks_like_renamed_function:
-      looks_like_function
-    | perc_name looks_like_function
-          { $_[2]->{perl_name} = $_[1]; $_[2] };
-
-function_decl:  looks_like_renamed_function function_metadata
+function_decl:  looks_like_function function_metadata
                     { add_data_function( $_[0],
                                          name      => $_[1]->{name},
                                          perl_name => $_[1]->{perl_name},
@@ -270,7 +271,7 @@ function_name:  ID
               | ID class_suffix { $_[1] . '::' . $_[2] };
 
 nmethod:
-      looks_like_renamed_function function_metadata
+      looks_like_function function_metadata
           { my $m = add_data_method
                         ( $_[0],
                           name      => $_[1]->{name},
@@ -287,17 +288,11 @@ nmethod:
           { $_[2]->set_static( $_[1] ); $_[2] };
 
 vmethod:
-      _vmethod
-    | perc_name vmethod
-          { $_[2]->set_perl_name( $_[1] ); $_[2] }
-    ;
-
-_vmethod:
-      virtual looks_like_function function_metadata
+      virtual_start looks_like_function function_metadata
           { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
-                          perl_name => $_[2]->{perl_name},
+                          perl_name => $_[1] || $_[2]->{perl_name},
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
                           const     => $_[2]->{const},
@@ -307,11 +302,11 @@ _vmethod:
             $m->set_virtual( 1 );
             $m
           }
-    | virtual looks_like_function EQUAL INTEGER function_metadata
+    | virtual_start looks_like_function EQUAL INTEGER function_metadata
           { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
-                          perl_name => $_[2]->{perl_name},
+                          perl_name => $_[1] || $_[2]->{perl_name},
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
                           const     => $_[2]->{const},

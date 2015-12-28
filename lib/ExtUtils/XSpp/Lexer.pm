@@ -307,18 +307,19 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $bases, $metadata, $methods, $condition ) = @_;
+  my( $parser, $name, $perl_name, $bases, $metadata, $methods, $condition ) = @_;
   my %args = @$metadata;
   _merge_keys( 'catch', \%args, $metadata );
 
   my $class = ExtUtils::XSpp::Node::Class->new( %args, # <-- catch only for now
                                                 cpp_name     => $name,
+                                                perl_name    => $perl_name,
                                                 base_classes => $bases,
                                                 condition    => $condition,
                                                 );
 
   # when adding a class C, automatically add weak typemaps for C* and C&
-  ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name );
+  ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name, $perl_name );
 
   my @any  = grep  $_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
   my @rest = grep !$_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
