@@ -8,6 +8,13 @@ use Test::Base -Base;
 use Test::Differences;
 use ExtUtils::XSpp::Typemap;
 
+{
+    no warnings 'redefine';
+
+    # Test::Base is way too clever
+    *Test::Base::run_compare = sub { };
+}
+
 our @EXPORT = qw(run_diff);
 
 # allows running tests both from t and from the top directory
@@ -35,6 +42,8 @@ sub run_diff(@) {
 
         eq_or_diff( $b_got, $b_expected, $block->name);
     };
+
+    Test::More::done_testing();
 }
 
 use ExtUtils::XSpp;

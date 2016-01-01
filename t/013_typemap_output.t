@@ -1,8 +1,6 @@
 #!/usr/bin/perl -w
 
-use strict;
-use warnings;
-use t::lib::XSP::Test tests => 5;
+use t::lib::XSP::Test;
 
 use ExtUtils::XSpp;
 use ExtUtils::XSpp::Typemap::simple;

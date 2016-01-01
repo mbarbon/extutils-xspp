@@ -1,8 +1,6 @@
 #!/usr/bin/perl -w
 
-use strict;
-use warnings;
-use t::lib::XSP::Test tests => 6;
+use t::lib::XSP::Test;
 
 # monkeypatch print methods to test conditionals are parsed correctly
 no warnings 'redefine';

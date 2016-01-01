@@ -1,8 +1,6 @@
 #!/usr/bin/perl -w
 
-use strict;
-use warnings;
-use t::lib::XSP::Test tests => 2;
+use t::lib::XSP::Test;
 
 # monkeypatch Enum/EnumValue just to test that they were parsed correctly
 no warnings 'redefine';
