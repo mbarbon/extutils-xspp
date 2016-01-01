@@ -44,7 +44,7 @@ struct Foo {
 --- test_code
 my $foo = \( my $bar = 1 );
 bless $foo, 'Foo';
-eq_or_diff( $foo->foo( 3, 4, 5 ), 12 );
+is( $foo->foo( 3, 4, 5 ), 12 );
 
 === Empty class
 --- xsp_stdout
@@ -88,6 +88,10 @@ foo( int a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+--- preamble
+int foo( int a ) { return a + 1; }
+--- test_code
+is( Foo::Bar::foo( 3 ), 4 );
 
 === Default arguments
 --- xsp_stdout
@@ -118,6 +122,19 @@ Foo::foo( int a = 1, int b = 0x1, int c = 1 | 2 )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+--- typemap
+Foo *   T_PTRREF
+--- preamble
+struct Foo {
+    int foo( int a, int b, int c ) { return a + b + c; }
+};
+--- test_code
+my $foo = \( my $bar = 1 );
+bless $foo, 'Foo';
+is( $foo->foo, 5 );
+is( $foo->foo( 7 ), 11 );
+is( $foo->foo( 7, 8 ), 18 );
+is( $foo->foo( 7, 8, 9 ), 24 );
 
 === Constructor
 --- xsp_stdout
@@ -154,6 +171,12 @@ Foo::new( int a = 1 )
 
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
+--- typemap
+Foo *   T_PTRREF
+--- preamble
+struct Foo {
+    Foo( int a ) { }
+};
 
 === Destructor
 --- xsp_stdout
@@ -183,6 +206,11 @@ Foo::DESTROY()
     catch (...) {
       croak("Caught C++ exception of unknown type");
     }
+--- typemap
+Foo *   T_PTRREF
+--- preamble
+struct Foo {
+};
 
 === Void function
 --- xsp_stdout
@@ -449,6 +477,7 @@ bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned 
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
 === verbatim code blocks for xsubs
 --- xsp_stdout
 %module{Wx};
