@@ -127,7 +127,7 @@ __DATA__
 
 === functions
 --- process xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 #if ONE
 
@@ -141,7 +141,7 @@ int bar();
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 #if ONE
 #define XSpp_zzzzzzzz_017082
 
@@ -156,7 +156,7 @@ MODULE=Foo
 
 === enums
 --- process xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 #if ONE
 
@@ -173,7 +173,7 @@ enum Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 #if ONE
 #define XSpp_zzzzzzzz_017082
 
@@ -189,7 +189,7 @@ enum Foo XSpp_zzzzzzzz_017082
 
 === classes/methods
 --- process xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 #if ONE
 
@@ -206,7 +206,7 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 #if ONE
 #define XSpp_zzzzzzzz_017082
 

@@ -8,7 +8,7 @@ __DATA__
 
 === Complex typemap, type rename
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %cpp_type{foobar};
@@ -26,9 +26,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 foobar
 Foo::foo( foobar a, void* b )
@@ -46,7 +46,7 @@ Foo::foo( foobar a, void* b )
 
 === Complex typemap, custom return value conversion
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %call_function_code{% $CVar = fancy_conversion( $Call ) %};
@@ -60,9 +60,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b )
@@ -80,7 +80,7 @@ Foo::foo( int a, int b )
 
 === Complex typemap, output code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %output_code{% $PerlVar = custom_code( $CVar ) %};
@@ -94,9 +94,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b )
@@ -115,7 +115,7 @@ Foo::foo( int a, int b )
 
 === Complex typemap, cleanup code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %cleanup_code{% custom_code( $PerlVar, $CVar ) %};
@@ -129,9 +129,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b )
@@ -151,7 +151,7 @@ Foo::foo( int a, int b )
 
 === Complex typemap, pre-call code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %precall_code{% custom_code( $PerlVar, $CVar ) %};
@@ -165,9 +165,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b )
@@ -187,7 +187,7 @@ Foo::foo( int a, int b )
 
 === Complex typemap, output list code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %typemap{int}{parsed}{
     %output_list{% PUTBACK; XPUSHi( $CVar ); SPAGAIN %};
@@ -201,9 +201,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b )

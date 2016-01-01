@@ -48,7 +48,7 @@ eq_or_diff( $foo->foo( 3, 4, 5 ), 12 );
 
 === Empty class
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -57,13 +57,13 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 === Basic function
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo::Bar};
 
 int foo( int a );
@@ -71,9 +71,9 @@ int foo( int a );
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo::Bar
+MODULE=XspTest PACKAGE=Foo::Bar
 
 int
 foo( int a )
@@ -91,7 +91,7 @@ foo( int a )
 
 === Default arguments
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -101,9 +101,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a = 1, int b = 0x1, int c = 1 | 2 )
@@ -121,7 +121,7 @@ Foo::foo( int a = 1, int b = 0x1, int c = 1 | 2 )
 
 === Constructor
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -131,9 +131,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (CLASS)
@@ -157,7 +157,7 @@ Foo::new( int a = 1 )
 
 === Destructor
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -167,9 +167,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::DESTROY()
@@ -186,7 +186,7 @@ Foo::DESTROY()
 
 === Void function
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -196,9 +196,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::foo( int a )
@@ -215,7 +215,7 @@ Foo::foo( int a )
 
 === No parameters
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -226,9 +226,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::foo()
@@ -261,7 +261,7 @@ Foo::bar()
 // comment before %module
 ## comment before %module
 
-%module{Foo};
+%module{XspTest};
 
 ## comment after %module
 // comment after %module
@@ -293,7 +293,7 @@ class Foo
 ## comment before %module
 
 
-MODULE=Foo
+MODULE=XspTest
 ## comment after %module
 
 
@@ -310,7 +310,7 @@ MODULE=Foo
 
 
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 ## before method
 
@@ -333,7 +333,7 @@ Foo::foo( int a, int b, int c )
 
 === %length and ANSI style
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %package{Bar};
 
@@ -343,9 +343,9 @@ bar( char* line, unsigned long %length{line} );
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Bar
+MODULE=XspTest PACKAGE=Bar
 
 unsigned int
 bar( char* line, unsigned long length(line) )
@@ -363,7 +363,7 @@ bar( char* line, unsigned long length(line) )
 
 === %length and %code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %package{Bar};
 
@@ -374,9 +374,9 @@ bar( char* line, unsigned long %length{line} )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Bar
+MODULE=XspTest PACKAGE=Bar
 
 unsigned int
 bar( char* line, unsigned long length(line) )
@@ -386,7 +386,7 @@ bar( char* line, unsigned long length(line) )
 
 === %length and %postcall, %cleanup
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %package{Bar};
 
@@ -398,9 +398,9 @@ bar( char* line, unsigned long %length{line} )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Bar
+MODULE=XspTest PACKAGE=Bar
 
 unsigned int
 bar( char* line, unsigned long length(line) )
@@ -422,7 +422,7 @@ bar( char* line, unsigned long length(line) )
 
 === various integer types
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %package{Bar};
 
@@ -432,9 +432,9 @@ bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned 
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Bar
+MODULE=XspTest PACKAGE=Bar
 
 short
 bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned short f, long g, unsigned long h )

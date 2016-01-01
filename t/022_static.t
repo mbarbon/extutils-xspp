@@ -8,7 +8,7 @@ __DATA__
 
 === Method decorated with package_static
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -18,9 +18,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 foo( int a )

@@ -8,7 +8,7 @@ __DATA__
 
 === Basic exception declaration
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{std::exception}{stdmessage};
 
@@ -18,7 +18,7 @@ int foo(int a);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -34,7 +34,7 @@ foo( int a )
   OUTPUT: RETVAL
 === Basic exception declaration and catch
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{stdmessage};
 
@@ -45,7 +45,7 @@ int foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -62,7 +62,7 @@ foo( int a )
 
 === Multiple exception declaration and catch
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{stdmessage};
 %exception{myException2}{SomeException2}{simple};
@@ -88,7 +88,7 @@ class Foo {
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -104,7 +104,7 @@ foo( int a )
   OUTPUT: RETVAL
 
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::bar( int a )
@@ -159,7 +159,7 @@ Foo::buz( int a )
 
 === 'code' exception
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{code}{% croak(e.what()); %};
 
@@ -170,7 +170,7 @@ int foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -187,7 +187,7 @@ foo( int a )
 
 === 'object' exception
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{object}{PerlClass};
 
@@ -198,7 +198,7 @@ int foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -220,7 +220,7 @@ foo( int a )
 
 === 'perlcode' exception
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{perlcode}{%some
 perl
@@ -233,7 +233,7 @@ int foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 int
 foo( int a )
   CODE:
@@ -260,7 +260,7 @@ foo( int a )
 
 === Class-wide catch with precedence test
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{stdmessage};
 %exception{myException2}{SomeException2}{stdmessage};
@@ -275,9 +275,9 @@ class Foo %catch{myException, myException3} {
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a )
@@ -301,7 +301,7 @@ Foo::foo( int a )
 
 === Catch nothing
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{stdmessage};
 %exception{myException3}{SomeException3}{stdmessage};
@@ -316,9 +316,9 @@ class Foo %catch{myException, myException3} {
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a )
@@ -350,7 +350,7 @@ Foo::bar( int a )
 
 === Catch nothing (via class)
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %exception{myException}{SomeException}{stdmessage};
 
@@ -366,9 +366,9 @@ class Foo %catch{nothing} {
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a )

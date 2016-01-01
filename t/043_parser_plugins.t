@@ -8,7 +8,7 @@ __DATA__
 
 === Handle class/method/function annotations
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 %loadplugin{TestParserPlugin};
 %loadplugin{TestNewNodesPlugin};
@@ -28,9 +28,9 @@ class klass
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo( int y )
@@ -50,7 +50,7 @@ Foo( int y )
 
 
 
-MODULE=Foo PACKAGE=Klass
+MODULE=XspTest PACKAGE=Klass
 
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (CLASS)
@@ -95,7 +95,7 @@ klass::Bar()
 
 === Handle top level directives
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 %loadplugin{TestParserPlugin};
 %loadplugin{TestNewNodesPlugin};
@@ -107,9 +107,9 @@ klass::Bar()
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 // directive MyComment
 
@@ -118,7 +118,7 @@ MODULE=Foo PACKAGE=Foo
 
 === Handle argument annotations
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %loadplugin{TestArgumentPlugin};
 
@@ -130,9 +130,9 @@ class klass
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=klass
+MODULE=XspTest PACKAGE=klass
 
 int
 klass::bar( int bar, int foo )
@@ -153,7 +153,7 @@ klass::bar( int bar, int foo )
 
 === Handle member annotations
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class klass
 {
@@ -164,6 +164,6 @@ class klass
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=klass
+MODULE=XspTest PACKAGE=klass

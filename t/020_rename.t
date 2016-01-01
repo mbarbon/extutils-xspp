@@ -10,7 +10,7 @@ __DATA__
 
 === Renamed function (also in different package)
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo::Bar};
 
 %name{boo} int foo(int a);
@@ -19,9 +19,9 @@ __DATA__
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo::Bar
+MODULE=XspTest PACKAGE=Foo::Bar
 
 int
 boo( int a )
@@ -37,7 +37,7 @@ boo( int a )
     }
   OUTPUT: RETVAL
 
-MODULE=Foo PACKAGE=moo
+MODULE=XspTest PACKAGE=moo
 
 int
 boo( int a )
@@ -55,7 +55,7 @@ boo( int a )
 
 === Function with alias
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo::Bar};
 
 %name{boo} int foo2(int a) %alias{baz2 = 3};
@@ -63,9 +63,9 @@ boo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo::Bar
+MODULE=XspTest PACKAGE=Foo::Bar
 
 int
 boo( int a )
@@ -92,7 +92,7 @@ boo( int a )
 
 === Function with alias and code
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo::Bar};
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %code{%RETVAL = a;%};
@@ -100,9 +100,9 @@ boo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo::Bar
+MODULE=XspTest PACKAGE=Foo::Bar
 
 int
 boo( int a )
@@ -114,7 +114,7 @@ boo( int a )
 
 === Function with multiple aliases
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo::Bar};
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %alias{buz2 = 1};
@@ -122,9 +122,9 @@ boo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo::Bar
+MODULE=XspTest PACKAGE=Foo::Bar
 
 int
 boo( int a )
@@ -155,7 +155,7 @@ boo( int a )
 
 === Renamed method
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -165,9 +165,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::bar( int a )
@@ -185,7 +185,7 @@ Foo::bar( int a )
 
 === Renamed method with alias
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -195,9 +195,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::bar( int a )
@@ -224,7 +224,7 @@ Foo::bar( int a )
 
 === Renamed constructor
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -234,9 +234,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (CLASS)
@@ -260,7 +260,7 @@ Foo::newFoo( int a )
 
 === Renamed destructor
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -270,9 +270,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::destroy()
@@ -289,7 +289,7 @@ Foo::destroy()
 
 === Renamed class
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 %name{Bar::Baz} class Foo
 {
@@ -300,9 +300,9 @@ Foo::destroy()
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Bar::Baz
+MODULE=XspTest PACKAGE=Bar::Baz
 
 void
 Foo::foo()

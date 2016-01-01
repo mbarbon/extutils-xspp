@@ -8,7 +8,7 @@ __DATA__
 
 === Virtual method
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -21,9 +21,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a )
@@ -39,7 +39,7 @@ Foo::bar( int a )
 
 === Virtual destructor
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -50,9 +50,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::DESTROY()
@@ -61,7 +61,7 @@ Foo::DESTROY()
 
 === Pure-virtual method
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -74,9 +74,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a )

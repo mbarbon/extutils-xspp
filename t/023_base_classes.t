@@ -8,7 +8,7 @@ __DATA__
 
 === Classes with base classes
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo : public Moo
 {
@@ -18,9 +18,9 @@ class Foo : public Moo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::foo()
@@ -43,7 +43,7 @@ BOOT:
 
 === Classes with renamed base classes
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo : public %name{PlMoo} Moo, public Boo
 {
@@ -53,9 +53,9 @@ class Foo : public %name{PlMoo} Moo, public Boo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 Foo::foo()

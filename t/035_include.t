@@ -8,7 +8,7 @@ __DATA__
 
 === Simple include files
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %include{t/files/typemap.xsp};
@@ -18,9 +18,9 @@ int bar(int y);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 # trivial typemap
 

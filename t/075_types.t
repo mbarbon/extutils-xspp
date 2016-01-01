@@ -8,7 +8,7 @@ __DATA__
 
 === Pointer/const pointer type
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %typemap{int*}{simple};
@@ -20,9 +20,9 @@ int* boo(const int* a);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int*
 foo()
@@ -54,7 +54,7 @@ boo( const int* a )
 
 === Const value/const reference type
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %typemap{const std::string}{simple};
@@ -66,9 +66,9 @@ void boo(const std::string& a);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 foo( const std::string a )
@@ -98,7 +98,7 @@ boo( std::string* a )
 
 === Const value/const reference type via shortcut
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %typemap{const std::string};
@@ -111,9 +111,9 @@ void foo2(std::vector<double> a, std::vector<double>& b);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 foo( const std::string a )
@@ -157,7 +157,7 @@ foo2( std::vector< double > a, std::vector< double >* b )
 
 === Template type
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %typemap{const std::vector<int>&}{simple};
@@ -170,9 +170,9 @@ void boo(const std::map<int, std::string> a);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 
 void
@@ -202,7 +202,7 @@ boo( const std::map< int, std::string > a )
     }
 === Template argument transformed to pointer
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %typemap{const std::vector<double>&}{reference}; // check type equality
@@ -212,9 +212,9 @@ void foo(const std::vector<double>& a);
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 
 void

@@ -8,7 +8,7 @@ __DATA__
 
 === Function with custom code block
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %name{boo} int foo(int a)
@@ -17,9 +17,9 @@ __DATA__
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 boo( int a )
@@ -29,7 +29,7 @@ boo( int a )
 
 === Function with custom cleanup block
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %name{boo} int foo(int a)
@@ -38,9 +38,9 @@ boo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 boo( int a )
@@ -60,7 +60,7 @@ boo( int a )
 
 === Function with custom postcall block
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 int foo(int a)
@@ -69,9 +69,9 @@ int foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 foo( int a )
@@ -91,7 +91,7 @@ foo( int a )
 
 === Void function with custom code block
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %name{boo} void foo(int a)
@@ -100,9 +100,9 @@ foo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 boo( int a )
@@ -111,7 +111,7 @@ boo( int a )
 
 === Void function with custom code and cleanup blocks
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %name{boo} void foo(int a)
@@ -121,9 +121,9 @@ boo( int a )
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 boo( int a )
@@ -134,7 +134,7 @@ boo( int a )
 
 === Void function with custom postcall block
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 void foo(int a)
@@ -143,9 +143,9 @@ void foo(int a)
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 void
 foo( int a )

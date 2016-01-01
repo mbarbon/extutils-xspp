@@ -8,7 +8,7 @@ __DATA__
 
 === Verbatim blocks
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %{
@@ -18,16 +18,16 @@ Straight to XS, no checks...
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 
 Straight to XS, no checks...
 
 === Space after verbatim blocks
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class X
 {
@@ -40,9 +40,9 @@ Straight to XS, no checks...
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=X
+MODULE=XspTest PACKAGE=X
 
 
 Straight to XS, no checks...

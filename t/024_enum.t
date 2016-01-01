@@ -20,7 +20,7 @@ __DATA__
 
 === Parse and ignore named enums
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 enum Values
 {
@@ -32,7 +32,7 @@ enum Values
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 // Values
 //     ONE
 //     TWO
@@ -40,7 +40,7 @@ MODULE=Foo
 
 === Parse and ignore anonymout enums
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 enum
 {
@@ -52,7 +52,7 @@ enum
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 // <anonymous>
 //     ONE
 //     TWO

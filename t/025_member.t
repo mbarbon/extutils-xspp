@@ -8,7 +8,7 @@ __DATA__
 
 === Basic accessors
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -18,9 +18,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::get_foo()
@@ -36,7 +36,7 @@ Foo::set_foo( int value )
 
 === Only getter/setter
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -47,9 +47,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::get_foo()
@@ -65,7 +65,7 @@ Foo::set_bar( int value )
 
 === Getter/setter name
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -75,9 +75,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::readFoo()
@@ -93,7 +93,7 @@ Foo::writeFoo( int value )
 
 === Getter/setter style
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo1
 {
@@ -158,9 +158,9 @@ class Foo6
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo1
+MODULE=XspTest PACKAGE=Foo1
 
 int
 Foo1::get_bar()
@@ -174,7 +174,7 @@ Foo1::set_bar( int value )
     THIS->foo = value;
 
 
-MODULE=Foo PACKAGE=Foo2
+MODULE=XspTest PACKAGE=Foo2
 
 int
 Foo2::bar()
@@ -188,7 +188,7 @@ Foo2::setBar( int value )
     THIS->foo = value;
 
 
-MODULE=Foo PACKAGE=Foo3
+MODULE=XspTest PACKAGE=Foo3
 
 int
 Foo3::bar()
@@ -202,7 +202,7 @@ Foo3::set_bar( int value )
     THIS->foo = value;
 
 
-MODULE=Foo PACKAGE=Foo4
+MODULE=XspTest PACKAGE=Foo4
 
 int
 Foo4::GetBar()
@@ -216,7 +216,7 @@ Foo4::SetBar( int value )
     THIS->foo = value;
 
 
-MODULE=Foo PACKAGE=Foo5
+MODULE=XspTest PACKAGE=Foo5
 
 int
 Foo5::bar()
@@ -230,7 +230,7 @@ Foo5::SetBar( int value )
     THIS->foo = value;
 
 
-MODULE=Foo PACKAGE=Foo6
+MODULE=XspTest PACKAGE=Foo6
 
 int
 Foo6::getBar()

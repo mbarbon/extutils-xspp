@@ -8,7 +8,7 @@ __DATA__
 
 === Basic plugin functionality
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 %loadplugin{t::lib::XSP::Plugin};
 %loadplugin{t::lib::XSP::Plugin};
@@ -23,9 +23,9 @@ class Y
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 foo_perl( int y )
@@ -42,7 +42,7 @@ foo_perl( int y )
   OUTPUT: RETVAL
 
 
-MODULE=Foo PACKAGE=Y
+MODULE=XspTest PACKAGE=Y
 
 void
 Y::bar()
@@ -59,7 +59,7 @@ Y::bar()
 
 === Plugin loading from the plugin namespace
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 %loadplugin{TestPlugin};
 
@@ -73,9 +73,9 @@ class Y
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 foo_perl2( int y )
@@ -92,7 +92,7 @@ foo_perl2( int y )
   OUTPUT: RETVAL
 
 
-MODULE=Foo PACKAGE=Y
+MODULE=XspTest PACKAGE=Y
 
 void
 Y::bar()

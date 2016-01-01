@@ -8,7 +8,7 @@ __DATA__
 
 === Basic file - stdout
 --- process xsp_stdout
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %file{foo.h};
@@ -23,9 +23,9 @@ int foo( int a, int b, int c );
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 foo( int a, int b, int c )
@@ -43,7 +43,7 @@ foo( int a, int b, int c )
 
 === Basic file - external file
 --- process xsp_file=foo.h
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %file{foo.h};
@@ -64,7 +64,7 @@ text
 
 === Basic file - processed external file
 --- process xsp_file=foo.h
-%module{Foo};
+%module{XspTest};
 %package{Foo};
 
 %file{foo.h};
