@@ -7,6 +7,7 @@ use if -d 'blib' => 'blib';
 use Test::Base -Base;
 use Test::Differences;
 use ExtUtils::XSpp::Typemap;
+use File::Temp qw(tempdir);
 
 {
     no warnings 'redefine';
@@ -16,6 +17,8 @@ use ExtUtils::XSpp::Typemap;
 }
 
 our @EXPORT = qw(run_diff);
+my $COMPILE = $ENV{XSP_COMPILE} || -f '.gitignore';
+my $OUTDIR = $COMPILE ? tempdir( CLEANUP => 1 ) : undef;
 
 # allows running tests both from t and from the top directory
 use File::Spec;
@@ -40,10 +43,144 @@ sub run_diff(@) {
         my( $b_got, $b_expected, $name ) = ( $block->$got, $block->$expected, $block->name );
 
         eq_or_diff( _munge_output( $b_got ),
-                    _munge_output( $b_expected ), $name );
+                    _munge_output( $b_expected ), "xsp output - $name" );
+
+        if ( $COMPILE ) {
+            my ( $preamble, $typemap, $test ) = ( $block->preamble // '', $block->typemap // '', $block->test_code // '' );
+
+            if ( $preamble || $typemap ) {
+                if ( compile_ok( $b_got, $preamble, $typemap, $name ) ) {
+                    if ( $test ) {
+                        test_ok( $test, $name );
+                    } else {
+                        Test::More::note( "no test code for - $name" );
+                    }
+                }
+            } else {
+                Test::More::note( "no preamble/typemap compilation test - $name" );
+            }
+        }
     };
 
     Test::More::done_testing();
+}
+
+sub compile_ok($$$$) {
+    my ( $xs_code, $preamble_code, $typemap_code, $name ) = @_;
+
+    require ExtUtils::ParseXS;
+    require ExtUtils::CBuilder;
+    require ExtUtils::CppGuess;
+
+    my $guess = ExtUtils::CppGuess->new;
+    my $pxs = ExtUtils::ParseXS->new;
+    my %guessed = $guess->module_build_options;
+    my $builder = ExtUtils::CBuilder->new( quiet => 1 );
+
+    my $xs = $OUTDIR . '/XspTest.xs';
+    my $typemap = $OUTDIR . '/typemap';
+    my $cpp = $OUTDIR . '/XspTest.cpp';
+    my $obj = $builder->object_file( $cpp );
+
+    {
+        open my $fh, '>', $xs or die "Unable to open '$xs': $!";
+        print $fh <<'EOT';
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
+EOT
+        print $fh $preamble_code;
+        print $fh $xs_code;
+        close $fh;
+    }
+    {
+        open my $fh, '>', $typemap or die "Unable to open '$typemap': $!";
+        print $fh $typemap_code;
+        close $fh;
+    }
+
+    $pxs->process_file(
+        filename    => $xs,
+        output      => $cpp,
+        typemap     => $typemap,
+        'C++'       => 1,
+        prototypes  => 1,
+    );
+    if ($pxs->report_error_count()) {
+        fail( "XS parsing failed - $name" );
+        return;
+    }
+    $builder->compile(
+        source                  => $cpp,
+        object_file             => $obj,
+        'C++'                   => 1,
+        extra_compiler_flags    => $guessed{extra_compiler_flags},
+    );
+    $builder->link(
+        objects             => [ $obj ],
+        module_name         => 'XspTest',
+        extra_linker_flags  => $guessed{extra_linker_flags},
+    );
+
+    ok( 1, "compilation - $name" );
+}
+
+sub test_ok($) {
+    require TAP::Harness;
+
+    my ($test_code, $name) = @_;
+
+    my $module = $OUTDIR . '/XspTest.pm';
+    my $test = $OUTDIR . '/xsp.t';
+
+    {
+        open my $fh, '>', $module or die "Unable to open '$module': $!";
+        print $fh <<'EOT';
+package XspTest;
+
+use XSLoader;
+
+XSLoader::load(__PACKAGE__);
+
+1;
+EOT
+        close $fh;
+    }
+    {
+        open my $fh, '>', $test or die "Unable to open '$test': $!";
+        print $fh <<'EOT';
+use strict;
+use warnings;
+use XspTest;
+use Test::More;
+use Test::Differences;
+#line 1 "test code"
+EOT
+        print $fh $test_code;
+        print $fh sprintf(<<'EOT', $test);
+#line 6 "%s"
+done_testing();
+EOT
+        close $fh;
+    }
+
+    my $output;
+    open my $capture, '>', \$output;
+    my $harness = TAP::Harness->new({
+        lib         => [ $OUTDIR ],
+        verbosity   => 1,
+        stdout      => $capture,
+        merge       => 1,
+    });
+    my $aggregator = $harness->runtests( $test );
+    if ( $aggregator->all_passed ) {
+        ok(1, "runtime check - $name");
+    } else {
+        fail("runtime check - $name");
+        diag("\nsubtest output\n");
+        diag( $output );
+    }
 }
 
 sub _munge_output($) {

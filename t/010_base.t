@@ -8,7 +8,7 @@ __DATA__
 
 === Basic class
 --- xsp_stdout
-%module{Foo};
+%module{XspTest};
 
 class Foo
 {
@@ -18,9 +18,9 @@ class Foo
 # XSP preamble
 
 
-MODULE=Foo
+MODULE=XspTest
 
-MODULE=Foo PACKAGE=Foo
+MODULE=XspTest PACKAGE=Foo
 
 int
 Foo::foo( int a, int b, int c )
@@ -35,6 +35,16 @@ Foo::foo( int a, int b, int c )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+--- typemap
+Foo *   T_PTRREF
+--- preamble
+struct Foo {
+    int foo( int a, int b, int c ) { return a + b + c; }
+};
+--- test_code
+my $foo = \( my $bar = 1 );
+bless $foo, 'Foo';
+eq_or_diff( $foo->foo( 3, 4, 5 ), 12 );
 
 === Empty class
 --- xsp_stdout
