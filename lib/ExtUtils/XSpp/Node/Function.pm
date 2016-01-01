@@ -174,12 +174,10 @@ sub add_exception_handlers {
   return();
 }
 
-# Depending on argument style, this produces either: (style=kr)
+# This produces an ANSI-style XS function:
 #
 # return_type
-# class_name::function_name( args = def, ... )
-#     type arg
-#     type arg
+# class_name::function_name( type arg1 = def, type arg2 = def, ... )
 #   PREINIT:
 #     aux vars
 #   [ALIAS:
@@ -192,13 +190,6 @@ sub add_exception_handlers {
 #     RETVAL
 #   CLEANUP:
 #     /* anything */
-#
-# Or: (style=ansi)
-#
-# return_type
-# class_name::function_name( type arg1 = def, type arg2 = def, ... )
-#   PREINIT:
-# (rest as above)
 
 sub print {
   my $this               = shift;
