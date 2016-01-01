@@ -37,13 +37,30 @@ sub run_diff(@) {
 
     run {
         my $block = shift;
-        my( $b_got, $b_expected ) = map { s/^\n+//s; s/\n+$//s; $_ }
-                                        $block->$got, $block->$expected;
+        my( $b_got, $b_expected, $name ) = ( $block->$got, $block->$expected, $block->name );
 
-        eq_or_diff( $b_got, $b_expected, $block->name);
+        eq_or_diff( _munge_output( $b_got ),
+                    _munge_output( $b_expected ), $name );
     };
 
     Test::More::done_testing();
+}
+
+sub _munge_output($) {
+    my $b_got = $_[0];
+
+    # This removes the default typemap entry that is added for O_OBJECT
+    # I admit that it doesn't make me feel all warm and fuzzy inside, but
+    # the alternative of having even more code duplicated a lot of times in
+    # all test files isn't any better.
+    $b_got =~ s/^INPUT\s*\n.*^OUTPUT\s*\n.*^END\s*\n/END\n/sm;
+    # remove some more repetitive preamble code
+    $b_got =~ s|^#include <exception>\n.*?^#define xsp_constructor_class.*?\n|# XSP preamble\n|sm;
+    # leading and trailing newlines
+    $b_got =~ s/^\n+//s;
+    $b_got =~ s/\n+$//s;
+
+    return $b_got;
 }
 
 use ExtUtils::XSpp;
@@ -62,20 +79,6 @@ sub ExtUtils::XSpp::Grammar::_random_digits {
     return shift @random_digits;
 }
 
-sub _munge_output($) {
-    my $b_got = $_[0];
-
-    # This removes the default typemap entry that is added for O_OBJECT
-    # I admit that it doesn't make me feel all warm and fuzzy inside, but
-    # the alternative of having even more code duplicated a lot of times in
-    # all test files isn't any better.
-    $b_got =~ s/^INPUT\s*\n.*^OUTPUT\s*\n.*^END\s*\n/END\n/sm;
-    # remove some more repetitive preamble code
-    $b_got =~ s|^#include <exception>\n.*?^#define xsp_constructor_class.*?\n|# XSP preamble\n|sm;
-
-    return $b_got;
-}
-
 sub xsp_stdout {
     ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
@@ -83,7 +86,7 @@ sub xsp_stdout {
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 
-    return _munge_output( $out->{'-'} );
+    return $out->{'-'};
 }
 
 sub xsp_file {
@@ -94,7 +97,7 @@ sub xsp_file {
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 
-    return _munge_output( $out->{$name} );
+    return $out->{$name};
 }
 
 1;
