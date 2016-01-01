@@ -51,14 +51,6 @@ Straight to XS, no checks...
 int
 X::foo( int a )
   CODE:
-    try {
-      RETVAL = THIS->foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a );
   OUTPUT: RETVAL
 

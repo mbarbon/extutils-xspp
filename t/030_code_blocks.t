@@ -45,15 +45,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 boo( int a )
   CODE:
-    try {
-      RETVAL = foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a );
   OUTPUT: RETVAL
   CLEANUP:
      free( it ); 
@@ -76,15 +68,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 foo( int a )
   CODE:
-    try {
-      RETVAL = foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a );
   POSTCALL:
      blub( a ); 
   OUTPUT: RETVAL
@@ -150,14 +134,6 @@ MODULE=XspTest PACKAGE=Foo
 void
 foo( int a )
   CODE:
-    try {
-      foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo( a );
   POSTCALL:
      blub( a ); 

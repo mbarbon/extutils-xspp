@@ -27,29 +27,13 @@ MODULE=XspTest PACKAGE=Foo
 int*
 foo()
   CODE:
-    try {
-      RETVAL = foo();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo();
   OUTPUT: RETVAL
 
 int*
 boo( const int* a )
   CODE:
-    try {
-      RETVAL = boo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = boo( a );
   OUTPUT: RETVAL
 
 === Const value/const reference type
@@ -73,28 +57,12 @@ MODULE=XspTest PACKAGE=Foo
 void
 foo( const std::string a )
   CODE:
-    try {
-      foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo( a );
 
 void
 boo( std::string* a )
   CODE:
-    try {
-      boo( *( a ) );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    boo( *( a ) );
 
 === Const value/const reference type via shortcut
 --- xsp_stdout
@@ -118,41 +86,17 @@ MODULE=XspTest PACKAGE=Foo
 void
 foo( const std::string a )
   CODE:
-    try {
-      foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo( a );
 
 void
 boo( std::string* a )
   CODE:
-    try {
-      boo( *( a ) );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    boo( *( a ) );
 
 void
 foo2( std::vector< double > a, std::vector< double >* b )
   CODE:
-    try {
-      foo2( a, *( b ) );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo2( a, *( b ) );
 
 
 === Template type
@@ -178,28 +122,13 @@ MODULE=XspTest PACKAGE=Foo
 void
 foo( const std::vector< int >& a )
   CODE:
-    try {
-      foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo( a );
 
 void
 boo( const std::map< int, std::string > a )
   CODE:
-    try {
-      boo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    boo( a );
+
 === Template argument transformed to pointer
 --- xsp_stdout
 %module{XspTest};
@@ -220,12 +149,4 @@ MODULE=XspTest PACKAGE=Foo
 void
 foo( std::vector< double >* a )
   CODE:
-    try {
-      foo( *( a ) );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    foo( *( a ) );

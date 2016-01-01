@@ -2,6 +2,7 @@
 
 use t::lib::XSP::Test;
 
+with_exception_handling();
 run_diff xsp_stdout => 'expected';
 
 __DATA__
@@ -32,6 +33,7 @@ foo( int a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
 === Basic exception declaration and catch
 --- xsp_stdout
 %module{XspTest};
@@ -405,3 +407,30 @@ Foo::buz( int a )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+=== Accessors don't generate exception code
+--- xsp_stdout
+%module{XspTest};
+
+class Foo
+{
+    int foo %get %set;
+};
+--- expected
+# XSP preamble
+
+
+MODULE=XspTest
+
+MODULE=XspTest PACKAGE=Foo
+
+int
+Foo::get_foo()
+  CODE:
+    RETVAL = THIS->foo;
+  OUTPUT: RETVAL
+
+void
+Foo::set_foo( int value )
+  CODE:
+    THIS->foo = value;

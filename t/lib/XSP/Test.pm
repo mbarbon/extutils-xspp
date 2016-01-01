@@ -16,9 +16,10 @@ use File::Temp qw(tempdir);
     *Test::Base::run_compare = sub { };
 }
 
-our @EXPORT = qw(run_diff);
+our @EXPORT = qw(run_diff with_exception_handling);
 my $COMPILE = $ENV{XSP_COMPILE} || -f '.gitignore';
 my $OUTDIR = $COMPILE ? tempdir( CLEANUP => 1 ) : undef;
+my $EXCEPTIONS = 0;
 
 # allows running tests both from t and from the top directory
 use File::Spec;
@@ -34,6 +35,10 @@ BEGIN {
 filters { xsp_stdout => 'xsp_stdout',
           xsp_file   => 'xsp_file',
           };
+
+sub with_exception_handling {
+    $EXCEPTIONS = 1;
+}
 
 sub run_diff(@) {
     my( $got, $expected ) = @_;
@@ -192,7 +197,7 @@ sub _munge_output($) {
     # all test files isn't any better.
     $b_got =~ s/^INPUT\s*\n.*^OUTPUT\s*\n.*^END\s*\n/END\n/sm;
     # remove some more repetitive preamble code
-    $b_got =~ s|^#include <exception>\n.*?^#define xsp_constructor_class.*?\n|# XSP preamble\n|sm;
+    $b_got =~ s[^(?:#include <exception>\n|#undef  xsp_constructor_class.*?\n).*?^#define xsp_constructor_class.*?\n][# XSP preamble\n]gsm;
     # leading and trailing newlines
     $b_got =~ s/^\n+//s;
     $b_got =~ s/\n+$//s;
@@ -219,7 +224,7 @@ sub ExtUtils::XSpp::Grammar::_random_digits {
 sub xsp_stdout {
     ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
-    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => 1 );
+    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => $EXCEPTIONS );
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 
@@ -230,7 +235,7 @@ sub xsp_file {
     ExtUtils::XSpp::Typemap::reset_typemaps();
     @random_digits = @random_list;
     my $name = Test::Base::filter_arguments();
-    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => 1 );
+    my $d = ExtUtils::XSpp::Driver->new( string => shift, exceptions => $EXCEPTIONS );
     my $out = $d->generate;
     ExtUtils::XSpp::Typemap::reset_typemaps();
 

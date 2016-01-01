@@ -25,15 +25,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b, c );
   OUTPUT: RETVAL
 --- typemap
 Foo *   T_PTRREF
@@ -78,15 +70,7 @@ MODULE=XspTest PACKAGE=Foo::Bar
 int
 foo( int a )
   CODE:
-    try {
-      RETVAL = foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a );
   OUTPUT: RETVAL
 --- preamble
 int foo( int a ) { return a + 1; }
@@ -112,15 +96,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a = 1, int b = 0x1, int c = 1 | 2 )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b, c );
   OUTPUT: RETVAL
 --- typemap
 Foo *   T_PTRREF
@@ -158,15 +134,7 @@ MODULE=XspTest PACKAGE=Foo
 Foo*
 Foo::new( int a = 1 )
   CODE:
-    try {
-      RETVAL = new Foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = new Foo( a );
   OUTPUT: RETVAL
 
 #undef  xsp_constructor_class
@@ -197,15 +165,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::DESTROY()
   CODE:
-    try {
-      delete THIS;
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    delete THIS;
 --- typemap
 Foo *   T_PTRREF
 --- preamble
@@ -231,15 +191,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::foo( int a )
   CODE:
-    try {
-      THIS->foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo( a );
 
 === No parameters
 --- xsp_stdout
@@ -261,28 +213,12 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::foo()
   CODE:
-    try {
-      THIS->foo();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo();
 
 void
 Foo::bar()
   CODE:
-    try {
-      THIS->bar();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->bar();
 
 === Comments and raw blocks
 --- xsp_stdout
@@ -346,15 +282,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b, c );
   OUTPUT: RETVAL
 
 # after method
@@ -378,15 +306,7 @@ MODULE=XspTest PACKAGE=Bar
 unsigned int
 bar( char* line, unsigned long length(line) )
   CODE:
-    try {
-      RETVAL = bar( line, XSauto_length_of_line );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = bar( line, XSauto_length_of_line );
   OUTPUT: RETVAL
 
 === %length and %code
@@ -433,15 +353,7 @@ MODULE=XspTest PACKAGE=Bar
 unsigned int
 bar( char* line, unsigned long length(line) )
   CODE:
-    try {
-      RETVAL = bar( line, XSauto_length_of_line );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = bar( line, XSauto_length_of_line );
   POSTCALL:
      cout << XSauto_length_of_line << endl;
   OUTPUT: RETVAL
@@ -467,15 +379,7 @@ MODULE=XspTest PACKAGE=Bar
 short
 bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned short f, long g, unsigned long h )
   CODE:
-    try {
-      RETVAL = bar( a, b, c, d, e, f, g, h );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = bar( a, b, c, d, e, f, g, h );
   OUTPUT: RETVAL
 
 === verbatim code blocks for xsubs

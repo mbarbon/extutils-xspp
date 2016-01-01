@@ -25,15 +25,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::foo()
   CODE:
-    try {
-      THIS->foo();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo();
 
 BOOT:
     {
@@ -60,15 +52,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::foo()
   CODE:
-    try {
-      THIS->foo();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo();
 
 BOOT:
     {

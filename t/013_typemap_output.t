@@ -41,7 +41,7 @@ EXPECTED
 
 # Now check whether adding a class may overwrite existing typemaps.
 # Process class of same name as manual typemap
-my $d = ExtUtils::XSpp::Driver->new( string => <<'HERE', exceptions => 1 );
+my $d = ExtUtils::XSpp::Driver->new( string => <<'HERE', exceptions => 0 );
 %module{Foo2};
 
 class bar
@@ -64,7 +64,6 @@ T_BAR
 	MY_OUT($arg, $var, Bar)
 
 END
-#include <exception>
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
 
@@ -76,15 +75,7 @@ MODULE=Foo2 PACKAGE=bar
 int
 bar::foo2( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = THIS->foo2( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo2( a, b, c );
   OUTPUT: RETVAL
 
 HERE
@@ -125,15 +116,7 @@ MODULE=Foo PACKAGE=Foo
 int
 Foo::foo( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b, c );
   OUTPUT: RETVAL
 
 === Override default
@@ -167,13 +150,5 @@ MODULE=Foo PACKAGE=Foo
 int
 Foo::foo( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b, c );
   OUTPUT: RETVAL

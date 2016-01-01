@@ -25,15 +25,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::foo( Foo* a )
   CODE:
-    try {
-      THIS->foo( *( a ) );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo( *( a ) );
 
 === Reference in return value
 --- xsp_stdout
@@ -54,14 +46,6 @@ MODULE=XspTest PACKAGE=Foo
 Foo*
 Foo::foo()
   CODE:
-    try {
-      RETVAL = new Foo( THIS->foo() );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = new Foo( THIS->foo() );
   OUTPUT: RETVAL
 

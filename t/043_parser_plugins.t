@@ -35,15 +35,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo( int y )
   CODE:
-    try {
-      RETVAL = foo( y );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( y );
   OUTPUT: RETVAL
 
 // function foo
@@ -58,15 +50,7 @@ MODULE=XspTest PACKAGE=Klass
 static klass*
 klass::newKlass()
   CODE:
-    try {
-      RETVAL = new klass();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = new klass();
   OUTPUT: RETVAL
 
 #undef  xsp_constructor_class
@@ -75,15 +59,7 @@ klass::newKlass()
 void
 klass::Bar()
   CODE:
-    try {
-      THIS->bar();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->bar();
 
 // method klass::klass
 
@@ -137,16 +113,8 @@ MODULE=XspTest PACKAGE=klass
 int
 klass::bar( int bar, int foo )
   CODE:
-    try {
       // wrapped typemap 1;
-      RETVAL = THIS->bar( bar, foo );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->bar( bar, foo );
   OUTPUT: RETVAL
   CLEANUP:
     // wrapped typemap ret;

@@ -33,15 +33,7 @@ MODULE=XspTest PACKAGE=Foo
 foobar
 Foo::foo( foobar a, void* b )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b );
   OUTPUT: RETVAL
 
 === Complex typemap, custom return value conversion
@@ -67,15 +59,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b )
   CODE:
-    try {
-       RETVAL = fancy_conversion( THIS->foo( a, b ) ) ;
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+     RETVAL = fancy_conversion( THIS->foo( a, b ) ) ;
   OUTPUT: RETVAL
 
 === Complex typemap, output code
@@ -101,16 +85,8 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b );
+    RETVAL = THIS->foo( a, b );
        ST(0) = custom_code( RETVAL ) ;
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
   OUTPUT: RETVAL
 
 === Complex typemap, cleanup code
@@ -136,15 +112,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b )
   CODE:
-    try {
-      RETVAL = THIS->foo( a, b );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b );
   OUTPUT: RETVAL
   CLEANUP:
      custom_code( ST(0), RETVAL ) ;
@@ -172,17 +140,9 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b )
   CODE:
-    try {
        custom_code( ST(1), a ) ;
  custom_code( ST(2), b ) ;
-      RETVAL = THIS->foo( a, b );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a, b );
   OUTPUT: RETVAL
 
 === Complex typemap, output list code
@@ -208,13 +168,5 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::foo( int a, int b )
   PPCODE:
-    try {
-      RETVAL = THIS->foo( a, b );
+    RETVAL = THIS->foo( a, b );
        PUTBACK; XPUSHi( RETVAL ); SPAGAIN ;
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }

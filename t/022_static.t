@@ -25,13 +25,5 @@ MODULE=XspTest PACKAGE=Foo
 int
 foo( int a )
   CODE:
-    try {
-      RETVAL = Foo::foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = Foo::foo( a );
   OUTPUT: RETVAL

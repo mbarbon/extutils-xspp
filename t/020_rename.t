@@ -26,15 +26,7 @@ MODULE=XspTest PACKAGE=Foo::Bar
 int
 boo( int a )
   CODE:
-    try {
-      RETVAL = foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a );
   OUTPUT: RETVAL
 
 MODULE=XspTest PACKAGE=moo
@@ -42,15 +34,7 @@ MODULE=XspTest PACKAGE=moo
 int
 boo( int a )
   CODE:
-    try {
-      RETVAL = foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a );
   OUTPUT: RETVAL
 
 === Function with alias
@@ -72,8 +56,7 @@ boo( int a )
   ALIAS:
     baz2 = 3
   CODE:
-    try {
-      if (ix == 0) {
+    if (ix == 0) {
         RETVAL = foo2( a );
       }
       else if (ix == 3) {
@@ -81,13 +64,6 @@ boo( int a )
       }
       else
         croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
   OUTPUT: RETVAL
 
 === Function with alias and code
@@ -132,8 +108,7 @@ boo( int a )
     buz2 = 1
     baz2 = 3
   CODE:
-    try {
-      if (ix == 0) {
+    if (ix == 0) {
         RETVAL = foo2( a );
       }
       else if (ix == 1) {
@@ -144,13 +119,6 @@ boo( int a )
       }
       else
         croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
   OUTPUT: RETVAL
 
 === Renamed method
@@ -172,15 +140,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 Foo::bar( int a )
   CODE:
-    try {
-      RETVAL = THIS->foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a );
   OUTPUT: RETVAL
 
 === Renamed method with alias
@@ -204,8 +164,7 @@ Foo::bar( int a )
   ALIAS:
     baz = 1
   CODE:
-    try {
-      if (ix == 0) {
+    if (ix == 0) {
         RETVAL = THIS->foo( a );
       }
       else if (ix == 1) {
@@ -213,13 +172,6 @@ Foo::bar( int a )
       }
       else
         croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
   OUTPUT: RETVAL
 
 === Renamed constructor
@@ -244,15 +196,7 @@ MODULE=XspTest PACKAGE=Foo
 static Foo*
 Foo::newFoo( int a )
   CODE:
-    try {
-      RETVAL = new Foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = new Foo( a );
   OUTPUT: RETVAL
 
 #undef  xsp_constructor_class
@@ -277,15 +221,7 @@ MODULE=XspTest PACKAGE=Foo
 void
 Foo::destroy()
   CODE:
-    try {
-      delete THIS;
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    delete THIS;
 
 === Renamed class
 --- xsp_stdout
@@ -307,26 +243,10 @@ MODULE=XspTest PACKAGE=Bar::Baz
 void
 Foo::foo()
   CODE:
-    try {
-      THIS->foo();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->foo();
 
 int
 Foo::foo_int( int a )
   CODE:
-    try {
-      RETVAL = THIS->foo( a );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = THIS->foo( a );
   OUTPUT: RETVAL

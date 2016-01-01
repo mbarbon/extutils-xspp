@@ -30,15 +30,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 foo_perl( int y )
   CODE:
-    try {
-      RETVAL = foo( y );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( y );
   OUTPUT: RETVAL
 
 
@@ -47,15 +39,7 @@ MODULE=XspTest PACKAGE=Y
 void
 Y::bar()
   CODE:
-    try {
-      THIS->bar();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->bar();
 
 === Plugin loading from the plugin namespace
 --- xsp_stdout
@@ -80,15 +64,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 foo_perl2( int y )
   CODE:
-    try {
-      RETVAL = foo( y );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( y );
   OUTPUT: RETVAL
 
 
@@ -97,12 +73,4 @@ MODULE=XspTest PACKAGE=Y
 void
 Y::bar()
   CODE:
-    try {
-      THIS->bar();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    THIS->bar();

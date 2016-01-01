@@ -30,15 +30,7 @@ MODULE=XspTest PACKAGE=Foo
 int
 foo( int a, int b, int c )
   CODE:
-    try {
-      RETVAL = foo( a, b, c );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = foo( a, b, c );
   OUTPUT: RETVAL
 
 === Basic file - external file
@@ -79,13 +71,5 @@ int foo( int a, int b, int c );
 int
 bar( int x )
   CODE:
-    try {
-      RETVAL = bar( x );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+    RETVAL = bar( x );
   OUTPUT: RETVAL
