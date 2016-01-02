@@ -51,6 +51,11 @@ class bar
 HERE
 
 eq_or_diff($d->generate->{'-'}, <<'HERE');
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
+
+
+MODULE=Foo2
 TYPEMAP: <<END
 TYPEMAP
 bar*	T_BAR
@@ -64,11 +69,6 @@ T_BAR
 	MY_OUT($arg, $var, Bar)
 
 END
-#undef  xsp_constructor_class
-#define xsp_constructor_class(c) (c)
-
-
-MODULE=Foo2
 
 MODULE=Foo2 PACKAGE=bar
 
@@ -100,17 +100,16 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
+# XSP preamble
+
+
+MODULE=Foo
 TYPEMAP: <<END
 TYPEMAP
 Foo*	O_OBJECT
 bar*	T_BAR
 
 END
-# XSP preamble
-
-
-MODULE=Foo
-
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -135,16 +134,15 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
+# XSP preamble
+
+
+MODULE=Foo
 TYPEMAP: <<END
 TYPEMAP
 Foo*	T_BAR
 
 END
-# XSP preamble
-
-
-MODULE=Foo
-
 MODULE=Foo PACKAGE=Foo
 
 int

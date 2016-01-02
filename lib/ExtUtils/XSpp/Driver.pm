@@ -32,13 +32,9 @@ sub generate {
     my $typemap_code = ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps();
     if (defined $typemap_code && $typemap_code =~ /\S/) {
         if (exists $generated->{'-'} and $generated->{'-'} ne '') {
-            $generated->{'-'} = $typemap_code . $generated->{'-'};
-        }
-        elsif (my @files = grep !/^-$/, keys %$generated) {
-            $generated->{$files[0]} = $typemap_code . ($generated->{$files[0]}||'');
-        }
-        else {
-            $generated->{'-'} = $typemap_code . ($generated->{'-'}||'');
+            $generated->{'-'} =~ s{^(MODULE=.*\n)$}{$1$typemap_code}m
+        } else {
+            $generated->{'-'} = $typemap_code;
         }
     }
 
