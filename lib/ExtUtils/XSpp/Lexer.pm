@@ -88,6 +88,8 @@ my %keywords = ( const           => 1,
                  protected       => 1,
                  virtual         => 1,
                  enum            => 1,
+                 aTHX            => 1,
+                 aTHX_           => 1,
                  );
 
 sub get_lex_mode { return $_[0]->YYData->{LEX}{MODES}[0] || '' }
@@ -302,6 +304,14 @@ sub make_argument {
                   name    => $name,
                   default => $default,
                   tags    => $args{tag} );
+
+  return $arg;
+}
+
+sub make_thx {
+  my $arg = ExtUtils::XSpp::Node::Argument->new
+                ( type    => undef,
+                  name    => 'aTHX' );
 
   return $arg;
 }

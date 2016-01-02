@@ -57,6 +57,11 @@ sub init {
   $this->{TAGS}      = $args{tags};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
+  if ( @{$this->{ARGUMENTS}} && $this->{ARGUMENTS}[0]->name eq 'aTHX' ) {
+    $this->{THX} = 1;
+    shift @{$this->{ARGUMENTS}};
+  }
+
   my $index = 0;
   foreach my $arg ( @{$this->{ARGUMENTS}} ) {
       $arg->{FUNCTION} = $this;
@@ -232,6 +237,9 @@ sub print {
 
     $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
     $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
+  }
+  if ( $this->{THX} ) {
+    $call_arg_list = ( $args && @$args ? ' aTHX_' : ' aTHX ') . $call_arg_list;
   }
 
   # If there's %alias{foo = 123} definitions, generate ALIAS section

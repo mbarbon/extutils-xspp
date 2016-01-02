@@ -408,12 +408,15 @@ file_name:      DASH                            { '-' }
               | ID SLASH file_name              { $_[1] . '/' . $_[3] };
 
 arg_list:       nonvoid_arg_list
-              | 'void'                  { undef };
+              | thx                     { [ $_[1] ] }
+              | 'void'                  { undef }
+              | ;
 
 nonvoid_arg_list:
     argument                            { [ $_[1] ] }
+  | thx_comma argument                  { [ $_[1], $_[2] ] }
   | nonvoid_arg_list COMMA argument     { push @{$_[1]}, $_[3]; $_[1] }
-  | ;
+  ;
 
 argument_metadata: argument_metadata _argument_metadata { [ @{$_[1]}, @{$_[2]} ] }
                  |                                      { [] }
@@ -427,6 +430,13 @@ argument:       type p_length OPCURLY ID CLCURLY
                     { make_argument( @_[0, 1, 2, 5], @{$_[3]} ) }
               | type ID argument_metadata
                     { make_argument( @_[0, 1, 2], undef, @{$_[3]} ) };
+
+thx: 'aTHX'         { make_thx() };
+
+thx_comma:
+    'aTHX_'         { make_thx() }
+  | 'aTHX' COMMA    { make_thx() }
+  ;
 
 value:          INTEGER
               | DASH INTEGER    { '-' . $_[2] }
