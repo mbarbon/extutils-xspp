@@ -207,7 +207,8 @@ sub print {
   $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
 
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
-      $postcall, $precall, $alias ) = ( ('') x 9 );
+      $postcall, $precall, $alias, $preinit ) = ( ('') x 10 );
+  my %typedefs;
 
   # compute the precall code, XS argument list and C++ argument list using
   # the typemap information
@@ -225,7 +226,8 @@ sub print {
 
       my $call_code = $t->call_parameter_code( $arg->name );
       push @call_arg_list, defined( $call_code ) ? $call_code : $arg->name;
-      $precall .= $pc . ";\n" if $pc
+      $precall .= $pc . ";\n" if $pc;
+      _add_typedef( \%typedefs, $t );
     }
 
     $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
@@ -251,6 +253,9 @@ sub print {
   }
 
   my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
+  _add_typedef(\%typedefs, $ret_typemap) if $has_ret;
+
+  $preinit .= join "\n", map "    $_", sort keys %typedefs;
 
   my $ppcode = $has_ret && $ret_typemap->output_list( '' ) ? 1 : 0;
   my $code_type = $ppcode ? "PPCODE" : "CODE";
@@ -317,6 +322,7 @@ sub print {
   if( $ppcode ) {
     $output = '';
   }
+  $preinit = "  PREINIT:\n" . $preinit . "\n" if $preinit;
 
   if( !$this->is_method && $fname =~ /^(.*)::(\w+)$/ ) {
     my $pcname = $1;
@@ -330,7 +336,7 @@ EOT
 
   my $head = "$retstr\n"
              . "$fname($arg_list)\n";
-  my $body = $alias . $init . $code . $postcall . $output . $cleanup;
+  my $body = $preinit . $alias . $init . $code . $postcall . $output . $cleanup;
 
   # cleanup potential multiple newlines because they break XSUBs
   $body =~ s/^\s*\n//mg;
@@ -357,6 +363,14 @@ sub _munge_code {
   foreach my $arg (@{$this->{ARGUMENTS}}) {
     $$code = $arg->fix_name_in_code($$code);
   }
+}
+
+sub _add_typedef {
+  my ($typedefs, $typemap) = @_;
+  my ($from, $to) = $typemap->type_alias;
+
+  return unless $from && $to;
+  $typedefs->{"typedef $from $to;"} = undef;
 }
 
 =head2 print_declaration

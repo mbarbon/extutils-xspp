@@ -39,6 +39,7 @@ methods in the class handle.
 # internal list of all the non-empty class objects, either defined by the
 # parser or created by plugins; does not include dummy base class objects
 my %all_classes;
+my $EnableRenamedTypes;
 
 sub init {
   my $this = shift;
@@ -219,5 +220,10 @@ the C++ and Perl name of the class are available as attributes.
 sub methods { $_[0]->{METHODS} }
 sub base_classes { $_[0]->{BASE_CLASSES} }
 sub empty { !$_[0]->methods || !@{$_[0]->methods} }
+sub xs_class_name { $EnableRenamedTypes ? $_[0]->perl_name : $_[0]->cpp_name }
+
+sub _enable_renamed_types_typemaps {
+  $EnableRenamedTypes = 1;
+}
 
 1;

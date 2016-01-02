@@ -60,6 +60,7 @@ lib/ExtUtils/XSpp/Node/Type.pm
 lib/ExtUtils/XSpp/Parser.pm
 lib/ExtUtils/XSpp/Plugin.pod
 lib/ExtUtils/XSpp/Plugin/feature/default_xs_typemap.pm
+lib/ExtUtils/XSpp/Plugin/feature/renamed_types_typemap.pm
 lib/ExtUtils/XSpp/Typemap.pm
 lib/ExtUtils/XSpp/Typemap/parsed.pm
 lib/ExtUtils/XSpp/Typemap/reference.pm

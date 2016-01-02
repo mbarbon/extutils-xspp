@@ -15,12 +15,14 @@ sub init {
 
   $this->{TYPE} = $args{type};
   $this->{NAME} = $args{name};
+  $this->{ALIAS} = $args{alias};
   $this->{XS_TYPE} = $args{xs_type};
   $this->{XS_INPUT_CODE} = $args{xs_input_code};
   $this->{XS_OUTPUT_CODE} = $args{xs_output_code};
 }
 
 sub cpp_type { $_[0]->{TYPE}->print }
+sub type_alias { @{$_[0]->{ALIAS} || []} }
 sub output_code { undef } # likewise
 sub call_parameter_code { undef }
 sub call_function_code { undef }

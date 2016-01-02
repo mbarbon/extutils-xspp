@@ -10,6 +10,7 @@ require ExtUtils::XSpp::Typemap::simple;
 require ExtUtils::XSpp::Typemap::reference;
 
 my %TypemapsByName;
+my $EnableRenamedTypes;
 
 =head1 NAME
 
@@ -66,6 +67,10 @@ sub type { $_[0]->{TYPE} }
 
 Returns the C++ type to be used for the local variable declaration.
 
+=head2 ExtUtils::XSpp::Typemap::type_alias()
+
+Returns a two-element list if the typemap requires a C++ C<typedef>.
+
 =head2 ExtUtils::XSpp::Typemap::input_code( perl_argument_name, cpp_var_name1, ... )
 
 Code to put the contents of the perl_argument (typically ST(x)) into
@@ -92,6 +97,7 @@ sub xs_input_code { $_[0]->{XS_INPUT_CODE} }
 sub xs_output_code { $_[0]->{XS_OUTPUT_CODE} }
 sub name { $_[0]->{NAME} }
 sub cpp_type { die; }
+sub type_alias { die; }
 sub input_code { die; }
 sub precall_code { undef }
 sub output_code { undef }
@@ -209,7 +215,7 @@ sub get_xs_typemap_code_for_all_typemaps {
 
 # adds default typemaps for C* and C&
 sub add_class_default_typemaps {
-  my( $name ) = @_;
+  my( $name, $perl_name ) = @_;
 
   my $ptr = ExtUtils::XSpp::Node::Type->new
                 ( base    => $name,
@@ -219,13 +225,29 @@ sub add_class_default_typemaps {
                 ( base      => $name,
                   reference => 1,
                   );
+  my ($to_ptr, $to_ref, $alias) = ($ptr, $ref, undef);
+  if ($EnableRenamedTypes && $perl_name) {
+    if ($perl_name =~ /::/) {
+      (my $replaced = $perl_name) =~ s{::}{__}g;
+      $alias = [$name, $replaced];
+    }
+
+    $to_ptr = ExtUtils::XSpp::Node::Type->new
+                  ( base    => $perl_name,
+                    pointer => 1,
+                    );
+    $to_ref = ExtUtils::XSpp::Node::Type->new
+                  ( base      => $perl_name,
+                    reference => 1,
+                    );
+  }
 
   my $xs_type = $TypemapsByName{object}->xs_type;
 
   add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr, xs_type => $xs_type ) );
+      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $to_ptr, xs_type => $xs_type, alias => $alias ) );
   add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref, xs_type => $xs_type ) );
+      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $to_ref, xs_type => $xs_type, alias => $alias ) );
 }
 
 sub add_default_typemaps {
@@ -277,6 +299,10 @@ sub _enable_default_xs_typemaps {
       last;
     }
   }
+}
+
+sub _enable_renamed_types_typemaps {
+  $EnableRenamedTypes = 1;
 }
 
 1;

@@ -48,9 +48,9 @@ sub perl_function_name {
   my $this = shift;
 
   if( $this->perl_name ne $this->cpp_name ) {
-    return $this->class->cpp_name . '::' . $this->perl_name;
+    return $this->class->xs_class_name . '::' . $this->perl_name;
   } else {
-    return $this->class->cpp_name . '::' . 'DESTROY';
+    return $this->class->xs_class_name . '::' . 'DESTROY';
   }
 }
 

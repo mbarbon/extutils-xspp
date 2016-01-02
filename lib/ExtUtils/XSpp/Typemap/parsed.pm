@@ -36,6 +36,8 @@ sub init {
 
 sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }
 
+sub type_alias { }
+
 sub output_code {
   my( $this, $pvar, $cvar ) = @_;
   return unless defined $_[0]->{OUTPUT_CODE};

@@ -414,3 +414,70 @@ wxRichTextCtrl::newDefault()
 
 #undef  xsp_constructor_class
 #define xsp_constructor_class(c) (c)
+
+=== Fixed return typemap handling does not impact non-renamed classes
+--- xsp_stdout
+%loadplugin{feature::renamed_types_typemap};
+%loadplugin{feature::default_xs_typemap};
+
+%module{XspTest};
+
+class Foo
+{
+    Foo(int v);
+    Foo *inc();
+    int add(Foo *other);
+};
+--- expected
+# XSP preamble
+
+
+MODULE=XspTest
+TYPEMAP: <<END
+TYPEMAP
+Foo*	O_OBJECT
+
+END
+MODULE=XspTest PACKAGE=Foo
+
+# XSP preamble
+
+Foo*
+Foo::new( int v )
+  CODE:
+    RETVAL = new Foo( v );
+  OUTPUT: RETVAL
+
+# XSP preamble
+
+Foo*
+Foo::inc()
+  CODE:
+    RETVAL = THIS->inc();
+  OUTPUT: RETVAL
+
+int
+Foo::add( Foo* other )
+  CODE:
+    RETVAL = THIS->add( other );
+  OUTPUT: RETVAL
+--- preamble
+struct Foo {
+    Foo(int v) : value(v) { }
+
+    Foo *inc() { value++; return this; }
+    int add(Foo *other) { return value + other->value; }
+
+    int value;
+};
+--- test_code
+my $foo1 = Foo->new( 5 );
+my $foo2 = $foo1->inc;
+my $foo3 = Foo->new( 4 );
+
+isa_ok( $foo1, 'Foo' );
+isa_ok( $foo2, 'Foo' );
+isa_ok( $foo3, 'Foo' );
+is( $$foo1, $$foo2 );
+isnt( $$foo1, $$foo3 );
+is( $foo1->add( $foo3 ), 10 );

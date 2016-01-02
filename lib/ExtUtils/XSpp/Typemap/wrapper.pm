@@ -11,6 +11,7 @@ sub init {
 
 sub type { shift->{TYPEMAP}->type( @_ ) }
 sub cpp_type { shift->{TYPEMAP}->cpp_type( @_ ) }
+sub type_alias { shift->{TYPEMAP}->type_alias( @_ ) }
 sub input_code { shift->{TYPEMAP}->input_code( @_ ) }
 sub precall_code { shift->{TYPEMAP}->precall_code( @_ ) }
 sub output_code { shift->{TYPEMAP}->output_code( @_ ) }

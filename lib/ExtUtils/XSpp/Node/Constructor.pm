@@ -70,15 +70,14 @@ sub ret_type {
 
 sub perl_function_name {
   my $this = shift;
-  my( $pname, $cname, $pclass, $cclass ) = ( $this->perl_name,
-                                             $this->cpp_name,
-                                             $this->class->perl_name,
-                                             $this->class->cpp_name );
+  my( $pname, $cname, $class ) = ( $this->perl_name,
+                                   $this->cpp_name,
+                                   $this->class->xs_class_name );
 
   if( $pname ne $cname ) {
-    return $cclass . '::' . $pname;
+    return $class . '::' . $pname;
   } else {
-    return $cclass . '::' . 'new';
+    return $class . '::' . 'new';
   }
 }
 

@@ -58,7 +58,7 @@ sub perl_function_name {
     if( $self->package_static ) {
         return $self->perl_name;
     } else {
-        return $self->class->cpp_name . '::' . $self->perl_name;
+        return $self->class->xs_class_name . '::' . $self->perl_name;
     }
 }
 

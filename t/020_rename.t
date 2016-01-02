@@ -231,6 +231,7 @@ Foo::destroy()
 {
     void foo();
     %name{foo_int} int foo( int a );
+    Foo *bar();
 };
 --- expected
 # XSP preamble
@@ -250,3 +251,82 @@ Foo::foo_int( int a )
   CODE:
     RETVAL = THIS->foo( a );
   OUTPUT: RETVAL
+
+Foo*
+Foo::bar()
+  CODE:
+    RETVAL = THIS->bar();
+  OUTPUT: RETVAL
+
+=== Renamed class with fixed return typemap handling
+--- xsp_stdout
+%loadplugin{feature::renamed_types_typemap};
+%loadplugin{feature::default_xs_typemap};
+
+%module{XspTest};
+
+%name{Bar::Baz} class Foo
+{
+    Foo(int v);
+    Foo *inc();
+    int add(Foo *other);
+};
+--- expected
+# XSP preamble
+
+
+MODULE=XspTest
+TYPEMAP: <<END
+TYPEMAP
+Bar::Baz*	O_OBJECT
+
+END
+MODULE=XspTest PACKAGE=Bar::Baz
+
+# XSP preamble
+
+Bar::Baz*
+Bar::Baz::new( int v )
+  PREINIT:
+    typedef Foo Bar__Baz;
+  CODE:
+    RETVAL = new Foo( v );
+  OUTPUT: RETVAL
+
+# XSP preamble
+
+Bar::Baz*
+Bar::Baz::inc()
+  PREINIT:
+    typedef Foo Bar__Baz;
+  CODE:
+    RETVAL = THIS->inc();
+  OUTPUT: RETVAL
+
+int
+Bar::Baz::add( Bar::Baz* other )
+  PREINIT:
+    typedef Foo Bar__Baz;
+  CODE:
+    RETVAL = THIS->add( other );
+  OUTPUT: RETVAL
+--- preamble
+struct Foo {
+    Foo(int v) : value(v) { }
+
+    Foo *inc() { value++; return this; }
+    int add(Foo *other) { return value + other->value; }
+
+    int value;
+};
+--- test_code
+my $foo1 = Bar::Baz->new( 5 );
+my $foo2 = $foo1->inc;
+my $foo3 = Bar::Baz->new( 4 );
+
+isa_ok( $foo1, 'Bar::Baz' );
+isa_ok( $foo2, 'Bar::Baz' );
+isa_ok( $foo3, 'Bar::Baz' );
+is( $$foo1, $$foo2 );
+isnt( $$foo1, $$foo3 );
+is( $foo1->add($foo3 ), 10 );
