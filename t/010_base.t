@@ -435,6 +435,7 @@ class Foo
 MODULE=XspTest
 TYPEMAP: <<END
 TYPEMAP
+const Foo*	O_OBJECT
 Foo*	O_OBJECT
 
 END

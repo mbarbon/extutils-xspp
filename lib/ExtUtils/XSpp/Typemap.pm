@@ -213,41 +213,35 @@ sub get_xs_typemap_code_for_all_typemaps {
   return "TYPEMAP: <<$end_marker\n$code\n$end_marker\n";
 }
 
-# adds default typemaps for C* and C&
+# adds default typemaps for C*, C& and their const counterparts
+sub _add_default_typemap {
+  my ($type_name, $to_type_name, $args, $alias) = @_;
+  my $type = ExtUtils::XSpp::Node::Type->new( base => $type_name, %$args );
+  my $to_type = ExtUtils::XSpp::Node::Type->new( base => $to_type_name, %$args );
+  my $xs_type = $TypemapsByName{object}->xs_type;
+  my $class = $args->{reference} ? 'ExtUtils::XSpp::Typemap::reference' :
+                                   'ExtUtils::XSpp::Typemap::simple';
+  add_weak_typemap_for_type
+      ( $type, $class->new( type => $to_type, xs_type => $xs_type, alias => $alias ) );
+}
+
 sub add_class_default_typemaps {
   my( $name, $perl_name ) = @_;
+  my ($to_name, $alias) = ($name, undef);
 
-  my $ptr = ExtUtils::XSpp::Node::Type->new
-                ( base    => $name,
-                  pointer => 1,
-                  );
-  my $ref = ExtUtils::XSpp::Node::Type->new
-                ( base      => $name,
-                  reference => 1,
-                  );
-  my ($to_ptr, $to_ref, $alias) = ($ptr, $ref, undef);
   if ($EnableRenamedTypes && $perl_name) {
     if ($perl_name =~ /::/) {
       (my $replaced = $perl_name) =~ s{::}{__}g;
       $alias = [$name, $replaced];
     }
 
-    $to_ptr = ExtUtils::XSpp::Node::Type->new
-                  ( base    => $perl_name,
-                    pointer => 1,
-                    );
-    $to_ref = ExtUtils::XSpp::Node::Type->new
-                  ( base      => $perl_name,
-                    reference => 1,
-                    );
+    $to_name = $perl_name;
   }
 
-  my $xs_type = $TypemapsByName{object}->xs_type;
-
-  add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $to_ptr, xs_type => $xs_type, alias => $alias ) );
-  add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $to_ref, xs_type => $xs_type, alias => $alias ) );
+  _add_default_typemap( $name, $to_name, { pointer => 1 }, $alias );
+  _add_default_typemap( $name, $to_name, { reference => 1 }, $alias );
+  _add_default_typemap( $name, $to_name, { pointer => 1, const => 1 }, $alias );
+  _add_default_typemap( $name, $to_name, { reference => 1, const => 1 }, $alias );
 }
 
 sub add_default_typemaps {

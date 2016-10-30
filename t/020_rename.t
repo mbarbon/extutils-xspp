@@ -279,6 +279,7 @@ Foo::bar()
 MODULE=XspTest
 TYPEMAP: <<END
 TYPEMAP
+const Bar::Baz*	O_OBJECT
 Bar::Baz*	O_OBJECT
 
 END

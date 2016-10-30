@@ -106,6 +106,7 @@ class Foo
 MODULE=Foo
 TYPEMAP: <<END
 TYPEMAP
+const Foo*	O_OBJECT
 Foo*	O_OBJECT
 bar*	T_BAR
 
@@ -140,6 +141,7 @@ class Foo
 MODULE=Foo
 TYPEMAP: <<END
 TYPEMAP
+const Foo*	T_BAR
 Foo*	T_BAR
 
 END
