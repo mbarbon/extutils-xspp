@@ -221,6 +221,7 @@ sub methods { $_[0]->{METHODS} }
 sub base_classes { $_[0]->{BASE_CLASSES} }
 sub empty { !$_[0]->methods || !@{$_[0]->methods} }
 sub xs_class_name { $EnableRenamedTypes ? $_[0]->perl_name : $_[0]->cpp_name }
+sub type { ExtUtils::XSpp::Node::Type->new( base => $_[0]->cpp_name, pointer => 1 ) }
 
 sub _enable_renamed_types_typemaps {
   $EnableRenamedTypes = 1;

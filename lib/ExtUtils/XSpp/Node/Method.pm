@@ -121,5 +121,6 @@ sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
 sub const { $_[0]->{CONST} }
 sub access { $_[0]->{ACCESS} }
 sub set_access { $_[0]->{ACCESS} = $_[1] }
+sub self_typemap { $_[0]->{TYPEMAPS}{SELF} }
 
 1;

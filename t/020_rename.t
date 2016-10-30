@@ -270,6 +270,7 @@ Foo::bar()
     Foo(int v);
     Foo *inc();
     int add(Foo *other);
+    int add_int(int other);
 };
 --- expected
 # XSP preamble
@@ -310,12 +311,21 @@ Bar::Baz::add( Bar::Baz* other )
   CODE:
     RETVAL = THIS->add( other );
   OUTPUT: RETVAL
+
+int
+Bar::Baz::add_int( int other )
+  PREINIT:
+    typedef Foo Bar__Baz;
+  CODE:
+    RETVAL = THIS->add_int( other );
+  OUTPUT: RETVAL
 --- preamble
 struct Foo {
     Foo(int v) : value(v) { }
 
     Foo *inc() { value++; return this; }
     int add(Foo *other) { return value + other->value; }
+    int add_int(int other) { return value + other; }
 
     int value;
 };

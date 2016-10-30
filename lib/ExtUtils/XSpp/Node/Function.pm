@@ -96,6 +96,10 @@ sub resolve_typemaps {
     $this->{TYPEMAPS}{RET_TYPE} ||=
       ExtUtils::XSpp::Typemap::get_typemap_for_type( $this->ret_type );
   }
+  if( $this->is_method ) {
+    $this->{TYPEMAPS}{SELF} ||=
+      ExtUtils::XSpp::Typemap::get_typemap_for_type( $this->class->type );
+  }
   foreach my $a ( @{$this->arguments} ) {
     $this->{TYPEMAPS}{ARGUMENTS}[$index++] ||=
       ExtUtils::XSpp::Typemap::get_typemap_for_type( $a->type );
@@ -241,6 +245,7 @@ sub print {
   if ( $this->{THX} ) {
     $call_arg_list = ( $args && @$args ? ' aTHX_' : ' aTHX ') . $call_arg_list;
   }
+  _add_typedef( \%typedefs, $this->self_typemap ) if $this->is_method;
 
   # If there's %alias{foo = 123} definitions, generate ALIAS section
   if ($has_aliases) {
