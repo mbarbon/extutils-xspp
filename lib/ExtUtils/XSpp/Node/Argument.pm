@@ -43,7 +43,7 @@ done by F<xsubpp>: C<XSauto_length_of_somthing>.
 
 =head2 fix_name_in_code
 
-Given a code string, replaces any occurrances of
+Given a code string, replaces any occurrences of
 the name of this C<Argument> with its implementation
 name. If the implementation name is the same as the name,
 which is the most likely case, the code remains

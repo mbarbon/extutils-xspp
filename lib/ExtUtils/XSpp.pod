@@ -232,7 +232,7 @@ There are multiple ways to override this default when needed.
         %xs_output_code{% ... %}; // optional
     };
 
-can be used to define a new type -> XS typemap mapping, with optinal
+can be used to define a new type -> XS typemap mapping, with optional
 input/output code.  Since XS typemap definitions are global, XS
 input/output code applies to all types with the same %xs_type, hence
 there is no need to repeat it.
@@ -385,7 +385,7 @@ the automatic exception handling is turned off.
 =head2 Member variables
 
 By default, member variable declarations are ignored; the C<%get> and
-C<%set> decorators syntehsize a getter/setter named after the member
+C<%set> decorators synthesize a getter/setter named after the member
 variable (can be renamed using C<%name>).
 
 XS++ defaults to get_/set_ prefix for getters/setters.  This can be
@@ -393,7 +393,7 @@ overridden on an individual basis by using e.g.
 
     int foo %get{readFoo} %set{writeFoo};
 
-As an alternative, the class-level C<%accessors> decorator sets the the
+As an alternative, the class-level C<%accessors> decorator sets the
 accessor style for the whole class:
 
     %accessors{
