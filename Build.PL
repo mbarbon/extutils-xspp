@@ -21,5 +21,10 @@ my $build = My::Build->new
         },
     add_to_cleanup => [ qw(t/files/foo.h) ],
     script_files => 'scripts',
+    meta_merge =>
+      { resources =>
+        { repository => 'https://github.com/tsee/extutils-xspp',
+            },
+        },
     );
 $build->create_build_script;
