@@ -1,4 +1,4 @@
-package t::lib::XSP::Test;
+package XSP::Test;
 
 use strict;
 use warnings;
@@ -207,7 +207,7 @@ sub _munge_output($) {
 
 use ExtUtils::XSpp;
 
-package t::lib::XSP::Test::Filter;
+package XSP::Test::Filter;
 
 use Test::Base::Filter -base;
 

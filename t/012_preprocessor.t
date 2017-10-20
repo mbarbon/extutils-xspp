@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
-use t::lib::XSP::Test;
+use lib 't/lib';
+use XSP::Test;
 
 # monkeypatch print methods to test conditionals are parsed correctly
 no warnings 'redefine';

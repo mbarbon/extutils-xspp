@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
-use t::lib::XSP::Test;
+use lib 't/lib';
+use XSP::Test;
 
 use ExtUtils::XSpp;
 use ExtUtils::XSpp::Typemap::simple;

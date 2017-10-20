@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
-use t::lib::XSP::Test;
+use lib 't/lib';
+use XSP::Test;
 
 # monkeypatch Enum/EnumValue just to test that they were parsed correctly
 no warnings 'redefine';

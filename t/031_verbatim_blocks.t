@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
-use t::lib::XSP::Test;
+use lib 't/lib';
+use XSP::Test;
 
 run_diff xsp_stdout => 'expected';
 
