@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
-use t::lib::XSP::Test;
+use lib 't/lib';
+use XSP::Test;
 
 run_diff xsp_stdout => 'expected';
 
@@ -10,8 +11,8 @@ __DATA__
 --- xsp_stdout
 %module{XspTest};
 %package{Foo};
-%loadplugin{t::lib::XSP::Plugin};
-%loadplugin{t::lib::XSP::Plugin};
+%loadplugin{XSP::Plugin};
+%loadplugin{XSP::Plugin};
 
 int foo(int y);
 

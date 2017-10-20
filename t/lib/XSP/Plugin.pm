@@ -1,4 +1,4 @@
-package t::lib::XSP::Plugin;
+package XSP::Plugin;
 
 use strict;
 use warnings;
