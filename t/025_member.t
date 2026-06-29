@@ -20,6 +20,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -49,6 +50,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -76,6 +78,7 @@ class Foo
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -159,6 +162,7 @@ class Foo6
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo1
 

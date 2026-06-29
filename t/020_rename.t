@@ -21,6 +21,7 @@ __DATA__
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo::Bar
 
 int
@@ -48,6 +49,7 @@ boo( int a )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo::Bar
 
@@ -78,6 +80,7 @@ boo( int a )
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo::Bar
 
 int
@@ -99,6 +102,7 @@ boo( int a )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo::Bar
 
@@ -135,6 +139,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -156,6 +161,7 @@ class Foo
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -188,6 +194,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 #undef  xsp_constructor_class
@@ -216,6 +223,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -238,6 +246,7 @@ Foo::destroy()
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Bar::Baz
 
@@ -277,6 +286,7 @@ Foo::bar()
 
 
 MODULE=XspTest
+
 TYPEMAP: <<END
 TYPEMAP
 const Bar::Baz*	O_OBJECT

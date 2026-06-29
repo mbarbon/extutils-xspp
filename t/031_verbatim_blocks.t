@@ -20,6 +20,7 @@ Straight to XS, no checks...
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 
@@ -41,6 +42,7 @@ Straight to XS, no checks...
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=X
 

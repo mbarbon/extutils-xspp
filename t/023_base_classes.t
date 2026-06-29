@@ -20,6 +20,7 @@ class Foo : public Moo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -46,6 +47,7 @@ class Foo : public %name{PlMoo} Moo, public Boo
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 

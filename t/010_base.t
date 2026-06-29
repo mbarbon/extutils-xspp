@@ -20,6 +20,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -51,6 +52,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 === Basic function
@@ -64,6 +66,7 @@ int foo( int a );
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo::Bar
 
@@ -90,6 +93,7 @@ class Foo
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -126,6 +130,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 #undef  xsp_constructor_class
@@ -160,6 +165,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -186,6 +192,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -207,6 +214,7 @@ class Foo
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -258,6 +266,7 @@ class Foo
 
 
 MODULE=XspTest
+
 ## comment after %module
 
 
@@ -301,6 +310,7 @@ bar( char* line, unsigned long %length{line} );
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Bar
 
 unsigned int
@@ -323,6 +333,7 @@ bar( char* line, unsigned long %length{line} )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Bar
 
@@ -347,6 +358,7 @@ bar( char* line, unsigned long %length{line} )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Bar
 
@@ -374,6 +386,7 @@ bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned 
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Bar
 
 short
@@ -399,6 +412,7 @@ bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned 
 
 
 MODULE=Wx
+
 
 MODULE=Wx PACKAGE=Wx::RichTextCtrl
 
@@ -433,6 +447,7 @@ class Foo
 
 
 MODULE=XspTest
+
 TYPEMAP: <<END
 TYPEMAP
 const Foo*	O_OBJECT

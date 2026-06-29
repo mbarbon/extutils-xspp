@@ -25,6 +25,7 @@ int foo( int a, int b, int c );
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int

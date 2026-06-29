@@ -22,6 +22,7 @@ class Foo
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int

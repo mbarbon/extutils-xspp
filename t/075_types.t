@@ -22,6 +22,7 @@ int* boo(const int* a);
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int*
@@ -52,6 +53,7 @@ void boo(const std::string& a);
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -80,6 +82,7 @@ void foo2(std::vector<double> a, std::vector<double>& b);
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -116,6 +119,7 @@ void boo(const std::map<int, std::string> a);
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 
@@ -142,6 +146,7 @@ void foo(const std::vector<double>& a);
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
