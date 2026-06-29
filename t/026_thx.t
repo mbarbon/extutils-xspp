@@ -12,9 +12,9 @@ __DATA__
 
 class Foo
 {
-    int foo(aTHX_ int a);
-    int bar(aTHX);
-    int baz(aTHX, int a);
+    int foo(pTHX_ int a);
+    int bar(pTHX);
+    int baz(pTHX, int a);
 };
 --- expected
 # XSP preamble
@@ -45,7 +45,7 @@ Foo::baz( int a )
 Foo *   T_PTRREF
 --- preamble
 struct Foo {
-    int foo(aTHX_ int a) { return a + 2; }
-    int bar(aTHX) { return 7; }
-    int baz(aTHX_ int a) { return a + 1; }
+    int foo(pTHX_ int a) { return a + 2; }
+    int bar(pTHX) { return 7; }
+    int baz(pTHX_ int a) { return a + 1; }
 };

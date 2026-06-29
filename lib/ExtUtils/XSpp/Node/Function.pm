@@ -57,7 +57,7 @@ sub init {
   $this->{TAGS}      = $args{tags};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
-  if ( @{$this->{ARGUMENTS}} && $this->{ARGUMENTS}[0]->name eq 'aTHX' ) {
+  if ( @{$this->{ARGUMENTS}} && $this->{ARGUMENTS}[0]->name eq 'pTHX' ) {
     $this->{THX} = 1;
     shift @{$this->{ARGUMENTS}};
   }
