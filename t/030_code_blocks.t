@@ -19,6 +19,7 @@ __DATA__
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -39,6 +40,7 @@ boo( int a )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -63,6 +65,7 @@ int foo(int a)
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -86,6 +89,7 @@ foo( int a )
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 void
@@ -106,6 +110,7 @@ boo( int a )
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 
@@ -128,6 +133,7 @@ void foo(int a)
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=Foo
 

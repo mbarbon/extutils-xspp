@@ -30,6 +30,7 @@ class klass
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 int
@@ -85,6 +86,7 @@ klass::Bar()
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 // directive MyComment
@@ -107,6 +109,7 @@ class klass
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=klass
 
@@ -133,5 +136,6 @@ class klass
 
 
 MODULE=XspTest
+
 
 MODULE=XspTest PACKAGE=klass

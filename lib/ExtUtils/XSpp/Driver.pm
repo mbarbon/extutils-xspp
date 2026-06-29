@@ -32,7 +32,7 @@ sub generate {
     my $typemap_code = ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps();
     if (defined $typemap_code && $typemap_code =~ /\S/) {
         if (exists $generated->{'-'} and $generated->{'-'} ne '') {
-            $generated->{'-'} =~ s{^(MODULE=.*\n)$}{$1$typemap_code}m
+            $generated->{'-'} =~ s{^(MODULE=.*\n)$}{$1\n$typemap_code}m
         } else {
             $generated->{'-'} = $typemap_code;
         }

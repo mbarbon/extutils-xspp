@@ -56,6 +56,7 @@ eq_or_diff($d->generate->{'-'}, <<'HERE');
 
 
 MODULE=Foo2
+
 TYPEMAP: <<END
 TYPEMAP
 bar*	T_BAR
@@ -69,6 +70,7 @@ T_BAR
 	MY_OUT($arg, $var, Bar)
 
 END
+
 
 MODULE=Foo2 PACKAGE=bar
 
@@ -104,6 +106,7 @@ class Foo
 
 
 MODULE=Foo
+
 TYPEMAP: <<END
 TYPEMAP
 const Foo*	O_OBJECT
@@ -139,6 +142,7 @@ class Foo
 
 
 MODULE=Foo
+
 TYPEMAP: <<END
 TYPEMAP
 const Foo*	T_BAR

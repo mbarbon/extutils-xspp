@@ -33,6 +33,7 @@ enum Values
 
 
 MODULE=XspTest
+
 // Values
 //     ONE
 //     TWO
@@ -53,6 +54,7 @@ enum
 
 
 MODULE=XspTest
+
 // <anonymous>
 //     ONE
 //     TWO

@@ -20,6 +20,7 @@ int bar(int y);
 
 MODULE=XspTest
 
+
 MODULE=XspTest PACKAGE=Foo
 
 # trivial typemap
