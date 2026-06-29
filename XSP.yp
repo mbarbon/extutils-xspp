@@ -431,11 +431,11 @@ argument:       type p_length OPCURLY ID CLCURLY
               | type ID argument_metadata
                     { make_argument( @_[0, 1, 2], undef, @{$_[3]} ) };
 
-thx: 'aTHX'         { make_thx() };
+thx: 'pTHX'         { make_thx() };
 
 thx_comma:
-    'aTHX_'         { make_thx() }
-  | 'aTHX' COMMA    { make_thx() }
+    'pTHX_'         { make_thx() }
+  | 'pTHX' COMMA    { make_thx() }
   ;
 
 value:          INTEGER
