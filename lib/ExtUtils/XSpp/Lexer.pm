@@ -369,7 +369,7 @@ sub create_class {
   return $class;
 }
 
-# support multiple occurrances of specific keys
+# support multiple occurrences of specific keys
 # => transform to flattened array ref
 sub _merge_keys {
   my $key = shift;
